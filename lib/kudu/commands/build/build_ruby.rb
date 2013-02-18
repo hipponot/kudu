@@ -1,0 +1,23 @@
+require 'rvm'
+require 'etc'
+require 'rubygems/builder'
+require 'rubygems/installer'
+
+require 'ruby-prof' unless RUBY_PLATFORM=='java'
+
+require_relative '../../error'
+require_relative '../../util'
+require_relative '../../rvm_util'
+require_relative '../../dependency_graph'
+require_relative '../../capture_stdout'
+require_relative '../../ui'
+require_relative '../../kudu_project'
+
+module Kudu
+
+  class BuildRuby
+    def initialize(options)
+      puts 'build ruby'
+    end
+  end
+end
