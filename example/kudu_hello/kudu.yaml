@@ -1,0 +1,8 @@
+---
+:publication:
+ :name: hello
+ :version: 0.0.1
+ :group: in-house
+ :namespace: kudu 
+ :type: ruby
+:dependencies:  [] 

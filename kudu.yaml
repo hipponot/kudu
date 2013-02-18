@@ -1,0 +1,6 @@
+---
+:publication:
+ :name: kudu
+ :version: 0.0.1
+ :group: in-house
+:dependencies:  [] 

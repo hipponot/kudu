@@ -1,0 +1,18 @@
+---
+:publication:
+ :name: test_sinatra
+ :version: 0.0.1
+ :group: in-house
+ :namespace: kudu 
+:dependencies: 
+- :name: test_gem
+  :group: in-house
+  :namespace: kudu 
+- :name: sinatra
+  :group: third-party
+- :name: json
+  :group: third-party
+- :name: shotgun
+  :group: third-party
+- :name: json
+  :group: third-party

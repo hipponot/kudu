@@ -1,0 +1,7 @@
+---
+:publication:
+ :name: test_gem
+ :version: 0.0.1
+ :group: in-house
+ :namespace: kudu 
+:dependencies:  [] 

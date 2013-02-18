@@ -1,0 +1,9 @@
+<% if namespace %>
+module <%= namespace_module %>
+<% end %>
+module <%=module_name%>
+  DEPENDENCIES = <%=dependencies%>
+end
+<% if namespace %>
+end
+<% end %>

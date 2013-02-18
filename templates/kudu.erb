@@ -1,0 +1,20 @@
+---
+:publication:
+ :name: <%= publication[:name] %>
+ :version: <%= publication[:version] %>
+ :group: <%= publication[:group] %>
+ <% if publication[:namespace] %>
+ :namespace: <%= publication[:namespace] %> 
+ <% end %>
+:dependencies: <%if dependencies.empty? %> [] <% end %>
+<% dependencies.each do |dep| %>
+- :name: <%= dep[:name] %>
+	<% if dep[:version] %>
+  :version: <%= dep[:version] %> 
+  <% end %>
+  :group: <%= dep[:group] %>
+  <% if dep[:namespace] %>
+  :namespace: <%= dep[:namespace] %> 
+  <% end %>
+<% end %>
+

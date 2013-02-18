@@ -1,0 +1,12 @@
+require 'yaml'
+<% if namespace %>
+module <%= namespace_cc %>
+<% end %>
+module <%=name_cc%>
+  kudu = YAML::load(IO.read(File.join(File.dirname(__FILE__), '../../kudu.yaml')))
+  VERSION = kudu[:publication][:version]
+  NAME = kudu[:publication][:name]
+end
+<% if namespace %>
+end
+<% end %>

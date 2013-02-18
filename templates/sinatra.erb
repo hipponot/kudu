@@ -1,0 +1,33 @@
+require "sinatra/base"
+require "json"
+
+require "kudu_test_gem"
+
+require "<%=fullname%>/version"
+<% if namespace %>
+module <%= namespace_cc %>
+<% end %>
+  module <%=name_cc%> 
+
+    class Service < Sinatra::Base
+
+      get '/' do
+        "Hello World"
+      end
+  
+      get '/hello' do
+        cache_control :max_age => 0
+        puts "#{Time.now} Kudu: Hello!"
+        status 200
+        body JSON.pretty_generate({
+          "status" => "success",
+          "service" => "<%=name_cc%>"
+        })
+      end
+    end
+
+  end
+<% if namespace %>
+end
+<% end %>
+

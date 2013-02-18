@@ -1,0 +1,12 @@
+require "bundler/setup"
+
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'lib')
+require "<%=fullname%>"
+
+<% 
+s = name_cc + "::Service"
+s.prepend(namespace_cc + "::") unless namespace_cc.nil?
+%>
+
+run <%= s %>
+

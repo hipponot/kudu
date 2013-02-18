@@ -1,0 +1,9 @@
+require "<%=fullname%>/version"
+<% if namespace %>
+module <%= namespace_cc %>
+<% end %>
+module <%=name_cc%>
+end
+<% if namespace %>
+end
+<% end %>

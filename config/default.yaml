@@ -1,0 +1,7 @@
+authors: 
+   - Sean Kelly
+emails: 
+   - sean.kelly@wootlearning
+description: Buildware with transitive dependency management in ruby
+summary: Buildware in ruby
+homepage: http://wootlearning.com
