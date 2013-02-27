@@ -101,6 +101,7 @@
           p = {}
           Dir.glob("#{Kudu.gitroot}/**/kudu.yaml").each do |file|
             spec = KuduProject.new(file)
+            raise DuplicateProjectFound, "Detected duplicate projects #{spec.directory} collides with #{p[spec.name].directory}" if p.has_key?(spec.name)
             p[spec.name] = spec
           end
           p.each do |name, spec|
