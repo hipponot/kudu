@@ -18,25 +18,21 @@ module Kudu
       eval("defined?(#{classname}) && #{classname}.is_a?(Class)")
     end
 
-    def delegate_command(command, type, options)
+    def delegate_command(command, type, options, *args)
       classname = (command + '_' + type).camel_case
-      eval("#{classname}.new(#{options})") 
-    end
-
-    def get_project(options)
-
-      if options[:name]
-      elsif options[:gemspec]
-      elsif local_gemspec
-
+      if args.empty?
+        eval("#{classname}.new(options)")
       else
+        # unbox varags before instantiating the delegate
+        args_str = ""
+        args.each_with_index {|a,i| args_str += "args[#{i}]"; args += "," unless args.length-1}
+        eval("#{classname}.new(options, #{args_str})")
       end
-
     end
-
+    
     def each
       begin
-        Dir.glob(File.join(Kudu.gitroot,'**/*.g emspec')).each do |gemspec|
+        Dir.glob(File.join(Kudu.gitroot,'**/*.gemspec')).each do |gemspec|
           next unless File.exist?(File.join(File.dirname(gemspec),'kudu.yaml'))
           yield Kudu.get_name_from_gemspec(gemspec)
         end

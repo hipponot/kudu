@@ -1,11 +1,14 @@
 ---
-:publication:
- :name: <%= publication[:name] %>
- :version: <%= publication[:version] %>
- :group: <%= publication[:group] %>
- <% if publication[:namespace] %>
- :namespace: <%= publication[:namespace] %> 
- <% end %>
+:project:
+ :name: <%= project_name %>
+ :type: <%= project_type %>
+:publications:
+<% publications.each do |pub| %>
+- :name: <%= pub[:name] %>
+  :version: <%= pub[:version] %>
+  :group: <%= pub[:group] %>
+  :type: <%= pub[:type] %>
+<% end %>
 :dependencies: <%if dependencies.empty? %> [] <% end %>
 <% dependencies.each do |dep| %>
 - :name: <%= dep[:name] %>
@@ -13,8 +16,7 @@
   :version: <%= dep[:version] %> 
   <% end %>
   :group: <%= dep[:group] %>
-  <% if dep[:namespace] %>
-  :namespace: <%= dep[:namespace] %> 
-  <% end %>
+  :type: <%= dep[:type] %>
 <% end %>
-
+...
+   

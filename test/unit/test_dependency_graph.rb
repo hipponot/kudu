@@ -21,6 +21,13 @@ class TestDependencyGraph < Test::Unit::TestCase
     remove_sample_projects 'sample_projects_in_namespace'    
   end
 
+  def test_dependency_graph
+   g = Kudu::DependencyGraph.new
+   all = g.build_order
+   d = g.build_order 'kudu_c'
+  end
+
+=begin
   def test_third_party
     deps = Kudu::DependencyGraph.third_party('a',false)
     assert(deps == [])
@@ -37,6 +44,7 @@ class TestDependencyGraph < Test::Unit::TestCase
     deps = Kudu::DependencyGraph.in_house('cws_a').map { |d| d[:namespace] + "_" + d[:name] }
     assert( deps == ['cws_d', 'cws_e', 'cws_c', 'cws_b', 'cws_a'])
   end
+=end
 
 end
 

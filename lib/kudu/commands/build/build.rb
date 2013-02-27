@@ -14,14 +14,14 @@ module Kudu
 
   class CLI < Thor
 
-    desc "build", "Build gem"
+    desc "build", "Build project"
 
-    method_option :name, :aliases => "-n", :required=>false, :default=>File.basename(Dir.pwd), :desc => "Gem name", :lazy_default => ""
+    method_option :name, :aliases => "-n", :required=>false, :default=>nil, :desc => "Project name", :lazy_default => ""
     method_option :all, :aliases => "-a", :type => :boolean, :required=>false, :desc => "Build everything"
     method_option :dependencies, :aliases => "-d", :required => false, :desc => "Rebuild dependencies before building"
     method_option :force, :aliases => "-f", :type => :boolean, :required => false, :default => false,  :desc => "Force rebuild"
-    method_option :user, :aliases => "-u", :type => :string, :required => false, :default=>Etc.getlogin(),  :desc => "User gemset name"
-    method_option :ffsf, :aliases => "-s", :type => :boolean, :required => false, :default=>false,  :desc => "Fast fast super fast"
+    method_option :repo, :aliases => "-r", :type => :string, :required => false, :default=>Etc.getlogin(),  :desc => "Repository name (published artifacts)"
+    method_option :odi, :aliases => "-o", :type => :boolean, :required => false, :default=>false,  :desc => "Optimized for developer iterations"
     
     # No ruby-prof in jruby 
     @profile = RUBY_PLATFORM == 'java' ? false : options[:profile] 
@@ -29,9 +29,9 @@ module Kudu
     def build
       Kudu.with_logging(self, __method__) do
         if options[:all]
-          Kudu.all.each { |project| build_one(project) } 
-        elsif options[:'rebuild-dependencies']
-          Kudu.dependencies(options[:name]).each { |project| build_one(project) } 
+          DependencyGraph.build_order { |project| build_one(project) } 
+        elsif options[:dependencies]
+          DependencyGraph.build_order(options[:name]).each { |project| build_one(project) } 
         else
           build_one(KuduProject.project(options[:name]))
         end
@@ -44,9 +44,8 @@ module Kudu
       unless Kudu.command_defined_for_type?('build', project.type)
         Kudu.ui.error("build command is not defined for project type " + project.type)
       else
-        Kudu.delegate_command('build', project.type, options)
+        Kudu.delegate_command('build', project.type, options, project)
       end
-
     end
 
 
