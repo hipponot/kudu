@@ -42,13 +42,15 @@ module Kudu
     end
     
     def with_logging(obj, method, message=nil)
-      begin
-        Kudu.ui.info "#{obj.to_s}::#{method}: #{message}" if verbose
-        yield
-      rescue
-        Kudu.ui.error "Error: #{obj.to_s}::#{method} failed"
-        raise
-      end
+      Kudu.with_friendly_errors {
+        begin
+          Kudu.ui.info "#{obj.to_s}::#{method}: #{message}" if verbose
+          yield
+        rescue
+          Kudu.ui.error "Error: #{obj.to_s}::#{method} failed"
+          raise
+        end
+      }
     end
 
     def validate_standard_options options
@@ -80,31 +82,31 @@ module Kudu
     def gitroot
       `git rev-parse --show-toplevel`.chomp
     end
-      def kudu_root
-        File.expand_path(File.join(__FILE__, '../../../'))
-      end
-      
-      def template_dir
-        File.join(kudu_root, 'templates')
-      end
+    def kudu_root
+      File.expand_path(File.join(__FILE__, '../../../'))
+    end
+    
+    def template_dir
+      File.join(kudu_root, 'templates')
+    end
 
-      def get_name_from_gemspec(gemspec)
-        unless gemspec
-          gemspec = Dir.glob('*.gemspec').first
-          raise Kudu::GemfileNotFound, 'Failed to find gemspec file, use the -n or -g option or run from a directory containting a gemspec' if gemspec.nil?
-        end
-        begin
-          Gem::Specification::load(gemspec).name
-        rescue
-          raise Kudu::InvalidGemfile, "Failed to parse #{gemspec}" 
-        end
+    def get_name_from_gemspec(gemspec)
+      unless gemspec
+        gemspec = Dir.glob('*.gemspec').first
+        raise Kudu::GemfileNotFound, 'Failed to find gemspec file, use the -n or -g option or run from a directory containting a gemspec' if gemspec.nil?
       end
+      begin
+        Gem::Specification::load(gemspec).name
+      rescue
+        raise Kudu::InvalidGemfile, "Failed to parse #{gemspec}" 
+      end
+    end
 
-      def parse_kudu_file kudu_file
-        return nil unless File.exist?(kudu_file)
-        begin
-          kudu = YAML::load(IO.read(kudu_file))
-          if !kudu[:publication].is_a?(Hash)
+    def parse_kudu_file kudu_file
+      return nil unless File.exist?(kudu_file)
+      begin
+        kudu = YAML::load(IO.read(kudu_file))
+        if !kudu[:publication].is_a?(Hash)
             #          raise Kudu::InvalidKudufile, "Kudufile #{kudu_file} missing publication: Hash"
           elsif !kudu[:dependencies].is_a?(Array)
             #          raise Kudu::InvalidKudufile, "Kudufile #{kudu_file} missing dependencies: Array"

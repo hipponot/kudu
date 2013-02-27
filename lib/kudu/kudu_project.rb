@@ -1,47 +1,48 @@
-  require_relative 'error'
-  require_relative 'kudu_artifact'
+require 'yaml'
+require_relative 'error'
+require_relative 'kudu_artifact'
 
-  module Kudu
+module Kudu
 
-    class KuduProject
+  class KuduProject
 
-      KNOWN_PROJECT_TYPES = ['gem', 'sinatra']
-      KNOWN_ARTIFACT_TYPES = ['gem']
+    KNOWN_PROJECT_TYPES = ['gem', 'sinatra']
+    KNOWN_ARTIFACT_TYPES = ['gem']
 
-      attr_reader :name
-      attr_reader :version
-      attr_reader :type
-      attr_reader :group
-      attr_reader :publications
-      attr_reader :directory
+    attr_reader :name
+    attr_reader :version
+    attr_reader :type
+    attr_reader :group
+    attr_reader :publications
+    attr_reader :directory
 
-      def initialize(kudu_spec)
-        @spec = KuduProject.load_and_validate_spec(kudu_spec)
-        @name = @spec[:project][:name]
-        @type = @spec[:project][:type]
-        @directory = File.dirname(kudu_spec)
-        @publications = []
-        @spec[:publications].each do |pub|
-          @publications << KuduArtifact.new_from_hash(pub)
-        end
-        @dependencies = []
-        @spec[:dependencies].each do |dep|
-          @dependencies << KuduArtifact.new_from_hash(dep)
-        end
+    def initialize(kudu_spec)
+      @spec = KuduProject.load_and_validate_spec(kudu_spec)
+      @name = @spec[:project][:name]
+      @type = @spec[:project][:type]
+      @directory = File.dirname(kudu_spec)
+      @publications = []
+      @spec[:publications].each do |pub|
+        @publications << KuduArtifact.new_from_hash(pub)
       end
-
-      def dependencies group=nil
-        if group.nil?
-          @dependencies
-        else
-          @dependencies.select { |d| d.group == group }
-        end
+      @dependencies = []
+      @spec[:dependencies].each do |dep|
+        @dependencies << KuduArtifact.new_from_hash(dep)
       end
+    end
 
-      class << self
+    def dependencies group=nil
+      if group.nil?
+        @dependencies
+      else
+        @dependencies.select { |d| d.group == group }
+      end
+    end
 
-        def load_and_validate_spec(kudu_spec)
-          spec = {}
+    class << self
+
+      def load_and_validate_spec(kudu_spec)
+        spec = {}
           #exists
           unless File.exist?(kudu_spec)
             raise Kudu::InvalidKuduSpec, "Can't open #{kudu_spec}"   
@@ -70,12 +71,12 @@
           spec
         end
         
-               
+        
         def project(project_name)
           # allows for skipping the project name parameter when commands are issued from project root directory
           project_name ||= File.exist?('kudu.yaml') ? KuduProject.new('kudu.yaml').name : nil
           unless project_name && projects.include?(project_name)
-            Kudu.ui.error "Can't find project #{project_name}"
+            Kudu.ui.error "Can't find project #{project_name}: Use the -n option or run from directory that contains a kudu.yaml"
             raise ProjectNotFound
           end
           projects[project_name]
@@ -83,16 +84,6 @@
 
         def projects
           @@projects ||= initialize_projects
-        end
-
-        def each
-          begin
-            DependencyGraph.build_order.each do |p|
-              yield v p
-            end
-          rescue Exception => e
-            Kudu.ui.error "Error: Kudu.each failed error: #{e}"
-          end
         end
 
         private

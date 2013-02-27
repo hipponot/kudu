@@ -12,19 +12,19 @@ class TestDependencyGraph < Test::Unit::TestCase
   include CreateSampleProjects
 
   def setup
-    create_sample_projects 'sample_projects'
-    create_sample_projects_in_namespace 'sample_projects_in_namespace'
+    @pwd = Dir.pwd
+    create_sample_projects File.join(@pwd,'sample_projects')
+    create_sample_projects_in_namespace File.join(@pwd, 'sample_projects_in_namespace')
   end
 
   def teardown
-    remove_sample_projects 'sample_projects'    
-    remove_sample_projects 'sample_projects_in_namespace'    
+    remove_sample_projects File.join(@pwd,'sample_projects')
+    remove_sample_projects File.join(@pwd,'sample_projects_in_namespace')
   end
 
   def test_dependency_graph
    g = Kudu::DependencyGraph.new
-   all = g.build_order
-   d = g.build_order 'kudu_c'
+   assert( (g.build_order 'kudu_a').map {|p| p.name } == ['kudu_d', 'kudu_e', 'kudu_c', 'kudu_b', 'kudu_a'])
   end
 
 =begin

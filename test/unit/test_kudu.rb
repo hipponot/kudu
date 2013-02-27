@@ -29,13 +29,13 @@ class TestKudu < Test::Unit::TestCase
 
   def test_build
     # Using a ruby 'here' document for capturing long string literal
-    capture_stdout  { Kudu::CLI.start ['build', '-n', 'a', '-d', '-f', '-u', 'some_user'] }    
+    capture_stdout  { Kudu::CLI.start ['build', '-n', 'a', '-d', '-f', '-r', 'some_user'] }    
   end
 
   def test_skip_unchanged
     # Using a ruby 'here' document for capturing long string literal
-    capture_stdout  { Kudu::CLI.start ['build', '-n', 'a', '-d', '-f', '-u', 'some_user'] }    
-    out = capture_stdout  { Kudu::CLI.start ['build', '-n', 'a', '-d', '-f', '-u', 'some_user'] }    
+    capture_stdout  { Kudu::CLI.start ['build', '-n', 'a', '-d', '-f', '-r', 'some_user'] }    
+    out = capture_stdout  { Kudu::CLI.start ['build', '-n', 'a', '-d', '-f', '-r', 'some_user'] }    
   end
 
 end

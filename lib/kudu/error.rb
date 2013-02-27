@@ -3,12 +3,12 @@ module Kudu
   class DuplicateProjectFound < KuduError; end
   class KuduSpecNotFound < KuduError;  end  
   class KuduSpecInHouseVersion < KuduError;  end  
-  class ProjectpecNotFound < KuduError; end
-  class InvalidGemfile < KuduError; end
+  class ProjectNotFound < KuduError; end
+  class InvalidGemspec < KuduError; end
   class InvalidKuduSpec < KuduError; end
   class InvalidOption < KuduError; end
   class BuildFailed < KuduError; end
   class CommandNotDefinedForType < KuduError; end
   class TemplateElaborationFailed < KuduError; end
-  class BuildGemFailed < KuduError; end
+  class GemBuilderFailed < KuduError; end
 end

@@ -9,6 +9,7 @@ require_relative '../../error'
 require_relative '../../util'
 require_relative '../../ui'
 require_relative '../../kudu_project'
+require_relative '../../dependency_graph'
 
 module Kudu
 
@@ -22,6 +23,7 @@ module Kudu
     method_option :force, :aliases => "-f", :type => :boolean, :required => false, :default => false,  :desc => "Force rebuild"
     method_option :repo, :aliases => "-r", :type => :string, :required => false, :default=>Etc.getlogin(),  :desc => "Repository name (published artifacts)"
     method_option :odi, :aliases => "-o", :type => :boolean, :required => false, :default=>false,  :desc => "Optimized for developer iterations"
+    method_option :dryrun, :aliases => "-", :type => :boolean, :required => false, :default=>false,  :desc => "Dry run"
     
     # No ruby-prof in jruby 
     @profile = RUBY_PLATFORM == 'java' ? false : options[:profile] 
@@ -29,9 +31,9 @@ module Kudu
     def build
       Kudu.with_logging(self, __method__) do
         if options[:all]
-          DependencyGraph.build_order { |project| build_one(project) } 
+          DependencyGraph.new.build_order { |project| build_one(project) } 
         elsif options[:dependencies]
-          DependencyGraph.build_order(options[:name]).each { |project| build_one(project) } 
+          DependencyGraph.new.build_order(options[:name]).each { |project| build_one(project) } 
         else
           build_one(KuduProject.project(options[:name]))
         end
