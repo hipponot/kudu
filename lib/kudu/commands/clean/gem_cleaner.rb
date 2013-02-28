@@ -17,14 +17,14 @@ module Kudu
           Kudu.ui.info "cleaning #{project.name}"
           Dir.chdir(project.directory)
           `rm -rf build`
-          Kudu.ui.info `rvm @#{options[:repo]} do gem uninstall -q -x #{project.name}`.chomp
+          Kudu.ui.info `rvm @#{options[:repo]} do gem uninstall -I -q -x #{project.name}`.chomp
           if options[:'more-clean'] || options[:nuke]
             project.dependencies.each do |dep|
               if dep.group == 'third-party'
                 if dep.version == 'latest'
-                  Kudu.ui.info `rvm @global do gem uninstall -q -x #{dep.name}`.chomp
+                  Kudu.ui.info `rvm @global do gem uninstall  -I -q -x #{dep.name}`.chomp
                 else
-                  Kudu.ui.info `rvm @global do gem uninstall -q -x #{dep.name} -v #{dep.version}`.chomp
+                  Kudu.ui.info `rvm @global do gem uninstall  -I -q -x #{dep.name} -v #{dep.version}`.chomp
                 end
               end
             end

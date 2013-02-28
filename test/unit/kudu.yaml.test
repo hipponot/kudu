@@ -1,0 +1,16 @@
+---
+:project:
+  :name: kudu_test
+  :type: gem
+:publications:
+ - :name: kudu_test_gem
+   :version: 0.0.1
+   :group: in-house
+   :type: gem
+:dependencies:  
+- :name: json 
+  :group: third-party
+  :type: gem
+- :name: erubis
+  :group: third-party
+  :type: gem
