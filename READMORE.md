@@ -41,9 +41,8 @@ If the build command is invoked with the -o option kudu will do what it can to i
 
 ```
 > vagrant ssh # from the guest OS 
-> cd '
-kudu/example/odi/kudu_odi_api
-> kudu build -d -o # build with dependencies using the ffsf option
+> cd kudu/example/odi/kudu_odi_api
+> kudu build -d -o # build with dependencies using the --odi option
 > kudu service-start
 ```
 
