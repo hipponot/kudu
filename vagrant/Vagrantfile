@@ -67,12 +67,12 @@ Vagrant::Config.run do |config|
   # some recipes and/or roles.
   #
    config.vm.provision :chef_solo, :log_level=>:debug do |chef|
-     chef.add_recipe "vagrant_main"
-     chef.add_recipe "apt"
-     chef.add_recipe "emacs"
+     #chef.add_recipe "vagrant_main"
+     #chef.add_recipe "apt"
+     #chef.add_recipe "emacs"
      chef.add_recipe "kudu"
-     chef.add_recipe "bash_setup"
-     chef.add_recipe "mongo_db"
+     #chef.add_recipe "bash_setup"
+     #chef.add_recipe "mongo_db"
      chef.json = { 
       'emacs' => {'packages' => ['emacs'] }
      }
