@@ -15,7 +15,7 @@ To generate a sample sinatra service
 To generate a sample sinatra service that depends upon kudu_test_gem
 
 ```
-> kudu create-project -n kudu_example_sinatra_dep -t sinatra -d '{namespace:%q{kudu}, group:%q{in-house}, name:%q{kudu_example_gem}}'
+> kudu create-project -n kudu_example_sinatra_dep -t sinatra -d '{namespace:%q{kudu}, group:%q{in-house}, name:%q{kudu_example_gem}, type:%q{gem}}'
 ```
 
 Build the sinatra API with dependencies
