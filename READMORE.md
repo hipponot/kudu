@@ -35,7 +35,7 @@ kudu manages transitive dependencies between modules through the kudu.yaml file 
   :group: third-party  
 ```
 
-## Optimzied Developer Iterations
+## Optimized Developer Iterations
 
 If the build command is invoked with the -o option kudu will do what it can to improve the efficiency developer iterations.  In the case of ruby based projects this implies that kudu will replace the files in the installed gems with links back to the source tree. In conjunction with shotgun this implies that you can build a web service its dependencies once and then edit source in-situ and simply refresh the browser or re-issue the API call.  To see how this works see the odi sample projects.
 
