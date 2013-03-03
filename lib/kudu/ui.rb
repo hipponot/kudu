@@ -32,7 +32,7 @@ module Kudu
       end
 
       def info(msg, newline = nil)
-        tell_me(msg, :blue, newline) if !@quiet
+        tell_me(msg, :cyan, newline) if !@quiet
       end
 
       def confirm(msg, newline = nil)
