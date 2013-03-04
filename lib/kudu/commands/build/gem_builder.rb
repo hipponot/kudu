@@ -36,7 +36,7 @@ module Kudu
           raise GemsBuilderFailed, "GemBuilder needs single @publication in publications array" unless project.publications.length == 1
           @publication = project.publications.first
           unless has_changed(project)
-            Kudu.ui.info "Already installed and no local changes, skipping #{vertex[:name]}:"
+            Kudu.ui.info "Already installed and no local changes, skipping #{@publication.name}:"
             return
           end
           gemspec = File.join(project.directory, "#{project.name}.gemspec")
