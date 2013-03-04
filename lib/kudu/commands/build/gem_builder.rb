@@ -36,6 +36,7 @@ module Kudu
         begin
           raise GemsBuilderFailed, "GemBuilder needs single @publication in publications array" unless project.publications.length == 1
           @publication = project.publications.first
+          Kudu.rvm_use @repo
           unless has_changed(project)
             Kudu.ui.info "Already installed and no local changes, skipping #{@publication.name}:"
             return
@@ -47,7 +48,6 @@ module Kudu
             Dir.chdir(project.directory)
             build_dir = File.join(project.directory,'build')
             Dir.mkdir(build_dir) unless File.directory?(build_dir)
-            Kudu.rvm_use @repo
             `gem build #{gemspec}`
             gem_name = "#{@publication.name}-#{@publication.version}.gem"
             FileUtils.mv File.join(project.directory, gem_name), File.join(build_dir, gem_name)
@@ -113,10 +113,10 @@ module Kudu
       Kudu.with_logging(self, __method__) do
         Kudu.rvm_use 'global'
         # Convert to full vertex descriptor if necessary
-        project.dependencies.select {|d| d.group == 'third-party'}.each do |d|
+        project.dependencies.select {|d| d.group == 'third-party'}.each do |dep|
           # install the versioned third party gem if necessary
           if not is_installed dep
-            if dep.version.nil?
+            if dep.version == 'latest'
               Kudu.ui.info "Installing latest #{dep.name}"
               Kudu.ui.info `gem install -f --no-ri --no-rdoc #{dep.name}`.chomp
             else
@@ -124,7 +124,7 @@ module Kudu
               Kudu.ui.info `gem install -f --no-ri --no-rdoc #{dep.name} --version \'#{dep.version}\'`.chomp
             end
           else
-            msg = "Already installed, skipping #{dep.name}, @{dep.version}" 
+            msg = "Already installed, skipping #{dep.name}, #{dep.version}"
             Kudu.ui.info msg
           end
         end
