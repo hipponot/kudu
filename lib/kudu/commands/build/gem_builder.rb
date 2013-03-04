@@ -17,7 +17,7 @@ module Kudu
   module GemBuilder
 
     def initialize(options, project)    
-      
+
       Kudu.with_logging(self, __method__) do
 
         @force = options[:force] || options[:odi]
@@ -25,6 +25,7 @@ module Kudu
         @odi = options[:odi]
 
         build_gem(project)
+        install_third_party(project)
 
       end
     end
@@ -46,6 +47,7 @@ module Kudu
             Dir.chdir(project.directory)
             build_dir = File.join(project.directory,'build')
             Dir.mkdir(build_dir) unless File.directory?(build_dir)
+            Kudu.rvm_use @repo
             `gem build #{gemspec}`
             gem_name = "#{@publication.name}-#{@publication.version}.gem"
             FileUtils.mv File.join(project.directory, gem_name), File.join(build_dir, gem_name)
@@ -77,7 +79,7 @@ module Kudu
           raise GemBuilderFailed, "Gem build failed: #{e.message}"
         end
       end
-    end
+      end
 
     def installed_gem_source_hash(project)
       Kudu.with_logging(self, __method__) do
@@ -107,6 +109,40 @@ module Kudu
       end
     end
 
+    def install_third_party project
+      Kudu.with_logging(self, __method__) do
+        Kudu.rvm_use 'global'
+        # Convert to full vertex descriptor if necessary
+        project.dependencies.select {|d| d.group == 'third-party'}.each do |d|
+          # install the versioned third party gem if necessary
+          if not is_installed dep
+            if dep.version.nil?
+              Kudu.ui.info "Installing latest #{dep.name}"
+              Kudu.ui.info `gem install -f --no-ri --no-rdoc #{dep.name}`.chomp
+            else
+              Kudu.ui.info "Installing #{dep.name}-#{dep.version}"
+              Kudu.ui.info `gem install -f --no-ri --no-rdoc #{dep.name} --version \'#{dep.version}\'`.chomp
+            end
+          else
+            msg = "Already installed, skipping #{dep.name}, @{dep.version}" 
+            Kudu.ui.info msg
+          end
+        end
+      end
+    end
+
+    def is_installed dep
+      begin
+        if (dep.version =='latest')
+          Gem::Specification.find_by_name(dep.name)
+        else
+          Gem::Specification.find_by_name(dep.name, dep.version)
+        end
+        true
+      rescue Gem::LoadError 
+        false
+      end
+    end
   end
 
 end
