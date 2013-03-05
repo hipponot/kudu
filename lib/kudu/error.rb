@@ -11,4 +11,5 @@ module Kudu
   class CommandNotDefinedForType < KuduError; end
   class TemplateElaborationFailed < KuduError; end
   class GemBuilderFailed < KuduError; end
+  class FlexBuilderMainNotFound < KuduError; end
 end
