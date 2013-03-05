@@ -1,22 +1,9 @@
-require_relative '../../error'
-require_relative '../../util'
+require_relative 'flex_builder'
 
 module Kudu
 
   class BuildAir
-
-    def initialize(options, project)
-      Kudu.with_logging(self, __method__) do
-      end
-    end
-
-    private
-
-    def build(project)
-      Kudu.with_logging(self, __method__) do
-      end
-    end
-
+    include FlexBuilder
   end
 
 end
