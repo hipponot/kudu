@@ -1,0 +1,21 @@
+bash -c '
+<%=
+pubs = Dir.glob(File.expand_path("~/.ssh/*.pub"))
+user = @config[:ssh_user] 
+if pubs.size == 1 && user
+  key = IO.read(pubs[0]).strip
+  <<-eos
+  /bin/mkdir -m 0700 ~/.ssh
+  /bin/chown #{user}:#{user} ~/.ssh
+  /bin/touch ~/.ssh/authorized_keys
+  if ! /bin/grep -q "#{key}" ~/.ssh/authorized_keys; then
+    /bin/echo \"#{key}\" >> ~/.ssh/authorized_keys
+  fi
+  /bin/chown #{user}:#{user} ~/.ssh/authorized_keys
+  eos
+else
+  ""
+end
+%>
+echo "copied ssh key"
+'

@@ -1,0 +1,4 @@
+{
+  "run_list": [ "recipe[service::installer]" ],
+  "settings": { "role": "dev" }
+}

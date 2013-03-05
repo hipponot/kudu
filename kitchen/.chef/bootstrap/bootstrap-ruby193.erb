@@ -1,0 +1,19 @@
+bash -c '
+if [ ! -f /usr/bin/chef-solo ]; then
+  apt-get update
+  apt-get -y upgrade
+  apt-get install -y build-essential wget zlib1g-dev libssl-dev libffi-dev libncurses5-dev libreadline5-dev libyaml-dev
+
+  cd
+  dpkg -i ruby-1.9.3_p194-1_amd64.deb
+
+  cd /usr/src
+  wget http://production.cf.rubygems.org/rubygems/rubygems-1.8.24.tgz
+  tar xzf rubygems-1.8.24.tgz
+  cd rubygems-1.8.24
+  ruby ./setup.rb
+
+  gem install chef --no-rdoc --no-ri
+  gem install httparty --no-rdoc --no-ri
+fi
+'
