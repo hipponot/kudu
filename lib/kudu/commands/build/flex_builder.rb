@@ -40,7 +40,7 @@ module Kudu
             Dir.mkdir(@build_dir) unless File.directory?(@build_dir)
             Dir.chdir(@build_dir)
             unless has_changed(project)
-              Kudu.ui.info "Already built and no local changes, skipping #{@publication.name}:"
+              Kudu.ui.info "Already built and no local changes, skipping #{@swf.name}:"
               return
             end
             call_mxmlc

@@ -8,6 +8,7 @@ ruby_block "install" do
  block do
    `tar xzf #{TMP_FLEX_SDK} -C #{FLEX_HOME}`
    `tar xzf #{TMP_AIR_SDK} -C #{AIR_HOME}`
+   `ln -sf #{FLEX_HOME}/bin/mxmlc} #{File.dirname(__File__)}/../../../../bin/mxmlc`
  end
 end
 
