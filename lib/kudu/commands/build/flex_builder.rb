@@ -36,6 +36,7 @@ module Kudu
           @swf = swfs[0]
           begin
             @build_dir = File.join(project.directory,'build')
+            current = Dir.pwd
             Dir.chdir(project.directory)
             Dir.mkdir(@build_dir) unless File.directory?(@build_dir)
             Dir.chdir(@build_dir)
@@ -43,7 +44,7 @@ module Kudu
               Kudu.ui.info "Already built and no local changes, skipping #{@swf.name}:"
               return
             end
-            call_mxmlc
+            call_flex(project)
           ensure
             Dir.chdir(current)
           end
@@ -52,14 +53,35 @@ module Kudu
         end
       end
     end
+
+# #!/bin/sh
+
+
+# #$AIR_SDK/bin/amxmlc -source-path src -output bin-debug/woot_math.swf src/woot/woot_math.as
+
+# # Fill in content string
+
+
+# # Run simulator (via wine, requires Linux setup:
+# #  - install wine
+# #  - http://askubuntu.com/questions/127848/wine-cant-find-gnome-keyring-pkcs11-so
+# wine /opt/air_sdk_3.6/bin/adl.exe -screensize iPad -profile extendedMobileDevice bin-debug/woot_math.xml
     
-    def call_mxmlc
-      main_file = Dir.glob(project.directory + "**/main*.as")[0]
+  def call_flex(project)
+      #SWF
+      main_file = Dir.glob("#{project.directory}/**/#{@swf.name}.as")[0]
       raise FlexBuilderMainNotFound unless File.exist?(main_file)
       cmd = "mxmlc "
-      cmd += " --source-path+=#{File.join(project.directory, 'src')}"
-      cmd += " --library-path+=#{File.join(project.directory, 'lib')}" 
-      cmd += " --main-file=#{main_file}"
+      cmd += " -output #{@build_dir}/#{@swf.name}.swf #{main_file}"
+      cmd += " -source-path+=#{project.directory}/src"
+      cmd += " -library-path+=#{project.directory}/lib"
+      cmd += " -static-link-runtime-shared-libraries"
+      puts cmd; system cmd
+      #APP XML
+      app_xml = Dir.glob("#{project.directory}/**/#{@swf.name}-app.xml")[0]
+      raise FlexBuilderAppXMLNotFound unless File.exist?(app_xml)
+      cmd = "cat #{app_xml} | sed -e 's,<content.*/content>,<content>#{@swf.name}.swf</content><renderMode>direct</renderMode>,' > #{@build_dir}/woot_math.xml"
+      puts "wrote #{@build_dir}/woot_math.xml"; system cmd
     end
     
     def has_changed(project)

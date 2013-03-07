@@ -2,13 +2,15 @@ TMP_FLEX_SDK = "/tmp/flex_sdk_4.6.zip"
 TMP_AIR_SDK = "/tmp/AIRSDK_Compiler.tbz2"
 FLEX_HOME = "/opt/flex/flex_sdk_4.6" 
 AIR_HOME = "/opt/flex/air_sdk_3.6" 
-
+MXMLC_BIN = "#{File.dirname(__FILE__)}/../../../../bin/mxmlc"
+ADL_BIN = "#{File.dirname(__FILE__)}/../../../../bin/adl"
+  
 ruby_block "install" do
  action :nothing
  block do
+  puts node.inspect
    `tar xzf #{TMP_FLEX_SDK} -C #{FLEX_HOME}`
    `tar xzf #{TMP_AIR_SDK} -C #{AIR_HOME}`
-   `ln -sf #{FLEX_HOME}/bin/mxmlc} #{File.dirname(__File__)}/../../../../bin/mxmlc`
  end
 end
 
@@ -26,6 +28,22 @@ remote_file TMP_AIR_SDK do
   owner "root"
   group "admin"
   action :create_if_missing
+end
+
+cookbook_file MXMLC_BIN do
+  source "mxmlc"
+  mode 0755
+  owner ENV['USER']
+  group "admin"
+  action :create
+end
+
+cookbook_file ADL_BIN do
+  source "adl"
+  mode 0755
+  owner ENV['USER']
+  group "admin"
+  action :create
 end
 
 directory AIR_HOME do

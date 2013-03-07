@@ -12,4 +12,5 @@ module Kudu
   class TemplateElaborationFailed < KuduError; end
   class GemBuilderFailed < KuduError; end
   class FlexBuilderMainNotFound < KuduError; end
+  class FlexBuilderAppXMLNotFound < KuduError; end
 end
