@@ -53,6 +53,7 @@ module Kudu
         end
       end
       FileUtils.mkdir_p(File.join(target, 'lib', project_name))
+      FileUtils.mkdir_p(File.join(target, 'ext', "#{project_name}")) if settings[:native_extension]
     end
 
     def elaborate(template_file, relative_output_file)

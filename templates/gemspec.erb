@@ -10,8 +10,12 @@ Gem::Specification.new do |gem|
   gem.description   = %q{<%= description %>}
   gem.summary       = %q{<%= summary %>}
   gem.homepage      = %q{<%= homepage %>}  
-  gem.files         = `git ls-files #{basedir}`.split($/) +
-                      `git ls-files #{basedir} --others --exclude-standard`.split($/) + `find . -name sha1`.split($/)
+  gem.files         = Dir.glob("lib/**/*").select {|f| f !=  "sha1"} +
+                      Dir.glob("ext/**/*.{cpp,h,rb,c}") +
+                      Dir.glob("kudu.yaml")
+  <% if native_extension %>                    
+  gem.extensions    = ["ext/<%=project_name%>/extconf.rb"] 
+  <% end %>
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]

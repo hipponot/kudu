@@ -9,6 +9,7 @@ module Kudu
       super
       # Settings specific to Sinatra project type, the rest are set in the base class
       settings[:project_type] = "sinatra"
+      settings[:native_extension] = options[:native_extension]
       settings[:publications] << {:name=>options[:name], :version=>"0.0.1", :type=>"gem", :group=>"in-house"}
       settings[:dependencies] << {:name=>"sinatra", :group=>"third-party", :type=>"gem"} << {:name=>"json", :group=>"third-party", :type=>"gem"} << {:name=>"shotgun", :group=>"developer", :type=>"gem"} 
 
@@ -19,6 +20,8 @@ module Kudu
       with_logging("wrote version") { elaborate("version.erb", File.join("lib", project_name, "version.rb")) }
       with_logging("wrote module") { elaborate("sinatra.erb", File.join("lib", "#{project_name}.rb")) }
       with_logging("wrote config.ru") { elaborate("config.ru.erb", "config.ru") }
+      with_logging("wrote extconf") { elaborate("extconf.erb", File.join("ext", project_name, "extconf.rb")) } if options[:native_extension]
+      with_logging("wrote extension cpp") { elaborate("module.cpp.erb", File.join("ext", project_name, "#{project_name}.cpp")) } if options[:native_extension]      
       with_logging("wrote kudu") { elaborate("kudu.erb", "kudu.yaml") }
     end
 

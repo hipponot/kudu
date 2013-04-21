@@ -1,4 +1,7 @@
 require "<%=project_name%>/version"
+<% if native_extension %>
+require "<%=project_name%>/<%=project_name%>"
+<% end %>
 <% if namespace %>
 module <%= namespace_cc %>
 <% end %>
