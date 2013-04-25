@@ -9,10 +9,10 @@ module Kudu
   class CLI < Thor
 
     desc "service-start", "Start service appropriate for project type"
-    method_option :project_name, :aliases => "-p", :required=>false, :desc => "Project name", :lazy_default => ""
+    method_option :project_name, :aliases => "-n", :required=>false, :desc => "Project name", :lazy_default => ""
     method_option :repo, :aliases => "-r", :type=>:string, :required=>false, :default=>Etc.getlogin(),  :desc => "Repository name to $USER"
     method_option :verbose, :aliases => "-v", :type=>:boolean, :required=>false, :default=>false,  :desc => "Verbose output"
-
+    method_option :port, :aliases => "-p", :type=>:string, :required=>false, :default=>"9393",  :desc => "Port number"
     def service_start
       #delegate to type specific command
       p = KuduProject.project(options[:project_name])
