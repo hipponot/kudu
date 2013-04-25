@@ -11,6 +11,7 @@ require_relative '../../rvm_util'
 require_relative '../../dependency_graph'
 require_relative '../../ui'
 require_relative '../../kudu_project'
+require_relative 'gem_builder'
 
 module Kudu
 
