@@ -22,6 +22,7 @@ module Kudu
       outfile = File.join(project.directory, "build", "#{project.name}.init.d")
       ErubisInflater.inflate_file_write(template, {project_name:project.name, project_version:project.version}, outfile)
       `sudo cp #{outfile} /etc/init.d/#{project.name}`
+      `sudo chmod 755 /etc/init.d/#{project.name}`
     end
 
   end
