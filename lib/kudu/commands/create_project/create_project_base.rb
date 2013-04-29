@@ -54,6 +54,7 @@ module Kudu
           return
         end
       end
+      FileUtils.mkdir_p(File.join(target, 'config'))
       FileUtils.mkdir_p(File.join(target, 'lib', project_name))
       FileUtils.mkdir_p(File.join(target, 'ext', "#{project_name}")) if settings[:native_extension]
     end
