@@ -1,0 +1,23 @@
+# set path to app that will be used to configure unicorn, 
+# note the trailing slash in this example
+dir = File.join(File.expand_path(File.dirname(__FILE__ )), File::SEPARATOR)
+
+#worker_processes 2
+working_directory dir
+timeout 30
+
+# Application directories
+FileUtils.mkdir_p "/tmp/unicorn/sockets/<%=project_name%>"
+FileUtils.mkdir_p "/tmp/unicorn/pids/<%=project_name%>"
+FileUtils.mkdir_p "/var/log/unicorn/<%=project_name%>"
+
+# Specify path to socket unicorn listens to, 
+# we will use this in our nginx.conf later
+listen "/tmp/unicorn/sockets/<%=project_name%>/unicorn.sock", :backlog => 64
+
+# Set process id path
+pid "/tmp/unicorn/pids/<%=project_name%>/unicorn.pid"
+
+# Set log file paths
+stderr_path "/var/log/unicorn/<%=project_name%>/stderr.log"
+stdout_path "/var/log/unicorn/<%=project_name%>/stdout.log"
