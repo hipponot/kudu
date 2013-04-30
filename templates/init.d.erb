@@ -25,7 +25,7 @@ ENV=production
  
 GEM_HOME="/home/vagrant/.rvm/gems/ruby-1.9.3-p392"
  
-UNICORN_OPTS="-D -E $ENV -c $APP_ROOT/config/unicorn.rb -l 0.0.0.0:9393"
+UNICORN_OPTS="-D -E $ENV -c $APP_ROOT/config/unicorn.rb -l 0.0.0.0:<%=port%>"
  
 SET_PATH="cd $APP_ROOT; rvm use @vagrant; export GEM_HOME=$GEM_HOME"
 CMD="$SET_PATH; $GEM_HOME@global/bin/unicorn $UNICORN_OPTS"
