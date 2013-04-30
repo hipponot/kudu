@@ -23,6 +23,7 @@ module Kudu
       ErubisInflater.inflate_file_write(template, {project_name:project.name, project_version:project.version}, outfile)
       `sudo cp #{outfile} /etc/init.d/#{project.name}`
       `sudo chmod 755 /etc/init.d/#{project.name}`
+      Kudu.ui.info("#{project.name} deployed")
     end
 
   end
