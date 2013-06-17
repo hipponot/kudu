@@ -70,7 +70,7 @@ module Kudu
       begin
         ErubisInflater.inflate_file_write(template, settings, outfile)
         Kudu.ui.info("Wrote #{outfile}")
-      rescue
+      rescue Exception => e
         raise TemplateElaborationFailed, "Failed to elaborate template file #{template}"
       end
     end
