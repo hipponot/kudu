@@ -130,7 +130,7 @@ module Kudu
         links = []
         files.each do |f|
           if File.symlink? f
-            ff = File.expand_path(File.join(File.expand_path(f), `readlink #{f}`))
+            ff = File.expand_path(File.join(File.dirname(f), `readlink #{f}`))
             links += git_ls_files ff
             files.delete(f)
           end
