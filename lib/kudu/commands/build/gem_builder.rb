@@ -97,7 +97,7 @@ module Kudu
     def odi(project)
       Kudu.with_logging(self, __method__) do
         targets = `gem contents #{@publication.name} --version #{@publication.version}`.split($/) 
-        sources = targets.map { |f| project.directory + f.split(/#{full_name}-\d+\.\d+\.\d+/)[1] }
+        sources = targets.map { |f| project.directory + f.split(/#{project.name}-\d+\.\d+\.\d+/)[1] }
         for i in 0..sources.length-1
           next if sources[i] =~ /sha1/
           cmd = "ln -fF -s #{sources[i]} #{targets[i]}"
