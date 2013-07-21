@@ -29,6 +29,7 @@ module Kudu
       @spec[:dependencies].each do |dep|
         @dependencies << KuduArtifact.new_from_hash(dep)
       end
+      @version = @publications[0].version
     end
 
     def dependencies group=nil

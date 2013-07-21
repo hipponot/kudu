@@ -32,7 +32,9 @@ module Kudu
       # merge in repo specific settings or use defaults
       @settings.merge!(repository_settings)
 
+      raise InvalidOption, " --patch and --force are not compatible" if options[:force] && options[:patch]
       @force = options[:force]
+      @patch = options[:patch]
       @backup = options[:backup]
       @repo = options[:repo]
     end
@@ -41,7 +43,7 @@ module Kudu
 
     def create_project_skeleton
       target = File.join(Dir.pwd, project_name)
-      if File.exist?(target) && !@force
+      if File.exist?(target) && !@force && !@patch
         Kudu.ui.info "#{target} exists, over-write ? (y/n)"
         overwrite = ''
         while overwrite != 'y' && overwrite != 'n'
@@ -52,17 +54,23 @@ module Kudu
           return
         end
       end
+      FileUtils.mkdir_p(File.join(target, 'config'))
       FileUtils.mkdir_p(File.join(target, 'lib', project_name))
       FileUtils.mkdir_p(File.join(target, 'ext', "#{project_name}")) if settings[:native_extension]
     end
 
     def elaborate(template_file, relative_output_file)
-      template = File.join(Kudu.template_dir, template_file) 
       outfile = File.join(Dir.pwd, project_name, relative_output_file)
+      if @patch && File.exists?(outfile)
+        Kudu.ui.info("File exists: #{outfile} - skipping")
+        return
+      end
+      template = File.join(Kudu.template_dir, template_file) 
       FileUtils.copy(outfile, outfile + ".bu") if @backup && File.exist?(outfile)
       begin
         ErubisInflater.inflate_file_write(template, settings, outfile)
-      rescue
+        Kudu.ui.info("Wrote #{outfile}")
+      rescue Exception => e
         raise TemplateElaborationFailed, "Failed to elaborate template file #{template}"
       end
     end

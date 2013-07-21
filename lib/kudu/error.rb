@@ -1,5 +1,6 @@
 module Kudu
   class KuduError < StandardError; end
+  class NotUserVagrant < KuduError; end
   class DuplicateProjectFound < KuduError; end
   class KuduSpecNotFound < KuduError;  end  
   class KuduSpecInHouseVersion < KuduError;  end  

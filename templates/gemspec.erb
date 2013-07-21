@@ -11,6 +11,8 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{<%= summary %>}
   gem.homepage      = %q{<%= homepage %>}  
   gem.files         = Dir.glob("lib/**/*").select {|f| f !=  "sha1"} +
+                      Dir.glob("bin/**/*") +
+                      Dir.glob("config/**/*") +
                       Dir.glob("ext/**/*.{cpp,h,rb,c}") +
                       Dir.glob("kudu.yaml")
   <% if native_extension %>                    

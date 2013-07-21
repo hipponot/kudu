@@ -1,0 +1,5 @@
+upstream <%=project_name%> {
+    server unix:/tmp/unicorn/sockets/<%=project_name%>/unicorn.sock fail_timeout=0;
+}
+
+
