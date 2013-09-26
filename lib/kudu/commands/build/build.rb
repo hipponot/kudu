@@ -21,7 +21,7 @@ module Kudu
     method_option :all, :aliases => "-a", :type => :boolean, :required=>false, :desc => "Build everything"
     method_option :dependencies, :aliases => "-d", :required => false, :desc => "Rebuild dependencies before building"
     method_option :force, :aliases => "-f", :type => :boolean, :required => false, :default => false,  :desc => "Force rebuild"
-    method_option :repo, :aliases => "-r", :type => :string, :required => false, :default=>Etc.getlogin(),  :desc => "Repository name (published artifacts)"
+    method_option :repo, :aliases => "-r", :type => :string, :required => false, :default=>"default",  :desc => "Repository name (published artifacts)"
     method_option :odi, :aliases => "-o", :type => :boolean, :required => false, :default=>false,  :desc => "Optimized for developer iterations"
     method_option :dryrun, :aliases => "-", :type => :boolean, :required => false, :default=>false,  :desc => "Dry run"
     

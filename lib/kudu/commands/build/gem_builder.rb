@@ -48,11 +48,11 @@ module Kudu
             Dir.chdir(project.directory)
             build_dir = File.join(project.directory,'build')
             Dir.mkdir(build_dir) unless File.directory?(build_dir)
-            `gem build #{gemspec}`
+            Kudu.ui.info `gem build #{gemspec}`
             gem_name = "#{@publication.name}-#{@publication.version}.gem"
             FileUtils.mv File.join(project.directory, gem_name), File.join(build_dir, gem_name)
             Dir.chdir(build_dir)
-            `gem install -l -f --no-ri --no-rdoc #{gem_name}`
+            Kudu.ui.info `gem install -l -f --no-ri --no-rdoc #{gem_name}`
             Kudu.ui.info "Installed #{gem_name} in group #{@publication.group}"
             odi(project) if @odi
           ensure

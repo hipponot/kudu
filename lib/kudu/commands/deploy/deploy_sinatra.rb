@@ -17,7 +17,7 @@ module Kudu
     def initialize(options, project)
       raise NotUserVagrant, "deploy command requires user vagrant" if ENV['USER'] != "vagrant"
       # Hack                                                                                                                                                                                                                                      
-      ports = {"woot_learning_model"=>"3000", "woot_storage"=>"3001", "woot_roster"=>"3002", "woot_cms"=>"3003"}
+      ports = {"woot_learning_model"=>"3000", "woot_storage"=>"3001", "woot_roster"=>"3002", "woot_cms"=>"3003", "woot_db"=>"3004"}
       `sudo cp #{project.directory}/config/location.conf /etc/nginx/conf.d/location/#{project.name}.conf`
       `sudo cp #{project.directory}/config/upstream.conf /etc/nginx/conf.d/upstream/#{project.name}.conf`
       template = File.join(Kudu.template_dir, "init.d.erb")
