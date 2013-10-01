@@ -3,7 +3,7 @@ module Kudu
   class CLI < Thor
 
     desc "list", "print list of installed gems"
-    method_option :user, :aliases => "-u", :type=>:string, :required=>false, :default=>Etc.getlogin(),  :desc => "User gemset to list"
+    method_option :user, :aliases => "-u", :type=>:string, :required=>false, :default=>"default",  :desc => "User gemset to list"
     def list
       list_gemset options[:user]
     end
