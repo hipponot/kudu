@@ -13,7 +13,7 @@ module Kudu
     method_option :backup, :type=>:boolean, :aliases => "-b", :required=>false, :default=>false, :desc => "Make backups of overwritten files"
     method_option :dependencies, :type=>:array, :aliases => "-d", :required=>false, :default=>[], :desc => "Dependencies"
     method_option :publications, :type=>:array, :aliases => "-p", :required=>false, :default=>[], :desc => "Publications"
-    method_option :repo, :aliases => "-r", :type => :string, :required => false, :default=>Etc.getlogin(),  :desc => "Repository name (published artifacts)"
+    method_option :repo, :aliases => "-r", :type => :string, :required => false, :default=>"default",  :desc => "Repository name (published artifacts)"
 
     def create_project
       #delegate to type specific command

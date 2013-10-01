@@ -22,7 +22,7 @@ module Kudu
       method_option :name, :aliases => "-n", :required=>false, :default=>nil, :desc => "Project name", :lazy_default => ""
       method_option :all, :aliases => "-a", :type => :boolean, :required=>false, :desc => "clean everything"
       method_option :dependencies, :aliases => "-d", :required => false, :desc => "Rebuild dependencies before building"
-      method_option :repo, :aliases => "-r", :type => :string, :required => false, :default=>Etc.getlogin(),  :desc => "Repository name (published artifacts)"
+      method_option :repo, :aliases => "-r", :type => :string, :required => false, :default=>"default",  :desc => "Repository name (published artifacts)"
       method_option :'more-clean', :aliases => "-m", :type => :boolean, :required => false, :default=>false,  :desc => "more clean"      
       method_option :'nuke', :aliases => "-N", :type => :boolean, :required => false, :default=>false,  :desc => "nuke"      
 
