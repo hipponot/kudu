@@ -1,5 +1,4 @@
 require 'digest'
-require 'rubygems/gem_path_searcher'
 require_relative 'error'
 
 class String

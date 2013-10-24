@@ -1,9 +1,6 @@
 
 require 'rvm'
 require 'etc'
-require 'rubygems/builder'
-require 'rubygems/installer'
-
 require 'ruby-prof' unless RUBY_PLATFORM=='java'
 
 require_relative '../../error'

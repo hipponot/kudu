@@ -1,7 +1,5 @@
 require 'rvm'
 require 'etc'
-require 'rubygems/builder'
-require 'rubygems/installer'
 
 require_relative '../../error'
 require_relative '../../util'

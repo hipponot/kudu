@@ -15,7 +15,7 @@ module Kudu
         end
         
         File.open(File.join(ENV['HOME'], '.kudu_bootstrap'), "w") { |f| f.puts true }          
-        ['rack','bundler','shotgun','sinatra','sinatra-synchrony','erubis','thor','rgl', 'ruby-prof'].each do |gem|
+        ['rvm', 'builder', 'rack','bundler','shotgun','sinatra','sinatra-synchrony','erubis','thor','rgl', 'ruby-prof'].each do |gem|
           unless is_installed gem
             puts `gem install -f --no-ri --no-rdoc #{gem}`
           else
