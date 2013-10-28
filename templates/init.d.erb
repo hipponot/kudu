@@ -21,7 +21,8 @@ APP_NAME=<%=project_name%>
 APP_VERSION=<%=project_version%>
 APP_ROOT=/home/<%=user%>/.rvm/gems/<%=ruby%>/gems/$APP_NAME-$APP_VERSION
 PID="/tmp/unicorn/pids/<%=project_name%>/unicorn.pid"
-ENV=production
+
+ENV=<%=env%>
 
 GEM_HOME="/home/<%=user%>/.rvm/gems/<%=ruby%>"
  
