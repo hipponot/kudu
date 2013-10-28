@@ -19,11 +19,11 @@ set -e
 # Change these to match your app:
 APP_NAME=<%=project_name%>
 APP_VERSION=<%=project_version%>
-APP_ROOT=/home/<%=user%>/.rvm/gems/ruby-1.9.3-p448@<%=user%>/gems/$APP_NAME-$APP_VERSION
+APP_ROOT=/home/<%=user%>/.rvm/gems/ruby-1.9.3-p448/gems/$APP_NAME-$APP_VERSION
 PID="/tmp/unicorn/pids/<%=project_name%>/unicorn.pid"
 ENV=production
- 
-GEM_HOME="/home/<%=user%>/.rvm/gems/ruby-1.9.3-p448"
+
+GEM_HOME="/home/<%=user%>/.rvm/gems/<%=ruby%>"
  
 UNICORN_OPTS="-D -E $ENV -c $APP_ROOT/config/unicorn.rb -l 0.0.0.0:<%=port%>"
  
