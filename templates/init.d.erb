@@ -19,15 +19,15 @@ set -e
 # Change these to match your app:
 APP_NAME=<%=project_name%>
 APP_VERSION=<%=project_version%>
-APP_ROOT=/home/vagrant/.rvm/gems/ruby-1.9.3-p448@vagrant/gems/$APP_NAME-$APP_VERSION
+APP_ROOT=/home/<%=user%>/.rvm/gems/ruby-1.9.3-p448@<%=user%>/gems/$APP_NAME-$APP_VERSION
 PID="/tmp/unicorn/pids/<%=project_name%>/unicorn.pid"
 ENV=production
  
-GEM_HOME="/home/vagrant/.rvm/gems/ruby-1.9.3-p448"
+GEM_HOME="/home/<%=user%>/.rvm/gems/ruby-1.9.3-p448"
  
 UNICORN_OPTS="-D -E $ENV -c $APP_ROOT/config/unicorn.rb -l 0.0.0.0:<%=port%>"
  
-SET_PATH="cd $APP_ROOT; rvm use @vagrant; export GEM_HOME=$GEM_HOME"
+SET_PATH="cd $APP_ROOT; export GEM_HOME=$GEM_HOME"
 CMD="$SET_PATH; $GEM_HOME@global/bin/unicorn $UNICORN_OPTS"
  
 old_pid="$PID.oldbin"
@@ -45,7 +45,7 @@ oldsig () {
 case ${1-help} in
 start)
   sig 0 && echo >&2 "Already running" && exit 0
-  su - vagrant -c "$CMD"
+  su - <%=user%> -c "$CMD"
   ;;
 stop)
   sig QUIT && exit 0
@@ -58,12 +58,12 @@ force-stop)
 restart|reload)
   sig HUP && echo reloaded OK && exit 0
   echo >&2 "Couldn't reload, starting '$CMD' instead"
-  su - vagrant -c "$CMD"
+  su - <%=user%> -c "$CMD"
   ;;
 upgrade)
   sig USR2 && exit 0
   echo >&2 "Couldn't upgrade, starting '$CMD' instead"
-  su - vagrant -c "$CMD"
+  su - <%=user%> -c "$CMD"
   ;;
 rotate)
   sig USR1 && echo rotated logs OK && exit 0
