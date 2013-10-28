@@ -45,7 +45,7 @@ oldsig () {
 case ${1-help} in
 start)
   sig 0 && echo >&2 "Already running" && exit 0
-  su - <%=user%> -c "$CMD"
+  sudo su - <%=user%> -c "$CMD"
   ;;
 stop)
   sig QUIT && exit 0
@@ -58,12 +58,12 @@ force-stop)
 restart|reload)
   sig HUP && echo reloaded OK && exit 0
   echo >&2 "Couldn't reload, starting '$CMD' instead"
-  su - <%=user%> -c "$CMD"
+  sudo su - <%=user%> -c "$CMD"
   ;;
 upgrade)
   sig USR2 && exit 0
   echo >&2 "Couldn't upgrade, starting '$CMD' instead"
-  su - <%=user%> -c "$CMD"
+  sudo su - <%=user%> -c "$CMD"
   ;;
 rotate)
   sig USR1 && echo rotated logs OK && exit 0
