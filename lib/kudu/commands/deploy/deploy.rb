@@ -17,6 +17,7 @@ module Kudu
 
     method_option :name, :aliases => "-n", :type => :string, :required=>true, :desc => "project name"
     method_option :port, :aliases => "-p", :type => :string, :required => true, :desc => "port (unicorn)"
+    method_option :user, :aliases => "-u", :type => :string, :required => true, :desc => "user"
     method_option :repo, :aliases => "-r", :type => :string, :required => false, :default=>"default",  :desc => "repository name"
 
     # No ruby-prof in jruby 
