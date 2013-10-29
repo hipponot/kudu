@@ -2,11 +2,15 @@ Kudu
 =====
 
 ## Introduction
-Kudu is a Vagrant based developer virtualization platform. In its current state Kudu supports the development of Sinatra Web APIs and ruby gems.  The host OS can be either ubuntu or OSX the guest OS is ubuntu.  The system includes build-ware for packaging ruby projects as gems that is optimzied for fast developer iterations and supports transitive dependency management.  The build-ware is extensible, adding support for other language types is WIP.
+Kudu is buildware that understands transitive dependency management
+and is optimized for multi-gem, multi-api developer workflows. In its
+current state Kudu supports the development of Sinatra Web APIs and
+ruby gems. The build-ware is extensible, adding support for other
+language types is WIP.
 
 ## Prerequisites
 
-Your system must have ruby >1.87 installed.  
+Your system must have ruby >1.93 installed.  
 
 ## Install VirtualBox
 
