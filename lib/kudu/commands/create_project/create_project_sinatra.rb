@@ -24,7 +24,6 @@ module Kudu
       elaborate("module.cpp.erb", File.join("ext", project_name, "#{project_name}.cpp")) if options[:native_extension]      
       elaborate("kudu.erb", "kudu.yaml") 
       elaborate("unicorn.erb", File.join("config", "unicorn.rb")) 
-      elaborate("location.conf.erb", File.join("config", "location.conf")) 
       elaborate("upstream.conf.erb", File.join("config", "upstream.conf"))
     end
 
