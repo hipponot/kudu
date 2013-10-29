@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
                       Dir.glob("kudu.yaml")
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ["lib"]
+  gem.require_paths = ["lib", "lib/templates"]
   begin
     text = IO.read(File.join(basedir,'kudu.yaml'))
     kudu = YAML::load(text)

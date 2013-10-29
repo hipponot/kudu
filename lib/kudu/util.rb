@@ -81,12 +81,13 @@ module Kudu
     def gitroot
       `git rev-parse --show-toplevel`.chomp
     end
+
     def kudu_root
       File.expand_path(File.join(__FILE__, '../../../'))
     end
     
     def template_dir
-      File.join(kudu_root, 'templates')
+      File.join(kudu_root, 'lib', 'templates')
     end
 
     def get_name_from_gemspec(gemspec)
