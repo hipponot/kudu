@@ -6,7 +6,7 @@ require_relative 'error'
     class KuduArtifact
 
       attr_reader :name
-      attr_reader :version
+      attr_accessor :version
       attr_reader :type
       attr_reader :group
 

@@ -49,6 +49,8 @@ module Kudu
         kudu[:publications][0][:version] = options[:version]
         File.open(kudu_file, 'w') {|f| f.write(kudu.to_yaml) }
         project.version = options[:version]
+        # Refactor for one gem per project - this is lame
+        project.publications.each {|p| p.version = options[:version] }
       end
       unless Kudu.command_defined_for_type?('build', project.type)
         Kudu.ui.error("build command is not defined for project type " + project.type)

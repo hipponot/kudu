@@ -29,7 +29,7 @@ GEM_HOME="/home/<%=user%>/.rvm/gems/<%=ruby%>"
 UNICORN_OPTS="-D -E $ENV -c $APP_ROOT/config/unicorn.rb -l 0.0.0.0:<%=port%>"
  
 SET_PATH="cd $APP_ROOT; export GEM_HOME=$GEM_HOME"
-CMD="$SET_PATH; $GEM_HOME@global/bin/unicorn $UNICORN_OPTS"
+CMD="$SET_PATH; $GEM_HOME@global/bin/unicorn $UNICORN_OPTS deploy.ru"
  
 old_pid="$PID.oldbin"
  

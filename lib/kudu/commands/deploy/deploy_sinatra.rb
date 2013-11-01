@@ -27,7 +27,6 @@ module Kudu
       ErubisInflater.inflate_file_write(template, {project_name:project.name, port:options[:port]}, outfile)
       location = "/etc/nginx/conf.d/location/#{project.name}-#{options[:port]}.conf"
       `sudo cp #{outfile} #{location}`
-      Kudu.ui.info("#{project.name} deployed")
     end
 
   end

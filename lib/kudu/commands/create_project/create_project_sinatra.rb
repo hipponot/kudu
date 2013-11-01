@@ -19,11 +19,13 @@ module Kudu
       elaborate("gemspec.erb", "#{project_name}.gemspec") 
       elaborate("version.erb", File.join("lib", project_name, "version.rb")) 
       elaborate("sinatra.erb", File.join("lib", "#{project_name}.rb")) 
+      # kudu build creates the versioned (deployable) config.ru
       elaborate("config.ru.erb", File.join("config","config.ru"))
       elaborate("extconf.erb", File.join("ext", project_name, "extconf.rb")) if options[:native_extension]
       elaborate("module.cpp.erb", File.join("ext", project_name, "#{project_name}.cpp")) if options[:native_extension]      
       elaborate("kudu.erb", "kudu.yaml") 
-      elaborate("unicorn.erb", File.join("config", "unicorn.rb")) 
+      # kudu deploy now creates the versioned unicorn.rb
+      #elaborate("unicorn.erb", File.join("config", "unicorn.rb")) 
       elaborate("upstream.conf.erb", File.join("config", "upstream.conf"))
     end
 

@@ -14,8 +14,20 @@ module Kudu
 
   class BuildSinatra
     
-    include GemBuilder
-    
-  end
+    def initialize(options, project)
+      # generate unicorn config before building sinatra project types
+      template = File.join(Kudu.template_dir, "unicorn.erb")
+      outfile = File.join(project.directory, "config", "unicorn.rb")
+      ErubisInflater.inflate_file_write(template, {project_name:project.name, project_version:project.version}, outfile)
 
+      # add version to config.ru 
+      ru_file = File.join(project.directory, "config", "config.ru")
+      deploy_ru = File.join(project.directory, "config", "deploy.ru")
+      IO.write(deploy_ru,IO.read(ru_file).gsub("require","gem \"#{project.name}\", \"#{project.version}\"; require"))
+
+      # build the gem
+      GemBuilder.new(options, project)
+    end
+
+  end
 end

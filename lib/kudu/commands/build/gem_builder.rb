@@ -11,7 +11,7 @@ require_relative '../../kudu_project'
 
 module Kudu
 
-  module GemBuilder
+  class GemBuilder
 
     def initialize(options, project)    
 
