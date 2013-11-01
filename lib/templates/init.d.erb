@@ -20,7 +20,7 @@ set -e
 APP_NAME=<%=project_name%>
 APP_VERSION=<%=project_version%>
 APP_ROOT=/home/<%=user%>/.rvm/gems/<%=ruby%>/gems/$APP_NAME-$APP_VERSION
-PID="/tmp/unicorn/pids/<%=project_name%>/unicorn.pid"
+PID="/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>/unicorn.pid"
 
 ENV=<%=env%>
 

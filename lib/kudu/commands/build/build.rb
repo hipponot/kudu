@@ -1,5 +1,6 @@
 require 'rvm'
 require 'etc'
+require 'yaml'
 require 'ruby-prof' unless RUBY_PLATFORM=='java'
 
 require_relative '../../error'
@@ -20,6 +21,7 @@ module Kudu
     method_option :force, :aliases => "-f", :type => :boolean, :required => false, :default => false,  :desc => "Force rebuild"
     method_option :repo, :aliases => "-r", :type => :string, :required => false, :default=>"default",  :desc => "Repository name (published artifacts)"
     method_option :odi, :aliases => "-o", :type => :boolean, :required => false, :default=>false,  :desc => "Optimized for developer iterations"
+    method_option :version, :aliases => "-v", :type => :string, :required => false, :desc => "Specify version"
     method_option :dryrun, :aliases => "-", :type => :boolean, :required => false, :default=>false,  :desc => "Dry run"
     
     # No ruby-prof in jruby 
@@ -40,6 +42,14 @@ module Kudu
     private
 
     def build_one project
+      # update top level project version if requested
+      if options[:version] and project.name == options[:name]
+        kudu_file = File.join(project.directory, 'kudu.yaml')
+        kudu = YAML::load(IO.read(kudu_file))
+        kudu[:publications][0][:version] = options[:version]
+        File.open(kudu_file, 'w') {|f| f.write(kudu.to_yaml) }
+        project.version = options[:version]
+      end
       unless Kudu.command_defined_for_type?('build', project.type)
         Kudu.ui.error("build command is not defined for project type " + project.type)
       else

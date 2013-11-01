@@ -10,7 +10,7 @@ module Kudu
     KNOWN_ARTIFACT_TYPES = ['gem']
 
     attr_reader :name
-    attr_reader :version
+    attr_accessor :version
     attr_reader :type
     attr_reader :group
     attr_reader :publications

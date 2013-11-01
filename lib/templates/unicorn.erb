@@ -7,17 +7,17 @@ working_directory dir
 timeout 30
 
 # Application directories
-FileUtils.mkdir_p "/tmp/unicorn/sockets/<%=project_name%>"
-FileUtils.mkdir_p "/tmp/unicorn/pids/<%=project_name%>"
-FileUtils.mkdir_p "/var/log/unicorn/<%=project_name%>"
+FileUtils.mkdir_p "/tmp/unicorn/sockets/<%=project_name%>-<%=project_version%>"
+FileUtils.mkdir_p "/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>"
+FileUtils.mkdir_p "/var/log/unicorn/<%=project_name%>-<%=project_version%>"
 
 # Specify path to socket unicorn listens to, 
 # we will use this in our nginx.conf later
-listen "/tmp/unicorn/sockets/<%=project_name%>/unicorn.sock", :backlog => 64
+listen "/tmp/unicorn/sockets/<%=project_name%>-<%=project_version%>/unicorn.sock", :backlog => 64
 
 # Set process id path
-pid "/tmp/unicorn/pids/<%=project_name%>/unicorn.pid"
+pid "/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>/unicorn.pid"
 
 # Set log file paths
-stderr_path "/var/log/unicorn/<%=project_name%>/stderr.log"
-stdout_path "/var/log/unicorn/<%=project_name%>/stdout.log"
+stderr_path "/var/log/unicorn/<%=project_name%>-<%=project_version%>/stderr.log"
+stdout_path "/var/log/unicorn/<%=project_name%>-<%=project_version%>/stdout.log"
