@@ -17,14 +17,16 @@ module Kudu
       template = File.join(Kudu.template_dir, "init.d.erb")
       outfile = File.join(project.directory, "build", "#{project.name}.init.d")
       ErubisInflater.inflate_file_write(template, {env:options[:env], ruby:options[:ruby], user:options[:user], project_name:project.name, project_version:project.version, port:options[:port]}, outfile)
-      `sudo cp #{outfile} /etc/init.d/#{project.name}`
-
+      # init.d
+      initd = "/etc/init.d/#{project.name}-#{options[:port]}"
+      `sudo cp #{outfile} #{initd}`
+      `sudo chmod 755 #{initd}`
+      # nginx location 
       template = File.join(Kudu.template_dir, "location.conf.erb")
       outfile = File.join(project.directory, "build", "location.conf")
       ErubisInflater.inflate_file_write(template, {project_name:project.name, port:options[:port]}, outfile)
-      `sudo cp #{outfile} /etc/nginx/conf.d/location/#{project.name}.conf`
-
-      `sudo chmod 755 /etc/init.d/#{project.name}`
+      location = "/etc/nginx/conf.d/location/#{project.name}-#{options[:port]}.conf"
+      `sudo cp #{outfile} #{location}`
       Kudu.ui.info("#{project.name} deployed")
     end
 
