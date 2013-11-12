@@ -22,8 +22,8 @@ module Kudu
       tokens = options[:name].split("_")
       @settings = {
         :project_name => options[:name],
-        :namespace => tokens.length > 1 ? tokens.first : nil,
-        :name => tokens.length > 1 ? tokens[1..tokens.length].join("_") : options[:name],
+        :namespace => (tokens.length > 1 and options[:use_namespace]) ? tokens.first : nil,
+        :name => (tokens.length > 1 and options[:use_namespace]) ? tokens[1..tokens.length].join("_") : options[:name],
         :dependencies => options[:dependencies].map {|dep| eval(dep) },
         :publications => options[:publications].map {|pub| eval(pub) }
       }

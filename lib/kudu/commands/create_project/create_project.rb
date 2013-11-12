@@ -8,6 +8,7 @@ module Kudu
     method_option :name, :type=>:string, :aliases => "-n", :required=>true, :desc => "Project name"
     method_option :type, :type=>:string, :aliases => "-t", :required=>true, :default=>'sinatra', :desc => "Project type"
     method_option :native_extension, :type=>:boolean, :aliases => "-e", :required=>false, :default=>false, :desc => "C-Native extension (ruby types only)"
+    method_option :use_namespace, :type=>:boolean, :aliases => "-s", :required=>false, :default=>false, :desc => "First token in snake cased name used as enclosing namespace"
     method_option :force, :type=>:boolean, :aliases => "-f", :required=>false, :desc => "Force overwrite if project of this name exists"
     method_option :patch, :type=>:boolean, :aliases => "-pa", :required=>false, :desc => "Only overwrite non-existent files"
     method_option :backup, :type=>:boolean, :aliases => "-b", :required=>false, :default=>false, :desc => "Make backups of overwritten files"

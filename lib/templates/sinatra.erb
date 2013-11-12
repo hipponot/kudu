@@ -12,18 +12,9 @@ module <%= namespace_cc %>
     class Service < Sinatra::Base
 
       get '/' do
-        "Hello World"
+        "<%=name%> #{<%=name_cc%>::VERSION}"
       end
   
-      get '/hello' do
-        cache_control :max_age => 0
-        puts "#{Time.now} Kudu: Hello!"
-        status 200
-        body JSON.pretty_generate({
-          "status" => "success",
-          "service" => "<%=name_cc%>"
-        })
-      end
     end
 
   end
