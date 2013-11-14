@@ -13,7 +13,8 @@ module Kudu
   class DeploySinatra
 
     def initialize(options, project)
-      `sudo cp #{project.directory}/config/upstream.conf /etc/nginx/conf.d/upstream/#{project.name}.conf`
+      # out until we know how to use it
+#      `sudo cp #{project.directory}/config/upstream.conf #{options[:'nginx-conf']}/conf.d/upstream/#{project.name}.conf`
       template = File.join(Kudu.template_dir, "init.d.erb")
       outfile = File.join(project.directory, "build", "#{project.name}.init.d")
       ErubisInflater.inflate_file_write(template, {env:options[:env], ruby:options[:ruby], user:options[:user], project_name:project.name, project_version:project.version, port:options[:port]}, outfile)
@@ -25,7 +26,7 @@ module Kudu
       template = File.join(Kudu.template_dir, "location.conf.erb")
       outfile = File.join(project.directory, "build", "location.conf")
       ErubisInflater.inflate_file_write(template, {project_name:project.name, port:options[:port]}, outfile)
-      location = "/etc/nginx/conf.d/location/#{project.name}-#{options[:port]}.conf"
+      location = "#{options[:'nginx-conf']}/etc/nginx/conf.d/location/#{project.name}-#{options[:port]}.conf"
       `sudo cp #{outfile} #{location}`
     end
 

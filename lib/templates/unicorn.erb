@@ -5,6 +5,7 @@ dir = File.join(File.expand_path(File.dirname(__FILE__ )), File::SEPARATOR)
 #worker_processes 2
 working_directory dir
 timeout 30
+preload_app false
 
 # Application directories
 FileUtils.mkdir_p "/tmp/unicorn/sockets/<%=project_name%>-<%=project_version%>"
