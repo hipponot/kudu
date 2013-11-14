@@ -26,7 +26,7 @@ module Kudu
       template = File.join(Kudu.template_dir, "location.conf.erb")
       outfile = File.join(project.directory, "build", "location.conf")
       ErubisInflater.inflate_file_write(template, {project_name:project.name, port:options[:port]}, outfile)
-      location = "#{options[:'nginx-conf']}/etc/nginx/conf.d/location/#{project.name}-#{options[:port]}.conf"
+      location = "#{options[:'nginx-conf']}/conf.d/location/#{project.name}-#{options[:port]}.conf"
       `sudo cp #{outfile} #{location}`
     end
 
