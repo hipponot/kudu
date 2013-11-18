@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+AIR_HOME=/opt/flex/air_sdk_3.6; $AIR_HOME/bin/adl $*
+

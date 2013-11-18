@@ -4,9 +4,11 @@ module Kudu
 
   class CLI < Thor
 
-    desc "version", "print version"
+    desc "version", "print version of named gem"
+    method_option :name, :aliases => "-n", :type => :string, :required=>true, :desc => "project name"
     def version
-      puts VERSION
+      project = KuduProject.project(options[:name])
+      puts project.version
     end
 
   end

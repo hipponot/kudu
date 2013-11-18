@@ -16,7 +16,6 @@ module Kudu
     desc "deploy", "Deploy project"
 
     method_option :name, :aliases => "-n", :type => :string, :required=>true, :desc => "project name"
-    method_option :port, :aliases => "-p", :type => :string, :required => true, :desc => "port (unicorn)"
     method_option :'nginx-conf', :aliases => "-g", :type => :string, :default=>"/etc/nginx", :required => false, :desc => "nginx conf directory"
     method_option :env, :aliases => "-e", :type => :string, :required => true, :desc => "environment"
     method_option :user, :aliases => "-u", :type => :string, :required => true, :desc => "user"
