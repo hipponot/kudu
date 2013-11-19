@@ -15,9 +15,9 @@ module Kudu
 
     desc "package", "Package project"
 
-    method_option :names, :aliases => "-n", :type => :array, :required=>true, :desc => "project names"
-    method_option :package, :aliases => "-p", :type => :array, :required=>true, :desc => "package path"
-
+    method_option :names, :aliases => "-n", :type => :array, :required=>true, :default=>["woot_db", "wm_api", "wm_web"], :desc => "project names"
+    method_option :package, :aliases => "-p", :type => :array, :required=>true, :default=>"/Volumes/shared/pool/pkgs/wootmath_gems", :desc => "package path"
+    method_option :force, :aliases => "-f", :type => :boolean, :required=>false, :default=>false, :desc => "overwrite existing package"
     def package
       Kudu.with_logging(self, __method__) do
         projects = []
@@ -38,7 +38,15 @@ module Kudu
 
     def build_package(projects, in_house, third_party)
       package = File.join(options[:package])
-      Dir.mkdir(package) unless File.directory?(package)
+      tarball = "#{package}.tar.gz"
+      if ( File.exist?(package) || File.exist?(tarball) ) and not options[:force]
+        Kudu.ui.error("File exists #{package}.  Use --force to overwrite.. punting")
+        exit(1)
+      elsif options[:force]
+        FileUtils.rm_rf(package)
+        FileUtils.rm_rf(tarball)
+      end
+      Dir.mkdir(package)
       [projects, in_house].flatten.each do |project|
         # so we can access project.directory
         project = KuduProject.project(project.name)
@@ -61,10 +69,15 @@ module Kudu
         |f| f.write(third_party.map {|d| {name:d.name, version:d.version} }.to_yaml) 
       }
       # tarball
-      `tar cvf #{package}.tar #{package}`
+      `cd #{File.join(File.dirname(package))}; tar cvf #{File.basename(package)}.tar #{File.basename(package)}`
       `gzip -f #{package}.tar`
+      # cleanup
+      FileUtils.rm_rf(package)
+      if File.exist?(tarball)
+        Kudu.ui.info("Wrote package #{tarball}")
+      else
+        Kudu.ui.error("Something went horribly wrong, can't find #{tarball}")
+      end
     end
-
-
   end
 end

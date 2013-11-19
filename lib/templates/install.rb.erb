@@ -6,7 +6,7 @@ require "etc"
 class Install < Thor
 
   desc "install", "Install wootmath package"
-  method_option :nginx, :aliases => "-n", :type => :string, :default=>"/etc/nginx", :required => true, :desc => "nginx conf directory"
+  method_option :nginx, :aliases => "-n", :type => :string, :default=>"/etc/nginx-backend", :required => true, :desc => "nginx conf directory"
   method_option :user, :aliases => "-u", :type => :string, :required=>true, :default=>Etc.getlogin, :desc => "user"
   def install
     # install in-house gems
