@@ -52,6 +52,26 @@ module Kudu
         cmd = "kudu build -n #{project.name} -u #{options[:user]}"
         puts `#{cmd}`
         FileUtils.cp_r(File.join(project.directory, 'build/.'), target_dir)
+
+        #-- Static file delivery for sinatra apps (that have an appropriately named lib/public/static/xxx/src dir):
+        sinatra_static_src_dir = File.join  project.directory, %W(lib public static #{project.name} src)
+        if File.directory? sinatra_static_src_dir
+          static_staging_dir = '/Volumes/shared/pool/www-static'
+          tgt_dir = File.join static_staging_dir, %W( #{project.name} #{project.version} ) 
+          if File.directory? tgt_dir
+            puts "Static content directory already exists: #{tgt_dir}\n --Leaving existing content as is."
+          else
+            puts "Delivering static content to #{tgt_dir}"
+            FileUtils.mkdir_p tgt_dir, :verbose => true
+            pwd = Dir.getwd
+            puts "cd #{sinatra_static_src_dir}"
+            Dir.chdir sinatra_static_src_dir
+            FileUtils.cp_r Dir.glob("*"), tgt_dir, :verbose => true
+            puts "cd #{pwd}"
+            Dir.chdir pwd 
+          end
+        end
+
       end
       # installer
       outfile = File.join(package, "install.rb")
@@ -64,7 +84,7 @@ module Kudu
       }
       # tarball
       `tar cvf #{package}.tar #{package}`
-      `gzip -f #{package}.tar`
+      `gzip -9 -f #{package}.tar`
     end
 
 
