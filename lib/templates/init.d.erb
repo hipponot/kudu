@@ -13,18 +13,30 @@
 # Change APPLICATION to match your app.
 # Make sure that all paths are correct.
  
-set -u
 set -e
  
 # Change these to match your app:
 APP_NAME=<%=project_name%>
 APP_VERSION=<%=project_version%>
-APP_ROOT=/home/<%=user%>/.rvm/gems/<%=ruby%>/gems/$APP_NAME-$APP_VERSION
+
+if [ -n "$SUDO_USER" ]
+then
+ RUN_AS=$SUDO_USER
+else 
+ RUN_AS=$USER
+fi
+
+APP_ROOT=/home/$RUN_AS/.rvm/gems/<%=ruby%>/gems/$APP_NAME-$APP_VERSION
 PID="/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>/unicorn.pid"
 
-ENV=<%=env%>
+if [ -n "$RACK_ENV" ]
+then
+  ENV=$RACK_ENV
+else
+  ENV=development
+fi
 
-GEM_HOME="/home/<%=user%>/.rvm/gems/<%=ruby%>"
+GEM_HOME="/home/$RUN_AS/.rvm/gems/<%=ruby%>"
  
 UNICORN_OPTS="-D -E $ENV -c $APP_ROOT/config/unicorn.rb"
  
@@ -46,7 +58,7 @@ oldsig () {
 case ${1-help} in
 start)
   sig 0 && echo >&2 "Already running" && exit 0
-  sudo su - <%=user%> -c "$CMD"
+  sudo su - $RUN_AS -c "$CMD"
   ;;
 stop)
   sig QUIT && exit 0
@@ -59,12 +71,12 @@ force-stop)
 restart|reload)
   sig HUP && echo reloaded OK && exit 0
   echo >&2 "Couldn't reload, starting '$CMD' instead"
-  sudo su - <%=user%> -c "$CMD"
+  sudo su - $RUN_AS -c "$CMD"
   ;;
 upgrade)
   sig USR2 && exit 0
   echo >&2 "Couldn't upgrade, starting '$CMD' instead"
-  sudo su - <%=user%> -c "$CMD"
+  sudo su - $RUN_AS -c "$CMD"
   ;;
 rotate)
   sig USR1 && echo rotated logs OK && exit 0

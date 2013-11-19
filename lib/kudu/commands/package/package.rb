@@ -17,8 +17,6 @@ module Kudu
 
     method_option :names, :aliases => "-n", :type => :array, :required=>true, :desc => "project names"
     method_option :package, :aliases => "-p", :type => :array, :required=>true, :desc => "package path"
-    method_option :env, :aliases => "-e", :type => :string, :required => true, :desc => "environment"
-    method_option :user, :aliases => "-u", :type => :string, :required => true, :desc => "user"
 
     def package
       Kudu.with_logging(self, __method__) do
@@ -49,7 +47,7 @@ module Kudu
         build_options = { name:project.name, force:true}
         cmd = "kudu clean -n #{project.name}"
         puts `#{cmd}`
-        cmd = "kudu build -n #{project.name} -u #{options[:user]}"
+        cmd = "kudu build -n #{project.name}"
         puts `#{cmd}`
         FileUtils.cp_r(File.join(project.directory, 'build/.'), target_dir)
 

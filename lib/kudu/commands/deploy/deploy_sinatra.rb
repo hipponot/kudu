@@ -18,27 +18,26 @@ module Kudu
       Dir.mkdir(build_dir) unless File.directory?(build_dir)
 
       # init.d
-      template = File.join(Kudu.template_dir, "init.d.erb")
-      outfile = File.join(project.directory, "build", "#{project.name}.init.d")
-      ErubisInflater.inflate_file_write(template, {env:options[:env], ruby:options[:ruby], user:options[:user], project_name:project.name, project_version:project.version}, outfile)
+      outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}.init.d")
       initd = "/etc/init.d/#{project.name}-#{project.version}"
-      `sudo cp #{outfile} #{initd}`
-      `sudo chmod 755 #{initd}`
+      run_and_echo("sudo cp #{outfile} #{initd}")
+      run_and_echo("sudo chmod 755 #{initd}")
 
       # nginx upstream
-      template = File.join(Kudu.template_dir, "upstream.conf.erb")
-      outfile = File.join(project.directory, "build", "upstream.conf")
-      ErubisInflater.inflate_file_write(template, {project_name:project.name, project_version:project.version}, outfile)
+      outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}-upstream.conf")
       upstream = "#{options[:'nginx-conf']}/conf.d/upstream/#{project.name}-#{project.version}.conf"
-      `sudo cp #{outfile} #{upstream}`
+      run_and_echo("sudo cp #{outfile} #{upstream}")
 
       # nginx location 
-      template = File.join(Kudu.template_dir, "location.conf.erb")
-      outfile = File.join(project.directory, "build", "location.conf")
-      ErubisInflater.inflate_file_write(template, {project_name:project.name, project_version:project.version}, outfile)
+      outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}-location.conf")
       location = "#{options[:'nginx-conf']}/conf.d/location/#{project.name}-#{project.version}.conf"
-      `sudo cp #{outfile} #{location}`
+      run_and_echo("sudo cp #{outfile} #{location}")
       puts "deployed #{project.name}-#{project.version}"
+    end
+    
+    def run_and_echo cmd
+      puts cmd
+      system(cmd)
     end
 
   end

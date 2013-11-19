@@ -19,7 +19,7 @@ module Kudu
       # init.d
       template = File.join(Kudu.template_dir, "init.d.erb")
       outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}.init.d")
-      ErubisInflater.inflate_file_write(template, {env:options[:env], ruby:options[:ruby], user:options[:user], project_name:project.name, project_version:project.version}, outfile)
+      ErubisInflater.inflate_file_write(template, {ruby:options[:ruby], project_name:project.name, project_version:project.version}, outfile)
 
       # nginx upstream
       template = File.join(Kudu.template_dir, "upstream.conf.erb")
