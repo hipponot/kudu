@@ -23,7 +23,11 @@ APP_ROOT=/home/$USER/.rvm/gems/<%=ruby%>/gems/$APP_NAME-$APP_VERSION
 PID="/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>/unicorn.pid"
 
 if [ -n "$RACK_ENV" ]
-ENV=$RACK_ENV
+then
+  ENV=$RACK_ENV
+else
+  ENV=development
+fi
 
 GEM_HOME="/home/$USER/.rvm/gems/<%=ruby%>"
  
