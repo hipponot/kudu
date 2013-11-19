@@ -9,57 +9,35 @@
 
 .idea/vcs.xml,0
 
-.idea/workspace.xml,8980
-      <pane id="Scope" />pane Scope193,10410
-      <pane id="ProjectPane">pane ProjectPane194,10436
-      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />EXTENSION BundlerRunConfigurationExtension317,16712
-      <EXTENSION ID="JRubyRunConfigurationExtension" />EXTENSION JRubyRunConfigurationExtension318,16796
-      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">EXTENSION RubyCoverageRunConfigurationExtension319,16852
-      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />EXTENSION org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension324,17137
-      <predefined_log_file id="RUBY_RSPEC" enabled="true" />predefined_log_file RUBY_RSPEC334,17713
-      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />EXTENSION BundlerRunConfigurationExtension342,18223
-      <EXTENSION ID="JRubyRunConfigurationExtension" />EXTENSION JRubyRunConfigurationExtension343,18307
-      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">EXTENSION RubyCoverageRunConfigurationExtension344,18363
-      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />EXTENSION org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension349,18648
-      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />EXTENSION BundlerRunConfigurationExtension371,20057
-      <EXTENSION ID="JRubyRunConfigurationExtension" />EXTENSION JRubyRunConfigurationExtension372,20141
-      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">EXTENSION RubyCoverageRunConfigurationExtension373,20197
-      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />EXTENSION org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension378,20482
-      <predefined_log_file id="RUBY_TESTUNIT" enabled="true" />predefined_log_file RUBY_TESTUNIT384,20832
-      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />EXTENSION BundlerRunConfigurationExtension392,21345
-      <EXTENSION ID="JRubyRunConfigurationExtension" />EXTENSION JRubyRunConfigurationExtension393,21429
-      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">EXTENSION RubyCoverageRunConfigurationExtension394,21485
-      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />EXTENSION org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension399,21770
-      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />EXTENSION BundlerRunConfigurationExtension417,22938
-      <EXTENSION ID="JRubyRunConfigurationExtension" />EXTENSION JRubyRunConfigurationExtension418,23022
-      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">EXTENSION RubyCoverageRunConfigurationExtension419,23078
-      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />EXTENSION org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension424,23363
-      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />EXTENSION BundlerRunConfigurationExtension439,24341
-      <EXTENSION ID="JRubyRunConfigurationExtension" />EXTENSION JRubyRunConfigurationExtension440,24425
-      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">EXTENSION RubyCoverageRunConfigurationExtension441,24481
-      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />EXTENSION org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension446,24766
-      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />EXTENSION BundlerRunConfigurationExtension461,25745
-      <EXTENSION ID="JRubyRunConfigurationExtension" />EXTENSION JRubyRunConfigurationExtension462,25829
-      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">EXTENSION RubyCoverageRunConfigurationExtension463,25885
-      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />EXTENSION org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension468,26170
-      <changelist id="b3fa4075-8676-480e-82e7-c25fd82a8203" name="Default" comment="" />changelist b3fa4075-8676-480e-82e7-c25fd82a8203490,27243
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />window_info Changes500,27610
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />window_info TODO501,27824
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />window_info Database502,28035
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />window_info Structure503,28249
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.11256961" sideWeight="0.47622883" order="0" side_tool="false" content_ui="combo" />window_info Project504,28463
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.52377117" sideWeight="0.9852824" order="3" side_tool="false" content_ui="tabs" />window_info Debug505,28688
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />window_info Favorites506,28912
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />window_info Event Log507,29126
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32957292" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />window_info Run508,29342
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />window_info Version Control509,29558
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />window_info Cvs510,29780
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />window_info Message511,29990
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />window_info Ant Build512,30204
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />window_info Find513,30419
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />window_info Commander514,30630
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />window_info Hierarchy515,30846
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />window_info Inspection516,31062
+.idea/workspace.xml,5659
+      <pane id="Scope" />pane Scope157,7979
+      <pane id="ProjectPane">pane ProjectPane158,8005
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />EXTENSION BundlerRunConfigurationExtension276,13863
+      <EXTENSION ID="JRubyRunConfigurationExtension" />EXTENSION JRubyRunConfigurationExtension277,13947
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">EXTENSION RubyCoverageRunConfigurationExtension278,14003
+      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />EXTENSION org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension283,14288
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />EXTENSION BundlerRunConfigurationExtension298,15140
+      <EXTENSION ID="JRubyRunConfigurationExtension" />EXTENSION JRubyRunConfigurationExtension299,15224
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">EXTENSION RubyCoverageRunConfigurationExtension300,15280
+      <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />EXTENSION org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension305,15565
+      <changelist id="753f2683-b297-4f80-8814-ec79cf562999" name="Default" comment="" />changelist 753f2683-b297-4f80-8814-ec79cf562999322,16238
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />window_info Changes332,16601
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />window_info TODO333,16815
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />window_info Database334,17026
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />window_info Structure335,17240
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23242468" sideWeight="0.65512264" order="0" side_tool="false" content_ui="combo" />window_info Project336,17454
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34487733" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />window_info Debug337,17679
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />window_info Favorites338,17897
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />window_info Event Log339,18110
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />window_info Run340,18325
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />window_info Version Control341,18535
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />window_info Cvs342,18757
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />window_info Message343,18967
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />window_info Ant Build344,19181
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />window_info Find345,19396
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />window_info Commander346,19607
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />window_info Hierarchy347,19823
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />window_info Inspection348,20039
 
 bin/install_flex.rb,0
 
@@ -83,11 +61,17 @@ module KuduKudu4,77
   module ExampleSinatra ExampleSinatra5,89
     class Service < Sinatra::BaseService6,114
 
+kitchen/.chef/bootstrap/bootstrap-ruby193.erb,0
+
+kitchen/.chef/bootstrap/copy-ssh-key.erb,0
+
 kitchen/.chef/knife.rb,0
 
 kitchen/cookbooks/flex/recipes/default.rb,0
 
 kitchen/solo.rb,0
+
+kudu.yaml,0
 
 lib/kudu/bootstrap.rb,132
 module KuduKudu1,0
@@ -105,50 +89,52 @@ module KuduKudu8,164
     def initialize(*)initialize12,222
 
 lib/kudu/commands/build/build.rb,126
-module KuduKudu15,327
-  class CLI < ThorCLI17,340
-    def buildbuild32,1394
-    def build_one projectbuild_one46,1802
+module KuduKudu12,263
+  class CLI < ThorCLI14,276
+    def buildbuild30,1441
+    def build_one projectbuild_one44,1849
 
 lib/kudu/commands/build/build_air.rb,53
 module KuduKudu3,33
   class BuildAirBuildAir5,46
 
-lib/kudu/commands/build/build_gem.rb,53
+lib/kudu/commands/build/build_gem.rb,106
 module KuduKudu3,32
-  class BuildGemBuildGem5,45
+  class BuildGemBuildGem4,44
+    def initialize(options, project)initialize6,62
 
-lib/kudu/commands/build/build_sinatra.rb,65
-module KuduKudu16,372
-  class BuildSinatraBuildSinatra18,385
+lib/kudu/commands/build/build_sinatra.rb,120
+module KuduKudu13,313
+  class BuildSinatraBuildSinatra15,326
+    def initialize(options, project)initialize17,352
 
 lib/kudu/commands/build/flex_builder.rb,405
-module KuduKudu13,265
-  module FlexBuilderFlexBuilder15,278
-    def initialize(options, project)    initialize17,300
-    def build_swf(project)build_swf31,583
-  def call_flex(project)call_flex70,1906
-    def has_changed(project)has_changed87,2751
-    def odi(project)odi105,3343
-    def install_third_party projectinstall_third_party109,3395
-    def is_installed depis_installed114,3495
+module KuduKudu10,206
+  module FlexBuilderFlexBuilder12,219
+    def initialize(options, project)    initialize14,241
+    def build_swf(project)build_swf28,524
+  def call_flex(project)call_flex67,1847
+    def has_changed(project)has_changed84,2692
+    def odi(project)odi102,3284
+    def install_third_party projectinstall_third_party106,3336
+    def is_installed depis_installed111,3436
 
-lib/kudu/commands/build/gem_builder.rb,436
-module KuduKudu15,341
-  module GemBuilderGemBuilder17,354
-    def initialize(options, project)    initialize19,375
-    def build_gem(project)build_gem33,658
-    def has_changed(project)has_changed67,2135
-    def installed_gem_source_hash(project)installed_gem_source_hash84,2695
-    def odi(project)odi97,3091
-    def install_third_party projectinstall_third_party112,3723
-    def is_installed depis_installed134,4646
+lib/kudu/commands/build/gem_builder.rb,435
+module KuduKudu12,282
+  class GemBuilderGemBuilder14,295
+    def initialize(options, project)    initialize16,315
+    def build_gem(project)build_gem30,598
+    def has_changed(project)has_changed64,2075
+    def installed_gem_source_hash(project)installed_gem_source_hash81,2635
+    def odi(project)odi94,3031
+    def install_third_party projectinstall_third_party109,3663
+    def is_installed depis_installed131,4586
 
 lib/kudu/commands/clean/clean.rb,132
-module KuduKudu14,307
-    class CLI < ThorCLI18,322
-      def cleanclean29,1153
-      def clean_one projectclean_one43,1585
+module KuduKudu11,248
+    class CLI < ThorCLI15,263
+      def cleanclean26,1094
+      def clean_one projectclean_one40,1526
 
 lib/kudu/commands/clean/clean_gem.rb,53
 module KuduKudu3,32
@@ -166,7 +152,7 @@ module KuduKudu8,158
 lib/kudu/commands/common/version.rb,80
 module KuduKudu3,34
   class CLI < ThorCLI5,47
-    def versionversion8,103
+    def versionversion9,218
 
 lib/kudu/commands/contents/contents_ruby.rb,138
 module KuduKudu1,0
@@ -177,7 +163,7 @@ module KuduKudu1,0
 lib/kudu/commands/create_project/create_project.rb,96
 module KuduKudu3,16
   class CLI < ThorCLI5,29
-    def create_projectcreate_project18,1285
+    def create_projectcreate_project19,1460
 
 lib/kudu/commands/create_project/create_project_base.rb,479
 module KuduKudu4,72
@@ -186,10 +172,10 @@ module KuduKudu4,72
     def project_typeproject_type12,177
     def settingssettings16,238
     def initialize(options)initialize20,284
-    def create_project_skeletoncreate_project_skeleton44,1226
-    def elaborate(template_file, relative_output_file)elaborate62,1872
-    def repository_settingsrepository_settings78,2527
-    def with_logging(description)with_logging93,2989
+    def create_project_skeletoncreate_project_skeleton44,1286
+    def elaborate(template_file, relative_output_file)elaborate62,1932
+    def repository_settingsrepository_settings78,2587
+    def with_logging(description)with_logging93,3049
 
 lib/kudu/commands/create_project/create_project_gem.rb,133
 module KuduKudu3,40
@@ -202,21 +188,32 @@ module KuduKudu4,41
     def initialize(options)initialize8,104
 
 lib/kudu/commands/deploy/deploy.rb,130
-module KuduKudu15,308
-  class CLI < ThorCLI17,321
-    def deploydeploy30,1112
-    def deploy_one projectdeploy_one44,1524
+module KuduKudu12,249
+  class CLI < ThorCLI14,262
+    def deploydeploy28,1133
+    def deploy_one projectdeploy_one36,1281
 
 lib/kudu/commands/deploy/deploy_sinatra.rb,122
-module KuduKudu13,291
-  class DeploySinatraDeploySinatra15,304
-    def initialize(options, project)initialize17,327
+module KuduKudu11,233
+  class DeploySinatraDeploySinatra13,246
+    def initialize(options, project)initialize15,269
 
 lib/kudu/commands/list/list_ruby.rb,119
 module KuduKudu1,0
   class CLI < ThorCLI3,13
     def listlist7,211
     def list_gemset gemsetlist_gemset13,279
+
+lib/kudu/commands/package/package.rb,162
+module KuduKudu11,219
+  class CLI < ThorCLI13,232
+    def packagepackage22,697
+    def build_package(projects, in_house, third_party)build_package40,1254
+
+lib/kudu/commands/package/package_sinatra.rb,124
+module KuduKudu11,233
+  class PackageSinatraPackageSinatra13,246
+    def initialize(options, project)initialize15,270
 
 lib/kudu/commands/service_start/service_start.rb,94
 module KuduKudu7,95
@@ -281,19 +278,19 @@ module KudoKudo1,0
 lib/kudu/kudu_artifact.rb,218
   module KuduKudu4,61
     class KuduArtifactKuduArtifact6,76
-      def initialize(name, version, type, group)initialize14,202
-      def to_hashto_hash21,354
-        def new_from_hash(hash)new_from_hash26,476
+      def initialize(name, version, type, group)initialize14,204
+      def to_hashto_hash21,356
+        def new_from_hash(hash)new_from_hash26,478
 
 lib/kudu/kudu_project.rb,381
 module KuduKudu5,74
   class KuduProjectKuduProject7,87
-    def initialize(kudu_spec)initialize19,339
-    def dependencies group=nildependencies35,863
-      def load_and_validate_spec(kudu_spec)load_and_validate_spec45,1039
-        def project(project_name)project76,2876
-        def projectsprojects86,3405
-        def initialize_projectsinitialize_projects92,3501
+    def initialize(kudu_spec)initialize19,341
+    def dependencies group=nildependencies35,865
+      def load_and_validate_spec(kudu_spec)load_and_validate_spec45,1041
+        def project(project_name)project76,2878
+        def projectsprojects86,3407
+        def initialize_projectsinitialize_projects92,3503
 
 lib/kudu/require_relative_all.rb,60
 def require_relative_all(pattern)require_relative_all3,65
@@ -330,23 +327,23 @@ module KuduKudu3,37
       def say(message)say88,1637
 
 lib/kudu/util.rb,823
-class StringString5,81
-  def camel_casecamel_case6,94
-module KuduKudu12,217
-    def command_defined_for_type?(command, type)command_defined_for_type?16,247
-    def delegate_command(command, type, options, *args)delegate_command21,423
-    def eacheach33,858
-    def with_logging(obj, method, message=nil)with_logging44,1208
-    def validate_standard_options optionsvalidate_standard_options56,1513
-    def verboseverbose74,2176
-    def verbose= valueverbose=78,2230
-    def gitrootgitroot82,2285
-    def kudu_rootkudu_root85,2353
-    def template_dirtemplate_dir89,2441
-    def get_name_from_gemspec(gemspec)get_name_from_gemspec93,2511
-    def parse_kudu_file kudu_fileparse_kudu_file105,2938
-      def git_ls_files dirgit_ls_files121,3546
-      def source_hash rootdirsource_hash127,3776
+class StringString4,43
+  def camel_casecamel_case5,56
+module KuduKudu11,179
+    def command_defined_for_type?(command, type)command_defined_for_type?15,209
+    def delegate_command(command, type, options, *args)delegate_command20,385
+    def eacheach32,820
+    def with_logging(obj, method, message=nil)with_logging43,1170
+    def validate_standard_options optionsvalidate_standard_options55,1475
+    def verboseverbose73,2138
+    def verbose= valueverbose=77,2192
+    def gitrootgitroot81,2247
+    def kudu_rootkudu_root85,2316
+    def template_dirtemplate_dir89,2404
+    def get_name_from_gemspec(gemspec)get_name_from_gemspec93,2481
+    def parse_kudu_file kudu_fileparse_kudu_file105,2908
+      def git_ls_files dirgit_ls_files121,3516
+      def source_hash rootdirsource_hash127,3746
 
 lib/kudu/version.rb,21
 module KuduKudu1,0
@@ -355,11 +352,43 @@ lib/kudu.rb,42
 module KuduKudu4,62
     def uiui9,134
 
+lib/templates/config.ru.erb,0
+
+lib/templates/dependencies.erb,0
+
+lib/templates/extconf.erb,0
+
+lib/templates/Gemfile.erb,0
+
+lib/templates/gemspec.erb,0
+
+lib/templates/init.d.erb,0
+
+lib/templates/kudu.erb,0
+
+lib/templates/location.conf.erb,0
+
+lib/templates/module.cpp.erb,0
+
+lib/templates/module.erb,0
+
+lib/templates/Rakefile.erb,0
+
+lib/templates/sinatra.erb,0
+
+lib/templates/unicorn.erb,0
+
+lib/templates/upstream.conf.erb,0
+
+lib/templates/version.erb,0
+
 test/unit/create_sample_projects.rb,326
 module CreateSampleProjectsCreateSampleProjects9,165
   def create_sample_projects_in_namespace dir='sample_projects'create_sample_projects_in_namespace11,194
   def create_sample_projects dir='sample_projects'create_sample_projects25,1245
   def remove_sample_projects dir='sample_projects'remove_sample_projects41,2269
+
+test/unit/template.erb,0
 
 test/unit/test_create_project.rb,149
 class TestKudu < Test::Unit::TestCaseTestKudu10,242
@@ -500,6 +529,56 @@ vagrant/cookbooks/apache2/recipes/mod_status.rb,0
 
 vagrant/cookbooks/apache2/recipes/mod_wsgi.rb,0
 
+vagrant/cookbooks/apache2/templates/default/a2dismod.erb,0
+
+vagrant/cookbooks/apache2/templates/default/a2dissite.erb,0
+
+vagrant/cookbooks/apache2/templates/default/a2enmod.erb,0
+
+vagrant/cookbooks/apache2/templates/default/a2ensite.erb,0
+
+vagrant/cookbooks/apache2/templates/default/apache2.conf.erb,0
+
+vagrant/cookbooks/apache2/templates/default/apache2.god.erb,0
+
+vagrant/cookbooks/apache2/templates/default/charset.erb,0
+
+vagrant/cookbooks/apache2/templates/default/default-site.erb,0
+
+vagrant/cookbooks/apache2/templates/default/mod_auth_openid.rb.erb,0
+
+vagrant/cookbooks/apache2/templates/default/mods/alias.conf.erb,0
+
+vagrant/cookbooks/apache2/templates/default/mods/authopenid.load.erb,0
+
+vagrant/cookbooks/apache2/templates/default/mods/autoindex.conf.erb,0
+
+vagrant/cookbooks/apache2/templates/default/mods/deflate.conf.erb,0
+
+vagrant/cookbooks/apache2/templates/default/mods/dir.conf.erb,0
+
+vagrant/cookbooks/apache2/templates/default/mods/fcgid.conf.erb,0
+
+vagrant/cookbooks/apache2/templates/default/mods/mime.conf.erb,0
+
+vagrant/cookbooks/apache2/templates/default/mods/negotiation.conf.erb,0
+
+vagrant/cookbooks/apache2/templates/default/mods/proxy.conf.erb,0
+
+vagrant/cookbooks/apache2/templates/default/mods/setenvif.conf.erb,0
+
+vagrant/cookbooks/apache2/templates/default/mods/ssl.conf.erb,0
+
+vagrant/cookbooks/apache2/templates/default/mods/status.conf.erb,0
+
+vagrant/cookbooks/apache2/templates/default/port_apache.erb,0
+
+vagrant/cookbooks/apache2/templates/default/ports.conf.erb,0
+
+vagrant/cookbooks/apache2/templates/default/security.erb,0
+
+vagrant/cookbooks/apache2/templates/default/web_app.conf.erb,0
+
 vagrant/cookbooks/apt/metadata.rb,0
 
 vagrant/cookbooks/apt/providers/preference.rb,66
@@ -544,3 +623,5 @@ vagrant/cookbooks/kudu/recipes/default.rb,0
 vagrant/cookbooks/mongo_db/recipes/default.rb,0
 
 vagrant/cookbooks/vagrant_main/recipes/default.rb,0
+
+vagrant/cookbooks/vagrant_main/templates/default/project.conf.erb,0

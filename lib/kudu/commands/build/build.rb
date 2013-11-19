@@ -23,6 +23,9 @@ module Kudu
     method_option :odi, :aliases => "-o", :type => :boolean, :required => false, :default=>false,  :desc => "Optimized for developer iterations"
     method_option :version, :aliases => "-v", :type => :string, :required => false, :desc => "Specify version"
     method_option :dryrun, :aliases => "-", :type => :boolean, :required => false, :default=>false,  :desc => "Dry run"
+    method_option :env, :aliases => "-e", :type => :string, :required => false, :default=>'development', :desc => "environment"
+    method_option :user, :aliases => "-u", :type => :string, :required => false, :default=>Etc.getlogin, :desc => "user"
+    method_option :ruby, :aliases => "-v", :type => :string, :required => true, :default=>`rvm current`.chomp,  :desc => "ruby-version"
     
     # No ruby-prof in jruby 
     @profile = RUBY_PLATFORM == 'java' ? false : options[:profile] 
@@ -42,6 +45,9 @@ module Kudu
     private
 
     def build_one project
+      # create build directory
+      build_dir = File.join(project.directory,'build')
+      Dir.mkdir(build_dir) unless File.directory?(build_dir)
       # update top level project version if requested
       if options[:version] and project.name == options[:name]
         kudu_file = File.join(project.directory, 'kudu.yaml')

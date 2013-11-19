@@ -43,9 +43,8 @@ module Kudu
           current = Dir.pwd
           begin
             Dir.chdir(project.directory)
-            build_dir = File.join(project.directory,'build')
-            Dir.mkdir(build_dir) unless File.directory?(build_dir)
             Kudu.ui.info `gem build #{gemspec}`
+            build_dir = File.join(project.directory,'build')
             gem_name = "#{@publication.name}-#{@publication.version}.gem"
             FileUtils.mv File.join(project.directory, gem_name), File.join(build_dir, gem_name)
             Dir.chdir(build_dir)

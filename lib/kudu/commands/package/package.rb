@@ -38,31 +38,17 @@ module Kudu
     private
 
     def build_package(projects, in_house, third_party)
-
       package = File.join(options[:package])
       Dir.mkdir(package) unless File.directory?(package)
-
-      # build & deploy projects
-      projects.each do |project|
-        project_dir = File.join(package, project.name)
-        Dir.mkdir(project_dir) unless File.directory?(project_dir)
+      [projects, in_house].flatten.each do |project|
+        # so we can access project.directory
+        project = KuduProject.project(project.name)
+        target_dir = File.join(package, project.name)
+        Dir.mkdir(target_dir) unless File.directory?(target_dir)
         build_options = { name:project.name }
         invoke :build, nil, build_options
-        if project.type == 'sinatra'
-          deploy_options = { name:project.name, user:options[:user], env:options[:env], packaging:true}
-          invoke :deploy, nil, deploy_options
-        end
-        FileUtils.cp_r(File.join(project.directory, 'build/.'), project_dir)
+        FileUtils.cp_r(File.join(project.directory, 'build/.'), target_dir)
       end
-
-      # build in-house dependencies
-      in_house.each do |project|
-        project_dir = File.join(package, project.name)
-        Dir.mkdir(project_dir) unless File.directory?(project_dir)
-        build_options = { name:project.name }
-        invoke :build, nil, build_options
-      end
-
     end
 
 

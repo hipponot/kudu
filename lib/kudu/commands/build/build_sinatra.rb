@@ -15,6 +15,22 @@ module Kudu
   class BuildSinatra
     
     def initialize(options, project)
+
+      # init.d
+      template = File.join(Kudu.template_dir, "init.d.erb")
+      outfile = File.join(project.directory, "build", "#{project.name}.init.d")
+      ErubisInflater.inflate_file_write(template, {env:options[:env], ruby:options[:ruby], user:options[:user], project_name:project.name, project_version:project.version}, outfile)
+
+      # nginx upstream
+      template = File.join(Kudu.template_dir, "upstream.conf.erb")
+      outfile = File.join(project.directory, "build", "upstream.conf")
+      ErubisInflater.inflate_file_write(template, {project_name:project.name, project_version:project.version}, outfile)
+
+      # nginx location 
+      template = File.join(Kudu.template_dir, "location.conf.erb")
+      outfile = File.join(project.directory, "build", "location.conf")
+      ErubisInflater.inflate_file_write(template, {project_name:project.name, project_version:project.version}, outfile)
+
       # generate unicorn config before building sinatra project types
       template = File.join(Kudu.template_dir, "unicorn.erb")
       outfile = File.join(project.directory, "config", "unicorn.rb")
