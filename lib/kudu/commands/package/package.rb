@@ -1,6 +1,7 @@
 require 'rvm'
 require 'etc'
 require 'fileutils'
+require 'yaml'
 
 require_relative '../../error'
 require_relative '../../util'
@@ -45,10 +46,25 @@ module Kudu
         project = KuduProject.project(project.name)
         target_dir = File.join(package, project.name)
         Dir.mkdir(target_dir) unless File.directory?(target_dir)
-        build_options = { name:project.name }
-        invoke :build, nil, build_options
+        build_options = { name:project.name, force:true}
+        cmd = "kudu clean -n #{project.name}"
+        puts `#{cmd}`
+        cmd = "kudu build -n #{project.name} -u #{options[:user]}"
+        puts `#{cmd}`
         FileUtils.cp_r(File.join(project.directory, 'build/.'), target_dir)
       end
+      # installer
+      outfile = File.join(package, "install.rb")
+      template = File.join(Kudu.template_dir, "install.rb.erb")
+      ErubisInflater.inflate_file_write(template, {}, outfile)
+      `chmod +x #{outfile}`
+      # third party
+      File.open(File.join(package,"third_party.yaml"), 'w') {
+        |f| f.write(third_party.map {|d| {name:d.name, version:d.version} }.to_yaml) 
+      }
+      # tarball
+      `tar cvf #{package}.tar #{package}`
+      `gzip -f #{package}.tar`
     end
 
 

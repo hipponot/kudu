@@ -1,0 +1,85 @@
+#!/usr/bin/env ruby
+require 'yaml'
+require "thor"
+require "etc"
+
+class Install < Thor
+
+  desc "install", "Install wootmath package"
+  method_option :nginx, :aliases => "-n", :type => :string, :default=>"/etc/nginx", :required => true, :desc => "nginx conf directory"
+  method_option :user, :aliases => "-u", :type => :string, :required=>true, :default=>Etc.getlogin, :desc => "user"
+  def install
+    # install in-house gems
+    Dir.glob('**').each do |dir|
+      next unless File.directory?(dir)
+      gem = Dir.glob("#{dir}/*.gem").first
+      `gem install #{gem}`
+      # APIs nginx & init.d
+      conf = Dir.glob("#{dir}/*.conf")
+      unless conf.empty?
+        name, version = File.basename(gem,'.gem').split('-')
+        # location
+        source = "#{dir}/#{name}-#{version}-location.conf"
+        target = "#{options[:nginx]}/conf.d/location/#{name}-#{version}.conf"
+        run_and_echo("sudo cp #{source} #{target}")
+        run_and_echo("sudo chown #{options[:user]} #{target}")
+        # upstream
+        source = "#{dir}/#{name}-#{version}-upstream.conf"
+        target = "#{options[:nginx]}/conf.d/upstream/#{name}-#{version}.conf"
+        run_and_echo("sudo cp  #{source} #{target}")
+        run_and_echo("sudo chown #{options[:user]} #{target}")
+        # init.d        
+        source = "#{dir}/#{name}-#{version}.init.d"
+        target = "/etc/init.d/#{name}-#{version}"
+        run_and_echo("sudo cp #{source} #{target}")
+        run_and_echo("sudo chown #{options[:user]} #{target}")
+        run_and_echo("sudo chmod 755  #{target}")
+        # restart on boot
+        run_and_echo("sudo update-rc.d #{name}-#{version} defaults 98 02")
+      end
+    end
+    
+    # install third party gems
+    third_party = YAML::load(IO.read('third_party.yaml'))
+    third_party.each do | gem|
+      if /latest/ =~ gem[:version]
+        if is_installed? gem[:name]
+          puts "already_installed #{gem[:name]}"
+        else
+          puts `gem install #{gem[:name]}` 
+        end
+      else
+        if is_installed? gem[:name], gem[:version]
+          puts "already_installed #{gem[:name]} #{gem[:version]}"
+        else
+          puts `gem install #{gem[:name]} #{gem[:version]}` 
+        end
+      end
+    end
+  end
+
+  default_task :install
+
+  private
+
+  def run_and_echo(cmd)
+    puts cmd
+    system(cmd)
+  end
+
+  def is_installed? name, version=nil
+    begin
+      if (version.nil?)
+        ::Gem::Specification.find_by_name(name)
+      else
+        ::Gem::Specification.find_by_name(name, version)
+      end
+      true
+    rescue ::Gem::LoadError 
+      false
+    end
+  end
+
+end
+
+Install.start

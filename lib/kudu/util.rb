@@ -12,6 +12,19 @@ module Kudu
 
   class << self
 
+    def is_installed? name, version=nil
+      begin
+        if (version.nil?)
+          ::Gem::Specification.find_by_name(name)
+        else
+          ::Gem::Specification.find_by_name(name, version)
+        end
+        true
+      rescue ::Gem::LoadError 
+        false
+      end
+    end
+
     def command_defined_for_type?(command, type)
       classname = (command + '_' + type).camel_case
       eval("defined?(#{classname}) && #{classname}.is_a?(Class)")
@@ -107,45 +120,45 @@ module Kudu
       begin
         kudu = YAML::load(IO.read(kudu_file))
         if !kudu[:publication].is_a?(Hash)
-            #          raise Kudu::InvalidKudufile, "Kudufile #{kudu_file} missing publication: Hash"
-          elsif !kudu[:dependencies].is_a?(Array)
-            #          raise Kudu::InvalidKudufile, "Kudufile #{kudu_file} missing dependencies: Array"
-          else
-            return kudu
-          end
-        rescue
-          raise Kudu::InvalidKudufile, "Failed to parse #{kudu_file} as YAML" 
+          #          raise Kudu::InvalidKudufile, "Kudufile #{kudu_file} missing publication: Hash"
+        elsif !kudu[:dependencies].is_a?(Array)
+          #          raise Kudu::InvalidKudufile, "Kudufile #{kudu_file} missing dependencies: Array"
+        else
+          return kudu
         end
+      rescue
+        raise Kudu::InvalidKudufile, "Failed to parse #{kudu_file} as YAML" 
       end
-
-      def git_ls_files dir
-        files = []
-        files += `git ls-files --others --exclude-from=#{File.join(Kudu.gitroot, '.gitignore')} #{dir}`.split(/\r?\n/)
-        files += `git ls-files #{dir}`.split(/\r?\n/)
-      end
-
-      def source_hash rootdir
-        files = git_ls_files rootdir
-        # Deal with 'git ls-files' not managing symlinks
-        links = []
-        files.each do |f|
-          if File.symlink? f
-            #readlink is relative to f's dirname
-            ff = File.expand_path(File.join(File.dirname(f), `readlink #{f}`))
-            links += git_ls_files ff
-            files.delete(f)
-          end
-        end
-        files += links
-        # Don't hash sha1 file or built gem
-        files = files.select { |f| not /\w*.gem$|sha1$/ =~ f }
-        sha1 = Digest::SHA1.new
-        files.each do |file|
-          sha1.update(`git hash-object #{file}`)
-        end
-        sha1.to_s
-      end
-
     end
+
+    def git_ls_files dir
+      files = []
+      files += `git ls-files --others --exclude-from=#{File.join(Kudu.gitroot, '.gitignore')} #{dir}`.split(/\r?\n/)
+      files += `git ls-files #{dir}`.split(/\r?\n/)
+    end
+
+    def source_hash rootdir
+      files = git_ls_files rootdir
+      # Deal with 'git ls-files' not managing symlinks
+      links = []
+      files.each do |f|
+        if File.symlink? f
+          #readlink is relative to f's dirname
+          ff = File.expand_path(File.join(File.dirname(f), `readlink #{f}`))
+          links += git_ls_files ff
+          files.delete(f)
+        end
+      end
+      files += links
+      # Don't hash sha1 file or built gem
+      files = files.select { |f| not /\w*.gem$|sha1$/ =~ f }
+      sha1 = Digest::SHA1.new
+      files.each do |file|
+        sha1.update(`git hash-object #{file}`)
+      end
+      sha1.to_s
+    end
+
   end
+end
 

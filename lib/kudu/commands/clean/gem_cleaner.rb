@@ -17,7 +17,9 @@ module Kudu
           Kudu.ui.info "cleaning #{project.name}"
           Dir.chdir(project.directory)
           `rm -rf build`
-          Kudu.ui.info `rvm @#{options[:repo]} do gem uninstall -I -q -x #{project.name}`.chomp
+          if Kudu.is_installed? project.name, project.version
+            Kudu.ui.info `gem uninstall -I -x -q -v #{project.version} #{project.name}`.chomp
+          end
           if options[:'more-clean'] || options[:nuke]
             project.dependencies.each do |dep|
               if dep.group == 'third-party'
