@@ -21,9 +21,9 @@ APP_VERSION=<%=project_version%>
 
 if [ -n "$SUDO_USER" ]
 then
- RUN_AS = $SUDO_USER
+ RUN_AS=$SUDO_USER
 else 
- RUNS_AS = $USER
+ RUNS_AS=$USER
 fi
 
 APP_ROOT=/home/$RUN_AS/.rvm/gems/<%=ruby%>/gems/$APP_NAME-$APP_VERSION
