@@ -18,21 +18,26 @@ module Kudu
       Dir.mkdir(build_dir) unless File.directory?(build_dir)
 
       # init.d
-      outfile = File.join(project.directory, "build", "#{project.name}.init.d")
+      outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}.init.d")
       initd = "/etc/init.d/#{project.name}-#{project.version}"
-      `sudo cp #{outfile} #{initd}`
-      `sudo chmod 755 #{initd}`
+      run_and_echo("sudo cp #{outfile} #{initd}")
+      run_and_echo("sudo chmod 755 #{initd}")
 
       # nginx upstream
-      outfile = File.join(project.directory, "build", "upstream.conf")
+      outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}-upstream.conf")
       upstream = "#{options[:'nginx-conf']}/conf.d/upstream/#{project.name}-#{project.version}.conf"
-      `sudo cp #{outfile} #{upstream}`
+      run_and_echo("sudo cp #{outfile} #{upstream}")
 
       # nginx location 
-      outfile = File.join(project.directory, "build", "location.conf")
+      outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}-location.conf")
       location = "#{options[:'nginx-conf']}/conf.d/location/#{project.name}-#{project.version}.conf"
-      `sudo cp #{outfile} #{location}`
+      run_and_echo("sudo cp #{outfile} #{location}")
       puts "deployed #{project.name}-#{project.version}"
+    end
+    
+    def run_and_echo cmd
+      puts cmd
+      system(cmd)
     end
 
   end
