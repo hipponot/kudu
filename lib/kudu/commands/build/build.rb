@@ -23,8 +23,6 @@ module Kudu
     method_option :odi, :aliases => "-o", :type => :boolean, :required => false, :default=>false,  :desc => "Optimized for developer iterations"
     method_option :version, :aliases => "-v", :type => :string, :required => false, :desc => "Specify version"
     method_option :dryrun, :aliases => "-", :type => :boolean, :required => false, :default=>false,  :desc => "Dry run"
-    method_option :env, :aliases => "-e", :type => :string, :required => false, :default=>'development', :desc => "environment"
-    method_option :user, :aliases => "-u", :type => :string, :required => false, :default=>Etc.getlogin, :desc => "user"
     method_option :ruby, :aliases => "-v", :type => :string, :required => true, :default=>`rvm current`.chomp,  :desc => "ruby-version"
     
     # No ruby-prof in jruby 
