@@ -36,6 +36,13 @@ module Kudu
 
     private
 
+    def package_version(project, in_house, third_party)
+      [projects, in_house, third_party].flatten.each do |project|
+        # so we can access project.directory
+        project = KuduProject.project(project.name)
+      end
+    end
+
     def build_package(projects, in_house, third_party)
       package = File.join(options[:package])
       tarball = "#{package}.tar.gz"

@@ -22,23 +22,23 @@ class Install < Thor
         source = "#{dir}/#{name}-#{version}-location.conf"
         target = "#{options[:nginx]}/conf.d/location/#{name}-#{version}.conf"
         run_and_echo("sudo cp #{source} #{target}")
-        run_and_echo("sudo chown #{options[:user]} #{target}")
+        run_and_echo("sudo chown #{options[:user]}:#{options[:user]} #{target}")
         # upstream
         source = "#{dir}/#{name}-#{version}-upstream.conf"
         target = "#{options[:nginx]}/conf.d/upstream/#{name}-#{version}.conf"
         run_and_echo("sudo cp  #{source} #{target}")
-        run_and_echo("sudo chown #{options[:user]} #{target}")
+        run_and_echo("sudo chown #{options[:user]}:#{options[:user]} #{target}")
         # init.d        
         source = "#{dir}/#{name}-#{version}.init.d"
         target = "/etc/init.d/#{name}-#{version}"
         run_and_echo("sudo cp #{source} #{target}")
-        run_and_echo("sudo chown #{options[:user]} #{target}")
+        run_and_echo("sudo chown #{options[:user]}:#{options[:user]} #{target}")
         run_and_echo("sudo chmod 755  #{target}")
         # restart on boot
-        run_and_echo("sudo update-rc.d #{name}-#{version} defaults 98 02")
+        run_and_echo("sudo /usr/sbin/update-rc.d #{name}-#{version} defaults 98 02")
       end
     end
-    
+
     # install third party gems
     third_party = YAML::load(IO.read('third_party.yaml'))
     third_party.each do | gem|

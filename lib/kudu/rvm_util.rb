@@ -2,7 +2,11 @@ require 'rvm'
 require_relative 'util'
 
 module Kudu
+
+  @current_gemset = ""
   class << self
+
+    attr_accessor :current_gemset
 
     def list_gem(gemset)
       begin
@@ -20,8 +24,11 @@ module Kudu
  
     def rvm_use gemset
       Kudu.with_logging(self, __method__, gemset) do
+        return if Kudu.current_gemset == gemset
+        Kudu.ui.info("RVM use #{gemset}")
         RVM.gemset.create gemset
         RVM.gemset.use! gemset
+        Kudu.current_gemset = gemset
       end
     end
 

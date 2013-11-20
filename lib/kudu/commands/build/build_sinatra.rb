@@ -16,6 +16,10 @@ module Kudu
     
     def initialize(options, project)
 
+      builder = GemBuilder.new(options, project)
+      # production builds update version first
+      builder.update_version if options[:production]
+
       # init.d
       template = File.join(Kudu.template_dir, "init.d.erb")
       outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}.init.d")
@@ -41,8 +45,10 @@ module Kudu
       deploy_ru = File.join(project.directory, "config", "deploy.ru")
       IO.write(deploy_ru,IO.read(ru_file).gsub("require","gem \"#{project.name}\", \"#{project.version}\"; require"))
 
-      # build the gem
-      GemBuilder.new(options, project)
+      # build the gem after generation of config files
+      builder.build_gem
+      builder.install_third_party unless options[:'skip-third-party']
+
     end
 
   end

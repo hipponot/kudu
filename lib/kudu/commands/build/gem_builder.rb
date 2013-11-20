@@ -13,26 +13,23 @@ module Kudu
 
   class GemBuilder
 
+
     def initialize(options, project)    
-
       Kudu.with_logging(self, __method__) do
-
+        @project = project
         @force = options[:force] || options[:odi]
         @repo = options[:repo]
         @odi = options[:odi]
-
-        build_gem(project)
-        install_third_party(project)
-
+        @production = options[:projection]
+        raise GemsBuilderFailed, "GemBuilder needs single @publication in publications array" unless project.publications.length == 1
+        @publication = project.publications.first
       end
     end
+    attr_reader :project
 
-    def build_gem(project)
+    def build_gem
       Kudu.with_logging(self, __method__) do
-
         begin
-          raise GemsBuilderFailed, "GemBuilder needs single @publication in publications array" unless project.publications.length == 1
-          @publication = project.publications.first
           Kudu.rvm_use @repo
           unless has_changed(project)
             Kudu.ui.info "Already installed and no local changes, skipping #{@publication.name}:"
@@ -60,6 +57,18 @@ module Kudu
       end
     end
 
+    def update_version
+      Kudu.with_logging(self, __method__) do      
+        Kudu.rvm_use @repo
+        return unless is_installed? project
+        local_hash = Kudu.source_hash(project.directory)
+        install_hash = installed_gem_source_hash(project)
+        if local_hash != install_hash
+          project.bump_version
+        end
+      end
+    end
+
     def has_changed(project)
       Kudu.with_logging(self, __method__) do
         return @force if @force
@@ -75,7 +84,7 @@ module Kudu
           raise GemBuilderFailed, "Gem build failed: #{e.message}"
         end
       end
-      end
+    end
 
     def installed_gem_source_hash(project)
       Kudu.with_logging(self, __method__) do
@@ -105,13 +114,13 @@ module Kudu
       end
     end
 
-    def install_third_party project
+    def install_third_party
       Kudu.with_logging(self, __method__) do
         Kudu.rvm_use 'global'
         # Convert to full vertex descriptor if necessary
         project.dependencies.select {|d| d.group == 'third-party' || d.group =='developer'}.each do |dep|
           # install the versioned third party gem if necessary
-          if not is_installed dep
+          if not is_installed? dep
             if dep.version == 'latest'
               Kudu.ui.info "Installing latest #{dep.name}"
               Kudu.ui.info `gem install -f --no-ri --no-rdoc #{dep.name}`.chomp
@@ -127,7 +136,7 @@ module Kudu
       end
     end
 
-    def is_installed dep
+    def is_installed? dep
       begin
         if (dep.version =='latest')
           Gem::Specification.find_by_name(dep.name)

@@ -10,12 +10,11 @@ module Kudu
     KNOWN_ARTIFACT_TYPES = ['gem']
 
     attr_reader :name
-    attr_accessor :version
     attr_reader :type
     attr_reader :group
     attr_reader :publications
     attr_reader :directory
-
+    attr_reader :version_updated
     def initialize(kudu_spec)
       @spec = KuduProject.load_and_validate_spec(kudu_spec)
       @name = @spec[:project][:name]
@@ -30,6 +29,7 @@ module Kudu
         @dependencies << KuduArtifact.new_from_hash(dep)
       end
       @version = @publications[0].version
+      @version_updated = false
     end
 
     def dependencies group=nil
@@ -38,6 +38,33 @@ module Kudu
       else
         @dependencies.select { |d| d.group == group }
       end
+    end
+
+    def bump_version
+      # this call is idempotent for a given kudu run
+      return if version_updated
+      kudu_file = File.join(directory, 'kudu.yaml')
+      kudu = YAML::load(IO.read(kudu_file))
+      kudu[:publications][0][:version] = version
+      major, minor, build = version.split('.')
+      build = (build.to_i+1).to_s
+      new_version = "#{major}.#{minor}.#{build}"
+      # write the new version back to kudu.yaml
+      kudu[:publications][0][:version] = new_version
+      File.open(kudu_file, 'w') {|f| f.write(kudu.to_yaml) }
+      self.version = new_version
+      # Refactor for one gem per project - this is lame
+      publications.each {|p| p.version = version }
+    end
+
+    def version
+      @version
+    end
+
+    def version= new_version
+      return if new_version == @version
+      @version = new_version
+      @version_updated = true
     end
 
     class << self

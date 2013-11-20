@@ -58,8 +58,8 @@ module Kudu
         begin
           Kudu.ui.info "#{obj.to_s}::#{method}: #{message}" if verbose
           yield
-        rescue
-          Kudu.ui.error "Error: #{obj.to_s}::#{method} failed"
+        rescue Exception=>e
+          Kudu.ui.error "Error: #{obj.to_s}::#{method} failed, #{e.message}"
           raise
         end
       }
