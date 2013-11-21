@@ -42,7 +42,7 @@ module Kudu
       tarball_name = "#{package_name}.tar.gz"
       tarball = File.join(package_dir, tarball_name)
       if ( File.exist?(target) || File.exist?(tarball) ) and not options[:force]
-        Kudu.ui.error("File exists #{package}.  Use --force to overwrite.. punting")
+        Kudu.ui.error("File exists #{target}.  Use --force to overwrite.. punting")
         exit(1)
       elsif options[:force]
         FileUtils.rm_rf(target)

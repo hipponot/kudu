@@ -9,6 +9,7 @@ class Install < Thor
   method_option :nginx, :aliases => "-n", :type => :string, :default=>"/etc/nginx-backend", :required => true, :desc => "nginx conf directory"
   method_option :user, :aliases => "-u", :type => :string, :required=>true, :default=>Etc.getlogin, :desc => "user"
   def install
+    gemset = File.basename(File.expand_path(File.dirname(__FILE__)))
     # install in-house gems
     Dir.glob('**').each do |dir|
       next unless File.directory?(dir)
