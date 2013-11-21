@@ -20,6 +20,7 @@ module Kudu
       method_option :all, :aliases => "-a", :type => :boolean, :required=>false, :desc => "clean everything"
       method_option :dependencies, :aliases => "-d", :required => false, :desc => "clean dependencies"
       method_option :repo, :aliases => "-r", :type => :string, :required => false, :default=>"default",  :desc => "Repository name (published artifacts)"
+      method_option :local, :aliases => "-l", :type => :boolean, :required => false, :default=>false,  :desc => "just clean local artifacts"      
       method_option :'more-clean', :aliases => "-m", :type => :boolean, :required => false, :default=>false,  :desc => "more clean"      
       method_option :'nuke', :aliases => "-N", :type => :boolean, :required => false, :default=>false,  :desc => "nuke"      
 

@@ -17,6 +17,8 @@ module Kudu
           Kudu.ui.info "cleaning #{project.name}"
           Dir.chdir(project.directory)
           `rm -rf build`
+          return if options[:local]
+          Kudu.ui.info "uninstalling #{project.name} #{project.version}"
           if Kudu.is_installed? project.name, project.version
             Kudu.ui.info `gem uninstall -I -x -q -v #{project.version} #{project.name}`.chomp
           end

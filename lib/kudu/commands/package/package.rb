@@ -51,7 +51,7 @@ module Kudu
       Dir.mkdir(target)
 
       # do a clean production build with dependencies
-      clean_options = { name:project.name, :dependencies=>true, :repo=>'default'}
+      clean_options = { name:project.name, :dependencies=>true, :repo=>'default', :local=>true}
       invoke :clean, nil, clean_options
       build_options = { :name=>project.name, :force=>true, :'skip-third-party'=>true, :repo=>'default', :dependencies=>true, :production=>true }
       invoke :build, nil, build_options
@@ -83,17 +83,17 @@ module Kudu
       end
 
       # installer
-      outfile = File.join(package, "install.rb")
+      outfile = File.join(target, "install.rb")
       template = File.join(Kudu.template_dir, "install.rb.erb")
       ErubisInflater.inflate_file_write(template, {}, outfile)
       `chmod +x #{outfile}`
       # third party
-      File.open(File.join(package,"third_party.yaml"), 'w') {
+      File.open(File.join(target,"third_party.yaml"), 'w') {
         |f| f.write(project.dependencies('third_party').map {|d| {name:d.name, version:d.version} }.to_yaml) 
       }
       # tarball
-      `cd #{File.join(File.dirname(package))}; tar cvf #{File.basename(package)}.tar #{File.basename(package)}`
-      `gzip -9 -f #{package}.tar`
+      `cd #{package_dir}; tar cvf #{package_name}.tar #{File.basename(target)}`
+      `cd #{package_dir}; gzip -9 -f #{package_name}.tar`
       # cleanup
       FileUtils.rm_rf(target)
       if File.exist?(tarball)

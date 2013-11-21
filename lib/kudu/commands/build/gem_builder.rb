@@ -71,17 +71,16 @@ module Kudu
 
     def has_changed(project)
       Kudu.with_logging(self, __method__) do
-        return @force if @force
         begin
           local_hash = Kudu.source_hash(project.directory)
           install_hash = installed_gem_source_hash(project)
           if local_hash != install_hash
             IO.write(File.join(project.directory, 'lib', @publication.name, 'sha1'), local_hash)
-            return true
+            return true 
           end
-          false
+          return false || @force
         rescue Exception => e
-          raise GemBuilderFailed, "Gem build failed: #{e.message}"
+          raise GemBuilderFailed, "Unexpected exception in GemBuilder::has_changed: #{e.message}"
         end
       end
     end
