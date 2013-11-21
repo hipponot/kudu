@@ -48,7 +48,7 @@ module Kudu
         FileUtils.rm_rf(target)
         FileUtils.rm_rf(tarball)
       end
-      Dir.mkdir(target)
+      FileUtils.mkdir_p(target)
 
       # do a clean production build with dependencies
       clean_options = { name:project.name, :dependencies=>true, :repo=>'default', :local=>true}
