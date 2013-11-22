@@ -26,7 +26,7 @@ else
  RUN_AS=$USER
 fi
 
-APP_ROOT=/home/$RUN_AS/.rvm/gems/<%=ruby%>/gems/$APP_NAME-$APP_VERSION
+APP_ROOT=/home/$RUN_AS/.rvm/gems/<%=ruby%>@$APP_NAME-$APP_VERSION/gems/$APP_NAME-$APP_VERSION
 PID="/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>/unicorn.pid"
 
 if [ -n "$RACK_ENV" ]
@@ -36,13 +36,13 @@ else
   ENV=development
 fi
 
-GEM_HOME="/home/$RUN_AS/.rvm/gems/<%=ruby%>"
- 
+RVM_HOME="/home/$RUN_AS/.rvm/gems/<%=ruby%>"
+GEM_HOME="/home/$RUN_AS/.rvm/gems/<%=ruby%>@<%=project_name%>-<%=project_version%>"
+GEM_PATH="/home/$RUN_AS/.rvm/gems/<%=ruby%>@<%=project_name%>-<%=project_version%>:/home/$RUN_AS/.rvm/gems/<%=ruby%>@global"
 UNICORN_OPTS="-D -E $ENV -c $APP_ROOT/config/unicorn.rb"
  
-SET_PATH="cd $APP_ROOT; export GEM_HOME=$GEM_HOME"
-CMD="$SET_PATH; $GEM_HOME@global/bin/unicorn $UNICORN_OPTS deploy.ru"
- 
+SET_PATH="cd $APP_ROOT; export GEM_HOME=$GEM_HOME; export GEM_PATH=$GEM_PATH"
+CMD="$SET_PATH; $RVM_HOME@global/bin/unicorn $UNICORN_OPTS deploy.ru"
 old_pid="$PID.oldbin"
  
 cd $APP_ROOT || exit 1

@@ -2,6 +2,7 @@
 require 'yaml'
 require "thor"
 require "etc"
+require "rvm"
 
 class Install < Thor
 
@@ -11,49 +12,54 @@ class Install < Thor
   def install
     gemset = File.basename(File.expand_path(File.dirname(__FILE__)))
     # install in-house gems
-    Dir.glob('**').each do |dir|
-      next unless File.directory?(dir)
-      gem = Dir.glob("#{dir}/*.gem").first
-      `gem install #{gem}`
-      # APIs nginx & init.d
-      conf = Dir.glob("#{dir}/*.conf")
-      unless conf.empty?
-        name, version = File.basename(gem,'.gem').split('-')
-        # location
-        source = "#{dir}/#{name}-#{version}-location.conf"
-        target = "#{options[:nginx]}/conf.d/location/#{name}-#{version}.conf"
-        run_and_echo("sudo cp #{source} #{target}")
-        run_and_echo("sudo chown #{options[:user]}:#{options[:user]} #{target}")
-        # upstream
-        source = "#{dir}/#{name}-#{version}-upstream.conf"
-        target = "#{options[:nginx]}/conf.d/upstream/#{name}-#{version}.conf"
-        run_and_echo("sudo cp  #{source} #{target}")
-        run_and_echo("sudo chown #{options[:user]}:#{options[:user]} #{target}")
-        # init.d        
-        source = "#{dir}/#{name}-#{version}.init.d"
-        target = "/etc/init.d/#{name}-#{version}"
-        run_and_echo("sudo cp #{source} #{target}")
-        run_and_echo("sudo chown #{options[:user]}:#{options[:user]} #{target}")
-        run_and_echo("sudo chmod 755  #{target}")
-        # restart on boot
-        run_and_echo("sudo /usr/sbin/update-rc.d #{name}-#{version} defaults 98 02")
-      end
+    RVM.gemset.create gemset
+    RVM.gemset.use! gemset
+    Dir.glob('*.gem').each do |gem|
+      run_and_echo("gem install -f --no-ri --no-rdoc #{gem}")
+    end
+
+    # location
+    Dir.glob("*-location.conf").each do |f|
+      target_name = File.basename(f).gsub('-location','')
+      target = "#{options[:nginx]}/conf.d/location/#{target_name}"
+      run_and_echo("sudo cp #{f} #{target}")
+      run_and_echo("sudo chown #{options[:user]}:#{options[:user]} #{target}")
+    end
+
+    # upstream
+    Dir.glob("*-upstream.conf").each do |f|
+      target_name = File.basename(f).gsub('-upstream','')
+      target = "#{options[:nginx]}/conf.d/upstream/#{target_name}"
+      run_and_echo("sudo cp #{f} #{target}")
+      run_and_echo("sudo chown #{options[:user]}:#{options[:user]} #{target}")
+    end
+
+    # init.d        
+    Dir.glob("*.init.d").each do |f|
+      target_name = File.basename(f).gsub('.init.d','')
+      target = "/etc/init.d/#{target_name}"
+      run_and_echo("sudo cp #{f} #{target}")
+      run_and_echo("sudo chown #{options[:user]}:#{options[:user]} #{target}")
+      run_and_echo("sudo chmod 755  #{target}")
+      # restart on boot
+      run_and_echo("sudo /usr/sbin/update-rc.d #{target_name} defaults 98 02")
     end
 
     # install third party gems
+    RVM.gemset.use! 'global'
     third_party = YAML::load(IO.read('third_party.yaml'))
     third_party.each do | gem|
       if /latest/ =~ gem[:version]
         if is_installed? gem[:name]
           puts "already_installed #{gem[:name]}"
         else
-          puts `gem install #{gem[:name]}` 
+          run_and_echo("gem install -f --no-ri --no-rdoc #{gem[:name]}")
         end
       else
         if is_installed? gem[:name], gem[:version]
           puts "already_installed #{gem[:name]} #{gem[:version]}"
         else
-          puts `gem install #{gem[:name]} #{gem[:version]}` 
+          run_and_echo("gem install -l -f --no-ri --no-rdoc -v #{gem[:version]} #{gem[:name]}")
         end
       end
     end

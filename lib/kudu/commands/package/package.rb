@@ -18,6 +18,7 @@ module Kudu
     method_option :name, :aliases => "-n", :type => :string, :required=>true, :desc => "project name"
     method_option :'package-dir', :aliases => "-p", :type => :string, :required=>true, :default=>"/Volumes/shared/pool/pkgs", :desc => "package directory"
     method_option :force, :aliases => "-f", :type => :boolean, :required=>false, :default=>false, :desc => "overwrite existing package"
+    method_option :ruby, :aliases => "-v", :type => :string, :required => true, :default=>`rvm current`.chomp,  :desc => "ruby-version"
     def package
       Kudu.with_logging(self, __method__) do
         project = KuduProject.project(options[:name])
@@ -53,7 +54,7 @@ module Kudu
       # do a clean production build with dependencies
       clean_options = { name:project.name, :dependencies=>true, :repo=>'default', :local=>true}
       invoke :clean, nil, clean_options
-      build_options = { :name=>project.name, :force=>true, :'skip-third-party'=>true, :repo=>'default', :dependencies=>true, :production=>true }
+      build_options = { :name=>project.name, :ruby=>options[:ruby], :force=>true, :'skip-third-party'=>true, :repo=>'default', :dependencies=>true, :production=>true }
       invoke :build, nil, build_options
       FileUtils.cp_r(File.join(project.directory, 'build/.'), target)      
 
@@ -89,7 +90,7 @@ module Kudu
       `chmod +x #{outfile}`
       # third party
       File.open(File.join(target,"third_party.yaml"), 'w') {
-        |f| f.write(project.dependencies('third_party').map {|d| {name:d.name, version:d.version} }.to_yaml) 
+        |f| f.write(project.dependencies('third-party').map {|d| {name:d.name, version:d.version} }.to_yaml) 
       }
       # tarball
       `cd #{package_dir}; tar cvf #{package_name}.tar #{File.basename(target)}`
