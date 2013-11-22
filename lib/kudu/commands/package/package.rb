@@ -37,6 +37,13 @@ module Kudu
 
     def build_package(project)
 
+      # do a clean production build with dependencies
+      clean_options = { name:project.name, :dependencies=>true, :repo=>'default', :local=>true}
+      invoke :clean, nil, clean_options
+      build_options = { :name=>project.name, :ruby=>options[:ruby], :force=>true, :'skip-third-party'=>true, :repo=>'default', :dependencies=>true, :production=>true }
+      invoke :build, nil, build_options
+
+      # create package directions
       package_dir = File.join(options[:'package-dir'])
       package_name = "#{project.name}-#{project.version}"
       target = File.join(package_dir, package_name)
@@ -50,12 +57,6 @@ module Kudu
         FileUtils.rm_rf(tarball)
       end
       FileUtils.mkdir_p(target)
-
-      # do a clean production build with dependencies
-      clean_options = { name:project.name, :dependencies=>true, :repo=>'default', :local=>true}
-      invoke :clean, nil, clean_options
-      build_options = { :name=>project.name, :ruby=>options[:ruby], :force=>true, :'skip-third-party'=>true, :repo=>'default', :dependencies=>true, :production=>true }
-      invoke :build, nil, build_options
       FileUtils.cp_r(File.join(project.directory, 'build/.'), target)      
 
       # add in-house dependencies to the package
