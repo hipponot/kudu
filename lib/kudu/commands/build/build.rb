@@ -32,21 +32,21 @@ module Kudu
     
     def build
       Kudu.with_logging(self, __method__) do
+        force_bump_version = false
         if options[:all]
-          DependencyGraph.new.build_order { |project| build_one(project) } 
+          DependencyGraph.new.build_order { |project| build_one(project, force_bump_version) } 
         elsif options[:dependencies]
-          bump_version = false
           DependencyGraph.new.build_order(options[:name]).each do |project| 
             Kudu.ui.info("building #{project.name}")
-            build_one(project, bump_version) 
-            # In a production build dependent project version update
+            build_one(project, force_bump_version) 
+            # In a production build a dependent project version update
             # forces all subsequent projects to bump their version
             if options[:production]
-              bump_version = bump_version ? bump_version : project.version_updated
+              force_bump_version = force_bump_version ? force_bump_version : project.version_updated
             end
           end
         else
-          build_one(KuduProject.project(options[:name]))
+          build_one(KuduProject.project(options[:name]), force_bump_version)
         end
       end
     end
