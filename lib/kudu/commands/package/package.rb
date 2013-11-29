@@ -94,7 +94,7 @@ module Kudu
         |f| f.write(project.dependencies('third-party').map {|d| {name:d.name, version:d.version} }.to_yaml) 
       }
       # tarball
-      `cd #{package_dir}; tar cvf #{package_name}.tar #{File.basename(target)}`
+      `cd #{package_dir}; tar cf #{package_name}.tar #{File.basename(target)}`
       `cd #{package_dir}; gzip -9 -f #{package_name}.tar`
       # cleanup
       FileUtils.rm_rf(target)

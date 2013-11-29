@@ -139,17 +139,11 @@ module Kudu
 
     def source_hash rootdir
       files = git_ls_files rootdir
-      # Deal with 'git ls-files' not managing symlinks
-      links = []
-      files.each do |f|
-        if File.symlink? f
-          #readlink is relative to f's dirname
-          ff = File.expand_path(File.join(File.dirname(f), `readlink #{f}`))
-          links += git_ls_files ff
-          files.delete(f)
-        end
+      files.delete_if do |f|
+        is_link = File.symlink?(f) 
+        Kudu.ui.warn "source hash ignoring symlink #{f}" if is_link
+        is_link
       end
-      files += links
       # Don't hash sha1 file or built gem
       files = files.select { |f| not /\w*.gem$|sha1$/ =~ f }
       sha1 = Digest::SHA1.new
