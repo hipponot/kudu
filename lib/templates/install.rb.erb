@@ -18,22 +18,6 @@ class Install < Thor
       run_and_echo("gem install -f --no-ri --no-rdoc #{gem}")
     end
 
-    # location
-    Dir.glob("*-location.conf").each do |f|
-      target_name = File.basename(f).gsub('-location','')
-      target = "#{options[:nginx]}/conf.d/location/#{target_name}"
-      run_and_echo("sudo cp #{f} #{target}")
-      run_and_echo("sudo chown #{options[:user]}:#{options[:user]} #{target}")
-    end
-
-    # upstream
-    Dir.glob("*-upstream.conf").each do |f|
-      target_name = File.basename(f).gsub('-upstream','')
-      target = "#{options[:nginx]}/conf.d/upstream/#{target_name}"
-      run_and_echo("sudo cp #{f} #{target}")
-      run_and_echo("sudo chown #{options[:user]}:#{options[:user]} #{target}")
-    end
-
     # init.d        
     Dir.glob("*.init.d").each do |f|
       target_name = File.basename(f).gsub('.init.d','')
