@@ -65,8 +65,8 @@ module Kudu
         FileUtils.cp_r(File.join(dep.directory, 'build/.'), target)
       end
 
-      #-- Static file delivery for sinatra apps (that have an appropriately named lib/public/static/xxx/src dir):
-      sinatra_static_src_dir = File.join  project.directory, %W(lib public static #{project.name} src)
+      #-- Static file delivery for sinatra apps (that have an appropriately named lib/public/static_src/<API>/ dir):
+      sinatra_static_src_dir = File.join  project.directory, %W(lib public static_src #{project.name})
       if File.directory? sinatra_static_src_dir
         static_staging_dir = '/Volumes/shared/pool/www-static'
         tgt_dir = File.join static_staging_dir, %W( #{project.name} #{project.version} ) 
