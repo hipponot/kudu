@@ -23,42 +23,37 @@ module Kudu
     method_option :repo, :aliases => "-r", :type => :string, :required => false, :default=>"default",  :desc => "Repository name (published artifacts)"
     method_option :odi, :aliases => "-o", :type => :boolean, :required => false, :default=>false,  :desc => "Optimized for developer iterations"
     method_option :version, :aliases => "-v", :type => :string, :required => false, :desc => "Specify version"
-    method_option :production, :aliases => "-p", :type => :boolean, :required => false, :default=>false, :lazy_default=>true, :desc => "Production build increments build number if version"
+    method_option :production, :aliases => "-p", :type => :boolean, :required => false, :default=>false, :lazy_default=>true, :desc => "Production build increments version"
     method_option :dryrun, :aliases => "-", :type => :boolean, :required => false, :default=>false,  :desc => "Dry run"
     method_option :ruby, :aliases => "-v", :type => :string, :required => true, :default=>`rvm current`.chomp,  :desc => "ruby-version"
     
     # No ruby-prof in jruby 
-    @profile = RUBY_PLATFORM == 'java' ? false : options[:profile] 
+    @profile = RUBY_PLATFORM == 'java' ? false : options[:profile]
     
     def build
       Kudu.with_logging(self, __method__) do
-        force_bump_version = false
         if options[:all]
-          DependencyGraph.new.build_order { |project| build_one(project, force_bump_version) } 
+          DependencyGraph.new.build_order { |project| build_one(project) } 
         elsif options[:dependencies]
           DependencyGraph.new.build_order(options[:name]).each do |project| 
             Kudu.ui.info("building #{project.name}")
-            build_one(project, force_bump_version) 
-            # In a production build a dependent project version update
-            # forces all subsequent projects to bump their version
-            if options[:production]
-              force_bump_version = force_bump_version ? force_bump_version : project.version_updated
-            end
+            build_one(project) 
           end
         else
-          build_one(KuduProject.project(options[:name]), force_bump_version)
+          build_one(KuduProject.project(options[:name]))
         end
       end
     end
 
     private
 
-    def build_one project, force_bump_version
+    def build_one project
+      # production build set build number according to git_commit_count
+      project.bump_version if options[:production]
       # create build directory
       build_dir = File.join(project.directory,'build')
       Dir.mkdir(build_dir) unless File.directory?(build_dir)
       # force the version bump if requested
-      project.bump_version if force_bump_version 
       unless Kudu.command_defined_for_type?('build', project.type)
         Kudu.ui.error("build command is not defined for project type " + project.type)
       else

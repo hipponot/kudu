@@ -22,6 +22,8 @@ module Kudu
     method_option :production, :aliases => "-p", :type => :boolean, :required => false, :default=>true, :lazy_default=>true, :desc => "Production build"
     def package
       Kudu.with_logging(self, __method__) do
+        # check options are consistent
+        validate_options 
         project = KuduProject.project(options[:name])
         build_package(project)
       end
@@ -35,6 +37,10 @@ module Kudu
         project = KuduProject.project(project.name)
       end
     end
+
+    def validate_options
+    end
+
 
     def build_package(project)
 
@@ -71,7 +77,8 @@ module Kudu
       if File.directory? sinatra_static_src_dir
         static_staging_dir = '/Volumes/shared/pool/www-static'
         tgt_dir = File.join static_staging_dir, %W( #{project.name} #{project.version} ) 
-        if File.directory? tgt_dir
+        # ToDo - reenable when we are doing production builds
+        if false and File.directory? tgt_dir
           puts "Static content directory already exists: #{tgt_dir}\n --Leaving existing content as is."
         else
           puts "Delivering static content to #{tgt_dir}"

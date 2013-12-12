@@ -8,7 +8,7 @@ module Kudu
       exit 1
     rescue Interrupt => e
       Kudu.ui.error "\nQuitting..."
-      Kudu.ui.debug e.backtrace.join("\n")
+     Kudu.ui.debug e.backtrace.join("\n")
       exit 1
     rescue SystemExit => e
       exit e.status

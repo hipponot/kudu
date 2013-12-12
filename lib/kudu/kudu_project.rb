@@ -40,6 +40,7 @@ module Kudu
       end
     end
 
+    # Auto incrementing of build number for production builds
     def bump_version
       # this call is idempotent for a given kudu run
       return if version_updated
@@ -47,7 +48,7 @@ module Kudu
       kudu = YAML::load(IO.read(kudu_file))
       kudu[:publications][0][:version] = version
       major, minor, build = version.split('.')
-      build = (build.to_i+1).to_s
+      build = Kudu.git_commit_count
       new_version = "#{major}.#{minor}.#{build}"
       # write the new version back to kudu.yaml
       kudu[:publications][0][:version] = new_version
