@@ -16,6 +16,7 @@ module Kudu
     desc "package", "Package project"
 
     method_option :name, :aliases => "-n", :type => :string, :required=>true, :desc => "project name"
+    method_option :'static-dir', :aliases => "-s", :type => :string, :required=>true, :default=>"/Volumes/shared/pool/www-static", :desc => "package directory"
     method_option :'package-dir', :aliases => "-d", :type => :string, :required=>true, :default=>"/Volumes/shared/pool/pkgs", :desc => "package directory"
     method_option :force, :aliases => "-f", :type => :boolean, :required=>false, :default=>false, :desc => "overwrite existing package"
     method_option :ruby, :aliases => "-v", :type => :string, :required => true, :default=>`rvm current`.chomp,  :desc => "ruby-version"
@@ -51,7 +52,7 @@ module Kudu
       invoke :build, nil, build_options
 
       # create package directions
-      package_dir = File.join(options[:'package-dir'])
+      package_dir = File.join(options[:'package-dir'], Kudu.git_commit_count)
       package_name = "#{project.name}-#{project.version}"
       target = File.join(package_dir, package_name)
       tarball_name = "#{package_name}.tar.gz"
@@ -75,7 +76,7 @@ module Kudu
       #-- Static file delivery for sinatra apps (that have an appropriately named lib/public/static_src/<API>/ dir):
       sinatra_static_src_dir = File.join  project.directory, %W(lib public static_src #{project.name})
       if File.directory? sinatra_static_src_dir
-        static_staging_dir = '/Volumes/shared/pool/www-static'
+        static_staging_dir = options[:'static-dir']
         tgt_dir = File.join static_staging_dir, %W( #{project.name} #{project.version} ) 
         # ToDo - reenable when we are doing production builds
         if false and File.directory? tgt_dir
