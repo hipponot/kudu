@@ -52,7 +52,7 @@ module Kudu
       invoke :build, nil, build_options
 
       # create package directions
-      package_dir = File.join(options[:'package-dir'], Kudu.git_commit_count)
+      package_dir = File.join(options[:'package-dir'])
       package_name = "#{project.name}-#{project.version}"
       target = File.join(package_dir, package_name)
       tarball_name = "#{package_name}.tar.gz"
