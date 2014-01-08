@@ -48,7 +48,7 @@ module Kudu
       # do a clean production build with dependencies
       clean_options = { name:project.name, :dependencies=>true, :repo=>'default', :local=>true}
       invoke :clean, nil, clean_options
-      build_options = { :name=>project.name, :ruby=>options[:ruby], :force=>true, :'skip-third-party'=>true, :repo=>'default', :dependencies=>true, :production=>options[:production] }
+      build_options = { :name=>project.name, :install=>false, :ruby=>options[:ruby], :force=>true, :'skip-third-party'=>true, :repo=>'default', :dependencies=>true, :production=>options[:production] }
       invoke :build, nil, build_options
 
       # create package directions

@@ -24,9 +24,10 @@ module Kudu
     method_option :odi, :aliases => "-o", :type => :boolean, :required => false, :default=>false,  :desc => "Optimized for developer iterations"
     method_option :version, :aliases => "-v", :type => :string, :required => false, :desc => "Specify version"
     method_option :production, :aliases => "-p", :type => :boolean, :required => false, :default=>false, :lazy_default=>true, :desc => "Production build increments version"
-    method_option :dryrun, :aliases => "-", :type => :boolean, :required => false, :default=>false,  :desc => "Dry run"
+    method_option :dryrun, :aliases => "-y", :type => :boolean, :required => false, :default=>false,  :desc => "Dry run"
     method_option :ruby, :aliases => "-v", :type => :string, :required => true, :default=>`rvm current`.chomp,  :desc => "ruby-version"
-    
+    method_option :install, :aliases => "-i", :type => :boolean, :required => false, :default=>true,  :desc => "install built gem"    
+
     # No ruby-prof in jruby 
     @profile = RUBY_PLATFORM == 'java' ? false : options[:profile]
     
@@ -35,7 +36,7 @@ module Kudu
         if options[:all]
           DependencyGraph.new.build_order { |project| build_one(project) } 
         elsif options[:dependencies]
-          DependencyGraph.new.build_order(options[:name]).each do |project| 
+          DependencyGraph.new.build_order(options[:name]).each do |project|
             Kudu.ui.info("building #{project.name}")
             build_one(project) 
           end

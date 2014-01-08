@@ -9,6 +9,10 @@ module Kudu
   class CLI < Thor
     include Thor::Actions
 
+    def self.exit_on_failure?
+      true
+    end
+
     def initialize(*)
       super
       the_shell = (options["no-color"] ? Thor::Shell::Basic.new : shell)
