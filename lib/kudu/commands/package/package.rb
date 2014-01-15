@@ -8,7 +8,6 @@ require_relative '../../util'
 require_relative '../../ui'
 require_relative '../../kudu_project'
 require_relative '../../dependency_graph'
-require_relative '../../wm_env'
 
 module Kudu
 
