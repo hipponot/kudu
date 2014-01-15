@@ -60,6 +60,13 @@ module Kudu
       else
         Kudu.delegate_command('build', project.type, options, project)
       end
+      project.post_build.each do |post|
+        post = File.expand_path(post)
+        Kudu.ui.error("Can't stat post build script #{post}") unless File.exist?(post)
+        Kudu.ui.info("executing post build step #{post}")
+        status = system(post)
+        Kudu.ui.error("Bad return status from post build script #{post}") unless status
+      end
     end
 
   end

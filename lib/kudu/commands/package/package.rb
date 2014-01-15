@@ -8,6 +8,7 @@ require_relative '../../util'
 require_relative '../../ui'
 require_relative '../../kudu_project'
 require_relative '../../dependency_graph'
+require_relative '../../wm_env'
 
 module Kudu
 
@@ -16,8 +17,8 @@ module Kudu
     desc "package", "Package project"
 
     method_option :name, :aliases => "-n", :type => :string, :required=>true, :desc => "project name"
-    method_option :'static-dir', :aliases => "-s", :type => :string, :required=>true, :default=>"/Volumes/shared/pool/www-static", :desc => "package directory"
-    method_option :'package-dir', :aliases => "-d", :type => :string, :required=>true, :default=>"/Volumes/shared/pool/pkgs", :desc => "package directory"
+    method_option :'static-dir', :aliases => "-s", :type => :string, :required=>true, :desc => "package directory"
+    method_option :'package-dir', :aliases => "-d", :type => :string, :required=>true, :desc => "package directory"
     method_option :force, :aliases => "-f", :type => :boolean, :required=>false, :default=>false, :desc => "overwrite existing package"
     method_option :ruby, :aliases => "-v", :type => :string, :required => true, :default=>`rvm current`.chomp,  :desc => "ruby-version"
     method_option :production, :aliases => "-p", :type => :boolean, :required => false, :default=>true, :lazy_default=>true, :desc => "Production build"

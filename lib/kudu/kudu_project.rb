@@ -15,6 +15,7 @@ module Kudu
     attr_reader :publications
     attr_reader :directory
     attr_reader :version_updated
+    attr_reader :post_build
     def initialize(kudu_spec)
       @spec = KuduProject.load_and_validate_spec(kudu_spec)
       @name = @spec[:project][:name]
@@ -30,6 +31,7 @@ module Kudu
       end
       @version = @publications[0].version
       @version_updated = false
+      @post_build = @spec[:post_build] ? @spec[:post_build] : []
     end
 
     def dependencies group=nil

@@ -12,10 +12,11 @@ module Kudu
     include TSort
     def tsort_each_child (node, &block)
       if graph[node].nil?
-        puts 'yoda'
+        raise "Kudu got a nil graph node ???"
       end
       graph[node].each(&block)
     end
+
     def tsort_each_node (&block)
       graph.each_key(&block)
     end
