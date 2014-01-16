@@ -49,6 +49,13 @@ module Kudu
     private
 
     def build_one project
+      project.pre_build.each do |pre|
+        pre = File.expand_path(File.join(project.directory, pre))
+        raise Error.new("Can't stat pre build script #{pre}") unless File.exist?(pre)
+        Kudu.ui.info("executing pre build step #{pre}")
+        status = system(pre)
+        raise Error.new("Bad return status from pre build script #{pre}") unless status
+      end
       # production build set build number according to git_commit_count
       project.bump_version if options[:production]
       # create build directory
@@ -59,13 +66,6 @@ module Kudu
         Kudu.ui.error("build command is not defined for project type " + project.type)
       else
         Kudu.delegate_command('build', project.type, options, project)
-      end
-      project.post_build.each do |post|
-        post = File.expand_path(post)
-        Kudu.ui.error("Can't stat post build script #{post}") unless File.exist?(post)
-        Kudu.ui.info("executing post build step #{post}")
-        status = system(post)
-        Kudu.ui.error("Bad return status from post build script #{post}") unless status
       end
     end
 
