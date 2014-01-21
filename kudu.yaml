@@ -4,7 +4,7 @@
  :type: gem
 :publications:
 - :name: kudu
-  :version: 0.0.1
+  :version: 1.0.0
   :group: in-house
   :type: gem
 :dependencies:  [] 
