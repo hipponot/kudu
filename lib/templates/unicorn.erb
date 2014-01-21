@@ -2,10 +2,10 @@
 # note the trailing slash in this example
 dir = File.join(File.expand_path(File.dirname(__FILE__ )), File::SEPARATOR)
 
-worker_processes 3
+worker_processes 16
 working_directory dir
-timeout 30
-preload_app false
+timeout 60
+preload_app true
 
 # Application directories
 FileUtils.mkdir_p "/tmp/unicorn/sockets/<%=project_name%>-<%=project_version%>"
@@ -14,7 +14,7 @@ FileUtils.mkdir_p "/var/log/unicorn/<%=project_name%>-<%=project_version%>"
 
 # Specify path to socket unicorn listens to, 
 # we will use this in our nginx.conf later
-listen "/tmp/unicorn/sockets/<%=project_name%>-<%=project_version%>/unicorn.sock", :backlog => 64
+listen "/tmp/unicorn/sockets/<%=project_name%>-<%=project_version%>/unicorn.sock", :backlog => 1024
 
 # Set process id path
 pid "/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>/unicorn.pid"
