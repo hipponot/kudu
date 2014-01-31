@@ -2,11 +2,12 @@ module Kudu
 
   class CLI < Thor
 
-    desc "build-order", "print version of named gem"
+    desc "build-order", "Print topological ordering of dependency graph"
     method_option :name, :aliases => "-n", :type => :string, :required=>true, :desc => "project name"
     def build_order
-      project = KuduProject.project(options[:name])
-      project.dependencies.each{ |p| printf "%-40s%-40s\n", p.name, p.group }
+      DependencyGraph.new.build_order(options[:name]).each do |p|
+        printf "%-40s%-40s\n", p.name, p.group 
+      end
     end
 
   end
