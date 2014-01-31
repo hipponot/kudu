@@ -2,7 +2,7 @@
 # note the trailing slash in this example
 dir = File.join(File.expand_path(File.dirname(__FILE__ )), File::SEPARATOR)
 
-worker_processes 16
+worker_processes <%=num_workers%>
 working_directory dir
 timeout 60
 preload_app true

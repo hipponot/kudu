@@ -20,7 +20,7 @@ module Kudu
     method_option :'package-dir', :aliases => "-d", :type => :string, :required=>true, :desc => "package directory"
     method_option :force, :aliases => "-f", :type => :boolean, :required=>false, :default=>false, :desc => "overwrite existing package"
     method_option :ruby, :aliases => "-v", :type => :string, :required => true, :default=>`rvm current`.chomp,  :desc => "ruby-version"
-    method_option :production, :aliases => "-p", :type => :boolean, :required => false, :default=>true, :lazy_default=>true, :desc => "Production build"
+    method_option :production, :aliases => "-p", :type => :boolean, :required => false, :default=>false, :lazy_default=>true, :desc => "Production build"
     def package
       Kudu.with_logging(self, __method__) do
         # check options are consistent
