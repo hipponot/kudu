@@ -62,7 +62,7 @@ module Kudu
           vertex_lookup[project.name] = v
           graph[v] = []
           project.dependencies.each do|dep| 
-            unless graph.has_key?(dep) 
+            unless graph.has_key?(dep.to_hash)
               graph[dep.to_hash] = []
             end
             graph[v] << dep.to_hash

@@ -11,7 +11,6 @@ module Kudu
       dg.build_order(options[:name]).each do |p|
         printf "%-40s%-40s\n", p.name, p.group 
       end
-      puts JSON.pretty_generate dg.graph
     end
 
   end
