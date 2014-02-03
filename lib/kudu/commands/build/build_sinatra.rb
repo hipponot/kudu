@@ -38,7 +38,7 @@ module Kudu
       # generate unicorn config before building sinatra project types
       template = File.join(Kudu.template_dir, "unicorn.erb")
       outfile = File.join(project.directory, "config", "unicorn.rb")
-      num_workers = options[:production] ? 16 : 3
+      num_workers = options[:'num-workers']
       ErubisInflater.inflate_file_write(template, {project_name:project.name, project_version:project.version, num_workers:num_workers}, outfile)
 
       # add version to config.ru 
