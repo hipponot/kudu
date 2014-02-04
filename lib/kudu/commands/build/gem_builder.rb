@@ -21,6 +21,7 @@ module Kudu
         @repo = options[:repo]
         @odi = options[:odi]
         @production = options[:projection]
+        @install = options[:install]
         raise GemsBuilderFailed, "GemBuilder needs single @publication in publications array" unless project.publications.length == 1
         @publication = project.publications.first
       end
@@ -44,10 +45,12 @@ module Kudu
             build_dir = File.join(project.directory,'build')
             gem_name = "#{@publication.name}-#{@publication.version}.gem"
             FileUtils.mv File.join(project.directory, gem_name), File.join(build_dir, gem_name)
-            Dir.chdir(build_dir)
-            Kudu.ui.info `gem install -l -f --no-ri --no-rdoc #{gem_name}`
-            Kudu.ui.info "Installed #{gem_name} in group #{@publication.group}"
-            odi(project) if @odi
+            if @install
+              Dir.chdir(build_dir)
+              Kudu.ui.info `gem install -l -f --no-ri --no-rdoc #{gem_name}`
+              Kudu.ui.info "Installed #{gem_name} in group #{@publication.group}"
+              odi(project) if @odi
+            end
           ensure
             Dir.chdir(current)
           end
@@ -115,6 +118,7 @@ module Kudu
 
     def install_third_party
       Kudu.with_logging(self, __method__) do
+        return unless @install
         Kudu.rvm_use 'global'
         # Convert to full vertex descriptor if necessary
         project.dependencies.select {|d| d.group == 'third-party' || d.group =='developer'}.each do |dep|

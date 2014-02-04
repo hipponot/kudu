@@ -12,10 +12,11 @@ module Kudu
     include TSort
     def tsort_each_child (node, &block)
       if graph[node].nil?
-        puts 'yoda'
+        raise "Kudu got a nil graph node ???"
       end
       graph[node].each(&block)
     end
+
     def tsort_each_node (&block)
       graph.each_key(&block)
     end
@@ -61,7 +62,7 @@ module Kudu
           vertex_lookup[project.name] = v
           graph[v] = []
           project.dependencies.each do|dep| 
-            unless graph.has_key?(dep) 
+            unless graph.has_key?(dep.to_hash)
               graph[dep.to_hash] = []
             end
             graph[v] << dep.to_hash

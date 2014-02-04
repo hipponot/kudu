@@ -20,7 +20,7 @@ module Kudu
           return if options[:local]
           Kudu.ui.info "uninstalling #{project.name} #{project.version}"
           if Kudu.is_installed? project.name, project.version
-#            Kudu.ui.info `gem uninstall -I -x -q -v #{project.version} #{project.name}`.chomp
+            Kudu.ui.info `gem uninstall -I -x -q -v #{project.version} #{project.name}`.chomp
             # cleans up all version
             Kudu.ui.info `gem cleanup #{project.name}`
           end

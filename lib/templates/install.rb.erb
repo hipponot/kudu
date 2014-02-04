@@ -14,6 +14,7 @@ class Install < Thor
     # install in-house gems
     RVM.gemset.create gemset
     RVM.gemset.use! gemset
+    puts "Package - install.rb :Installing in-house gem"
     Dir.glob('*.gem').each do |gem|
       run_and_echo("gem install -f --no-ri --no-rdoc #{gem}")
     end
@@ -30,6 +31,7 @@ class Install < Thor
     end
 
     # install third party gems
+    puts "Package - install.rb :Installing third-party gem"
     RVM.gemset.use! 'global'
     third_party = YAML::load(IO.read('third_party.yaml'))
     third_party.each do | gem|
@@ -54,8 +56,11 @@ class Install < Thor
   private
 
   def run_and_echo(cmd)
-    puts cmd
-    system(cmd)
+    status = system(cmd)
+    unless status
+      puts "Pkg - install.rb command failed #{cmd} - punting" 
+      exit(1)
+    end
   end
 
   def is_installed? name, version=nil
