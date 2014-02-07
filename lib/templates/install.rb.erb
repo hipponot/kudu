@@ -31,6 +31,10 @@ class Install < Thor
     end
 
     # install third party gems
+    unless ENV['RACK_ENV']=='production'
+     puts "Non-production environment -- installing third party gems into global"
+     RVM.gemset.use! "global" 
+    end		   
     puts "Package - install.rb :Installing third-party gem"
     RVM.gemset.use! 'global'
     third_party = YAML::load(IO.read('third_party.yaml'))
