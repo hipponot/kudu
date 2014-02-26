@@ -24,9 +24,6 @@ module Kudu
       elaborate("extconf.erb", File.join("ext", project_name, "extconf.rb")) if options[:native_extension]
       elaborate("module.cpp.erb", File.join("ext", project_name, "#{project_name}.cpp")) if options[:native_extension]      
       elaborate("kudu.erb", "kudu.yaml") 
-      # kudu deploy now creates the versioned unicorn.rb
-      #elaborate("unicorn.erb", File.join("config", "unicorn.rb")) 
-      elaborate("upstream.conf.erb", File.join("config", "upstream.conf"))
     end
 
   end

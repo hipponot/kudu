@@ -15,7 +15,7 @@ module Kudu
 
     desc "build", "Build project"
 
-    method_option :name, :aliases => "-n", :required=>false, :default=>nil, :desc => "Project name", :lazy_default => ""
+    method_option :name, :aliases => "-n", :required=>true, :default=>nil, :desc => "Project name"
     method_option :all, :aliases => "-a", :type => :boolean, :required=>false, :desc => "Build everything"
     method_option :dependencies, :aliases => "-d", :required => false, :desc => "Rebuild dependencies before building"
     method_option :force, :aliases => "-f", :type => :boolean, :required => false, :default => false,  :desc => "Force rebuild"
