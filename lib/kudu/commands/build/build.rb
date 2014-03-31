@@ -20,6 +20,7 @@ module Kudu
     method_option :dependencies, :aliases => "-d", :required => false, :desc => "Rebuild dependencies before building"
     method_option :force, :aliases => "-f", :type => :boolean, :required => false, :default => false,  :desc => "Force rebuild"
     method_option :'skip-third-party', :aliases => "-s", :type => :boolean, :required => false, :default => false,  :desc => "Skip third party gem install"
+    method_option :'only-third-party', :aliases => "-s", :type => :boolean, :required => false, :default => false,  :desc => "Only build and install third party deps"
     method_option :repo, :aliases => "-r", :type => :string, :required => false, :default=>"default",  :desc => "Repository name (published artifacts)"
     method_option :odi, :aliases => "-o", :type => :boolean, :required => false, :default=>false,  :desc => "Optimized for developer iterations"
     method_option :version, :aliases => "-v", :type => :string, :required => false, :desc => "Specify version"

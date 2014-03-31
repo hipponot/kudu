@@ -41,13 +41,14 @@ module Kudu
       num_workers = options[:'num-workers']
       ErubisInflater.inflate_file_write(template, {project_name:project.name, project_version:project.version, num_workers:num_workers}, outfile)
 
+      # Don't needthis anymore - superceded by unicorn.rb
       # add version to config.ru 
-      ru_file = File.join(project.directory, "config", "config.ru")
-      deploy_ru = File.join(project.directory, "config", "deploy.ru")
-      IO.write(deploy_ru,IO.read(ru_file).gsub("require","gem \"#{project.name}\", \"#{project.version}\"; require"))
+      # ru_file = File.join(project.directory, "config", "config.ru")
+      # deploy_ru = File.join(project.directory, "config", "deploy.ru")
+      # IO.write(deploy_ru,IO.read(ru_file).gsub("require","gem \"#{project.name}\", \"#{project.version}\"; require"))
 
       # build the gem after generation of config files
-      builder.build_gem
+      builder.build_gem unless options[:'only-third-party']
       builder.install_third_party unless options[:'skip-third-party']
 
     end
