@@ -23,8 +23,14 @@ module Kudu
       # init.d
       template = File.join(Kudu.template_dir, "init.d.erb")
       outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}.init.d")
-      ErubisInflater.inflate_file_write(template, {ruby:options[:ruby], project_name:project.name, project_version:project.version}, outfile)
-
+      # presence of config/sidekiq.yaml triggers init.d script with sidekiq support
+      with_sidekiq = File.exists?(File.join(project.directory, 'config/sidekiq.yaml')) ? true : false
+      ErubisInflater.inflate_file_write(template, {
+                                          ruby:options[:ruby], 
+                                          project_name:project.name, 
+                                          project_version:project.version, 
+                                          with_sidekiq:with_sidekiq
+                                        }, outfile)
       # nginx upstream
       template = File.join(Kudu.template_dir, "upstream.conf.erb")
       outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}-upstream.conf")
