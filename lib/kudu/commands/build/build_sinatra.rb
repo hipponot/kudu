@@ -49,6 +49,9 @@ module Kudu
 
       # add version to config.ru 
       ru_file = File.join(project.directory, "config", "config.ru")
+      unless File.exist?(ru_file) 
+        ru_file = File.join(project.directory, "config.ru")
+      end
       deploy_ru = File.join(project.directory, "config", "deploy.ru")
       IO.write(deploy_ru,IO.read(ru_file).gsub("require","gem \"#{project.name}\", \"#{project.version}\"; require"))
 
