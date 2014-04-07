@@ -56,7 +56,7 @@ cd $APP_ROOT || exit 1
  
 sig () {
   <%if with_sidekiq%>   
-  test -s "$SIDEKIQ_PID" && kill -$1 `cat $PID`
+  test -s "$SIDEKIQ_PID" && kill -$1 `cat $SIDEKIQ_PID`
   <%end%>
   test -s "$PID" && kill -$1 `cat $PID`
 }
