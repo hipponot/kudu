@@ -44,7 +44,7 @@ SET_PATH="cd $APP_ROOT; export GEM_HOME=$GEM_HOME; export GEM_PATH=$GEM_PATH"
 UNICORN_LOG_DIR="/var/log/unicorn/<%=project_name%>-<%=project_version%>"
 if [ ! -d $UNICORN_LOG_DIR ]; then
   mkdir -p $UNICORN_LOG_DIR
-  chown $USER:$USER $UNICORN_LOG_DIR
+  chown $RUN_AS:$RUN_AS $UNICORN_LOG_DIR
 fi
 
 <%if with_sidekiq%> 
