@@ -16,8 +16,7 @@ class Install < Thor
     RVM.gemset.use! gemset
     puts "Package - install.rb :Installing in-house gem"
     Dir.glob('*.gem').each do |gem|
-      # third party deps handled elsewhere
-      run_and_echo("gem install --ignore-dependencies -f --no-ri --no-rdoc #{gem}")
+      run_and_echo("gem install -f --no-ri --no-rdoc #{gem}")
     end
 
     # init.d        
