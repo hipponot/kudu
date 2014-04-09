@@ -50,7 +50,7 @@ class Install < Thor
         if is_installed? gem[:name], gem[:version]
           puts "already_installed #{gem[:name]} #{gem[:version]}"
         else
-          run_and_echo("gem install -l -f --no-ri --no-rdoc -v #{gem[:version]} #{gem[:name]}")
+          run_and_echo("gem install -f --no-ri --no-rdoc -v #{gem[:version]} #{gem[:name]}")
         end
       end
     end
