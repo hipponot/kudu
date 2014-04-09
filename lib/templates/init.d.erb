@@ -41,6 +41,12 @@ GEM_HOME="/home/$RUN_AS/.rvm/gems/<%=ruby%>@<%=project_name%>-<%=project_version
 GEM_PATH="/home/$RUN_AS/.rvm/gems/<%=ruby%>@<%=project_name%>-<%=project_version%>:/home/$RUN_AS/.rvm/gems/<%=ruby%>@global"
 UNICORN_OPTS="-D -E $ENV -c $APP_ROOT/config/unicorn.rb"
 SET_PATH="cd $APP_ROOT; export GEM_HOME=$GEM_HOME; export GEM_PATH=$GEM_PATH"
+UNICORN_LOG_DIR="/var/log/unicorn/<%=project_name%>-<%=project_version%>"
+if [ ! -d $UNICORN_LOG_DIR ]; then
+  mkdir -p $UNICORN_LOG_DIR
+  chown $USER:$USER $UNICORN_LOG_DIR
+fi
+
 <%if with_sidekiq%> 
 SIDEKIQ_PID="/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>/sidekiq.pid"
 SIDEKIQ_LOG="/var/log/unicorn/<%=project_name%>-<%=project_version%>/sidekiq.log"

@@ -60,6 +60,7 @@ class Install < Thor
   private
 
   def run_and_echo(cmd)
+    puts cmd
     status = system(cmd)
     unless status
       puts "Pkg - install.rb command failed #{cmd} - punting" 
