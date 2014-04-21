@@ -1,6 +1,5 @@
 require 'rvm'
 require 'etc'
-require 'ruby-prof' unless RUBY_PLATFORM=='java'
 
 require_relative '../../error'
 require_relative '../../util'
