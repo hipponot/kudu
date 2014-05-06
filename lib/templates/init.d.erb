@@ -51,6 +51,7 @@ fi
 SIDEKIQ_PID_DIR="/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>"
 if [ ! -d ${SIDEKIQ_PID_DIR} ]; then
      mkdir -p ${SIDEKIQ_PID_DIR}
+     chown $RUN_AS:$RUN_AS $SIDEKIQ_PID_DIR
 fi
 SIDEKIQ_PID="$SIDEKIQ_PID_DIR/sidekiq.pid"
 SIDEKIQ_LOG="/var/log/unicorn/<%=project_name%>-<%=project_version%>/sidekiq.log"
