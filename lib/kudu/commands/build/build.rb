@@ -1,7 +1,6 @@
 require 'rvm'
 require 'etc'
 require 'yaml'
-require 'ruby-prof' unless RUBY_PLATFORM=='java'
 
 require_relative '../../error'
 require_relative '../../util'
@@ -29,9 +28,6 @@ module Kudu
     method_option :ruby, :aliases => "-v", :type => :string, :required => true, :default=>`rvm current`.chomp,  :desc => "ruby-version"
     method_option :install, :aliases => "-i", :type => :boolean, :required => false, :default=>true,  :desc => "install built gem"    
 
-    # No ruby-prof in jruby 
-    @profile = RUBY_PLATFORM == 'java' ? false : options[:profile]
-    
     def build
       Kudu.with_logging(self, __method__) do
         if options[:all]
