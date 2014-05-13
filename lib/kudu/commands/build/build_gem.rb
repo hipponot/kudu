@@ -10,6 +10,5 @@ module Kudu
       builder.install_third_party unless options[:'skip-third-party']
     end
 
-
   end
 end
