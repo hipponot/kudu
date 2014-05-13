@@ -21,7 +21,7 @@ module Kudu
     method_option :force, :aliases => "-f", :type => :boolean, :required=>false, :default=>false, :desc => "overwrite existing package"
     method_option :ruby, :aliases => "-v", :type => :string, :required => true, :default=>`rvm current`.chomp,  :desc => "ruby-version"
     method_option :'num-workers', :aliases => "-w", :required=>false, :type=>:numeric, :default=>16, :desc=>"Number of unicorn workers to write to unicorn.rb"
-    method_option :'force-build-version', :required=>false, :type=>:string, :lazy_default=>'1.0.0', :desc=>"force application build version number"
+    method_option :production, :required=>false, :type=>:boolean, :default=>true, :desc=>"production versioning"
     def package
       Kudu.with_logging(self, __method__) do
         # check options are consistent
@@ -49,8 +49,18 @@ module Kudu
       # do a clean production build with dependencies
       clean_options = { name:project.name, :dependencies=>true, :repo=>'default', :local=>true}
       invoke :clean, nil, clean_options
-      build_options = { :name=>project.name, :install=>false, :ruby=>options[:ruby], :force=>true, :'skip-third-party'=>true, :repo=>'default', :production=>true, :dependencies=>true, :'num-workers'=>options[:'num-workers'] }
-      build_options[:version] = options[:'force-build-version'] if options[:'force-build-version']
+      build_options = { 
+        :name=>project.name, 
+        :install=>false, 
+        :ruby=>options[:ruby], 
+        :force=>true, 
+        :'skip-third-party'=>true, 
+        :repo=>'default', 
+        :production=>options[:production],
+        :dependencies=>true, 
+        :'num-workers'=>options[:'num-workers'] 
+      }
+      puts build_options
       invoke :build, nil, build_options
 
       # create package directions

@@ -23,6 +23,9 @@ module Kudu
         @install = options[:install]
         raise GemsBuilderFailed, "GemBuilder needs single @publication in publications array" unless project.publications.length == 1
         @publication = project.publications.first
+        if options[:version]
+          @publication.version = options[:version]
+        end
       end
     end
     attr_reader :project
