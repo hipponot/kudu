@@ -60,7 +60,7 @@ module Kudu
         :dependencies=>true, 
         :'num-workers'=>options[:'num-workers'] 
       }
-      puts build_options
+      Kudu.ui.info "Building with options #{build_options}"
       invoke :build, nil, build_options
 
       # create package directions
