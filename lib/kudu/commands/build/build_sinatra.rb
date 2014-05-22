@@ -17,7 +17,7 @@ module Kudu
 
       builder = GemBuilder.new(options, project)
       # production builds update version first
-      builder.update_version if options[:production]
+      builder.update_version if options[:production] 
 
       # init.d
       template = File.join(Kudu.template_dir, "init.d.erb")

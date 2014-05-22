@@ -21,7 +21,8 @@ module Kudu
     method_option :force, :aliases => "-f", :type => :boolean, :required=>false, :default=>false, :desc => "overwrite existing package"
     method_option :ruby, :aliases => "-v", :type => :string, :required => true, :default=>`rvm current`.chomp,  :desc => "ruby-version"
     method_option :'num-workers', :aliases => "-w", :required=>false, :type=>:numeric, :default=>16, :desc=>"Number of unicorn workers to write to unicorn.rb"
-    method_option :production, :required=>false, :type=>:boolean, :default=>true, :desc=>"production versioning"
+    method_option :production, :required=>false, :type=>:boolean, :default=>true, :desc=>"Production package (RACK_ENV)"
+    method_option :'bump-version', :required=>false, :type=>:boolean, :default=>true, :desc=>"Production build increments version"
     def package
       Kudu.with_logging(self, __method__) do
         # check options are consistent
@@ -58,7 +59,8 @@ module Kudu
         :repo=>'default', 
         :production=>options[:production],
         :dependencies=>true, 
-        :'num-workers'=>options[:'num-workers'] 
+        :'num-workers'=>options[:'num-workers'],
+        :'bump-version'=>options[:'bump-version'] 
       }
       puts build_options
       invoke :build, nil, build_options

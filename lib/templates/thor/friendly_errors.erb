@@ -1,0 +1,22 @@
+module <%=name_cc%>
+  def self.with_friendly_errors
+    begin
+      yield
+    rescue <%=name_cc%>::Error => e
+      <%=name_cc%>.ui.error e.message
+      <%=name_cc%>.ui.debug e.backtrace.join("\n")
+      exit 1
+    rescue Interrupt => e
+      <%=name_cc%>.ui.error "\nQuitting..."
+      <%=name_cc%>.ui.debug e.backtrace.join("\n")
+      exit 1
+    rescue SystemExit => e
+      exit e.status
+    rescue Exception => e
+      <%=name_cc%>.ui.error(
+        "Unfortunately, a fatal error has occurred.")
+      raise e
+    end
+  end
+end
+

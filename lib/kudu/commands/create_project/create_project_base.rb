@@ -25,9 +25,10 @@ module Kudu
         :namespace => (tokens.length > 1 and options[:use_namespace]) ? tokens.first : nil,
         :name => (tokens.length > 1 and options[:use_namespace]) ? tokens[1..tokens.length].join("_") : options[:name],
         :dependencies => options[:dependencies].map {|dep| eval(dep) },
-        :publications => options[:publications].map {|pub| eval(pub) }
+        :publications => options[:publications].map {|pub| eval(pub) },
+        :create_type => options[:type]
       }
-      @settings[:name_cc] = @settings[:name].camel_case
+      @settings[:name_cc] = @settings[:module_name] ? @settings[:module_name] : @settings[:name].camel_case
       @settings[:namespace_cc] = @settings[:namespace] ? @settings[:namespace].camel_case : nil
       # merge in repo specific settings or use defaults
       @settings.merge!(repository_settings)
@@ -54,9 +55,15 @@ module Kudu
           return
         end
       end
+
       FileUtils.mkdir_p(File.join(target, 'config'))
-      FileUtils.mkdir_p(File.join(target, 'lib', project_name))
+      FileUtils.mkdir_p(File.join(target, 'lib', project_name)) 
       FileUtils.mkdir_p(File.join(target, 'ext', "#{project_name}")) if settings[:native_extension]
+      if settings[:create_type] == 'thor'
+        FileUtils.mkdir_p(File.join(target, 'lib', project_name, 'commands')) 
+        FileUtils.mkdir_p(File.join(target, 'bin'))
+      end
+
     end
 
     def elaborate(template_file, relative_output_file)
