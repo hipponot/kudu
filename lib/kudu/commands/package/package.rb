@@ -62,7 +62,7 @@ module Kudu
         :'num-workers'=>options[:'num-workers'],
         :'bump-version'=>options[:'bump-version'] 
       }
-      puts build_options
+      Kudu.ui.info "Building with options #{build_options}"
       invoke :build, nil, build_options
 
       # create package directions
