@@ -28,7 +28,7 @@ module Kudu
         :publications => options[:publications].map {|pub| eval(pub) },
         :create_type => options[:type]
       }
-      @settings[:name_cc] = @settings[:module_name] ? @settings[:module_name] : @settings[:name].camel_case
+      @settings[:name_cc] = options[:module_name] ? options[:module_name] : @settings[:name].camel_case
       @settings[:namespace_cc] = @settings[:namespace] ? @settings[:namespace].camel_case : nil
       # merge in repo specific settings or use defaults
       @settings.merge!(repository_settings)
