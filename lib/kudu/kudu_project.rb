@@ -129,7 +129,7 @@ module Kudu
           p.each do |name, spec|
             spec.dependencies.each do |d|
               if d.group == 'in-house' && d.version != 'latest'
-                raise KudoSpecInHouseVersion, "Invalid spec: #{kudu_spec}, versioning of in-house dependencies is not supported, #{d.inspect}"
+                raise KuduSpecInHouseVersion, "Invalid spec: #{spec.name}, versioning of in-house dependencies is not supported, #{d.inspect}"
               end  
             end
           end
