@@ -2,6 +2,12 @@
 # note the trailing slash in this example
 dir = File.join(File.expand_path(File.dirname(__FILE__ )), File::SEPARATOR)
 
+# Set number of unicorn workers from the environment or use default
+worker_env = '<%="#{project_name.upcase}_WORKERS"%>'
+nworker = ENV.has_key?(worker_env) ? ENV[worker_env].to_i : <%=num_workers%>
+puts "Number of unicorn workers set to #{nworker}"
+worker_processes nworker
+
 worker_processes <%=num_workers%>
 working_directory dir
 timeout 60
