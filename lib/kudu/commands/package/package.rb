@@ -20,7 +20,7 @@ module Kudu
     method_option :'package-dir', :aliases => "-d", :type => :string, :required=>true, :desc => "package directory"
     method_option :force, :aliases => "-f", :type => :boolean, :required=>false, :default=>false, :desc => "overwrite existing package"
     method_option :ruby, :aliases => "-v", :type => :string, :required => true, :default=>`rvm current`.chomp,  :desc => "ruby-version"
-    method_option :'num-workers', :aliases => "-w", :required=>false, :type=>:numeric, :default=>8, :desc=>"Number of unicorn workers to write to unicorn.rb"
+    method_option :'num-workers', :aliases => "-w", :required=>false, :type=>:numeric, :default=>4, :desc=>"Number of unicorn workers to write to unicorn.rb"
     method_option :production, :required=>false, :type=>:boolean, :default=>true, :desc=>"Production package (RACK_ENV)"
     method_option :'bump-version', :required=>false, :type=>:boolean, :default=>true, :desc=>"Production build increments version"
     def package
