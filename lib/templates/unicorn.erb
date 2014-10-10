@@ -8,7 +8,6 @@ nworker = ENV.has_key?(worker_env) ? ENV[worker_env].to_i : <%=num_workers%>
 puts "Number of unicorn workers set to #{nworker}"
 worker_processes nworker
 
-worker_processes <%=num_workers%>
 working_directory dir
 timeout 60
 preload_app true
