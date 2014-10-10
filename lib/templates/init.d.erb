@@ -55,7 +55,7 @@ if [ ! -d ${SIDEKIQ_PID_DIR} ]; then
 fi
 SIDEKIQ_PID="$SIDEKIQ_PID_DIR/sidekiq.pid"
 SIDEKIQ_LOG="/var/log/unicorn/<%=project_name%>-<%=project_version%>/sidekiq.log"
-SIDEKIQ_CMD="sidekiq -C $GEM_HOME/config/sidekiq.yaml -d -L $SIDEKIQ_LOG -P $SIDEKIQ_PID -r $APP_ROOT/lib/<%=project_name%>.rb"
+SIDEKIQ_CMD="sidekiq -C $APP_ROOT/config/sidekiq.yaml -d -L $SIDEKIQ_LOG -P $SIDEKIQ_PID -r $APP_ROOT/lib/<%=project_name%>.rb"
 CMD="$SET_PATH; echo $SIDEKIQ_CMD; $SIDEKIQ_CMD; $RVM_HOME@global/bin/unicorn $UNICORN_OPTS deploy.ru"
 <%else%>
 CMD="$SET_PATH; $RVM_HOME@global/bin/unicorn $UNICORN_OPTS deploy.ru"
