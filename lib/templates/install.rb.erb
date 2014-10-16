@@ -29,31 +29,31 @@ class Install < Thor
       # restart on boot
       run_and_echo("sudo /usr/sbin/update-rc.d #{target_name} defaults 98 02")
     end
-    puts "Package - skipping 3d party test"
+#    puts "Package - skipping 3d party test"
 
-    # install third party gems
+    #install third party gems
     # unless ENV['RACK_ENV']=='production'
     #  puts "Non-production environment -- installing third party gems into global"
     #  RVM.gemset.use! "global" 
     # end		   
-    # puts "Package - install.rb :Installing third-party gem"
-    # RVM.gemset.use! 'global'
-    # third_party = YAML::load(IO.read('third_party.yaml'))
-    # third_party.each do | gem|
-    #   if /latest/ =~ gem[:version]
-    #     if is_installed? gem[:name]
-    #       puts "already_installed #{gem[:name]}"
-    #     else
-    #       run_and_echo("gem install -f --no-ri --no-rdoc #{gem[:name]}")
-    #     end
-    #   else
-    #     if is_installed? gem[:name], gem[:version]
-    #       puts "already_installed #{gem[:name]} #{gem[:version]}"
-    #     else
-    #       run_and_echo("gem install -f --no-ri --no-rdoc -v '#{gem[:version]}' #{gem[:name]}")
-    #     end
-    #   end
-    # end
+    puts "Package - install.rb :Installing third-party gem"
+    RVM.gemset.use! 'global'
+    third_party = YAML::load(IO.read('third_party.yaml'))
+    third_party.each do | gem|
+      if /latest/ =~ gem[:version]
+        if is_installed? gem[:name]
+          puts "already_installed #{gem[:name]}"
+        else
+          run_and_echo("gem install -f --no-ri --no-rdoc #{gem[:name]}")
+        end
+      else
+        if is_installed? gem[:name], gem[:version]
+          puts "already_installed #{gem[:name]} #{gem[:version]}"
+        else
+          run_and_echo("gem install -f --no-ri --no-rdoc -v '#{gem[:version]}' #{gem[:name]}")
+        end
+      end
+    end
 
   end
 
