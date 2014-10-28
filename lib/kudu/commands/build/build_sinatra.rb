@@ -30,6 +30,12 @@ module Kudu
                                           project_version:project.version, 
                                           with_sidekiq:with_sidekiq
                                         }, outfile)
+      if with_sidekiq
+        template = File.join(Kudu.template_dir, "sidekiq.god.erb")
+        outfile = File.join(project.directory, "config", "sidekiq.god")
+        ErubisInflater.inflate_file_write(template, {project_name:project.name, project_version:project.version}, outfile)
+      end
+
       # nginx upstream
       template = File.join(Kudu.template_dir, "upstream.conf.erb")
       outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}-upstream.conf")
