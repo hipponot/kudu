@@ -1,5 +1,5 @@
 app = "<%=project_name%>-<%=project_version%>"
-app_root="/home/#{ENV['USER']}/.rvm/gems/ENV['RUBY_VERSION']/#{app}/gems/#{app}"
+app_root="/home/#{ENV['USER']}/.rvm/gems/#{ENV['RUBY_VERSION']}@#{app}/gems/#{app}"
 
 God.watch do |w|
   w.name = "sidekiq"
