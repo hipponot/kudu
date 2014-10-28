@@ -29,12 +29,13 @@ class Install < Thor
       # restart on boot
       run_and_echo("sudo /usr/sbin/update-rc.d #{target_name} defaults 98 02")
     end
+#    puts "Package - skipping 3d party test"
 
-    # install third party gems
-    unless ENV['RACK_ENV']=='production'
-     puts "Non-production environment -- installing third party gems into global"
-     RVM.gemset.use! "global" 
-    end		   
+    #install third party gems
+    # unless ENV['RACK_ENV']=='production'
+    #  puts "Non-production environment -- installing third party gems into global"
+    #  RVM.gemset.use! "global" 
+    # end		   
     puts "Package - install.rb :Installing third-party gem"
     RVM.gemset.use! 'global'
     third_party = YAML::load(IO.read('third_party.yaml'))
@@ -53,6 +54,7 @@ class Install < Thor
         end
       end
     end
+
   end
 
   default_task :install
