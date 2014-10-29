@@ -30,10 +30,22 @@ module Kudu
                                           project_version:project.version, 
                                           with_sidekiq:with_sidekiq
                                         }, outfile)
-      if with_sidekiq
+
+      # New sidekiq under god flow
+      if with_sidekiq and !options[:production]
+
         template = File.join(Kudu.template_dir, "sidekiq.god.erb")
         outfile = File.join(project.directory, "config", "sidekiq.god")
         ErubisInflater.inflate_file_write(template, {project_name:project.name, project_version:project.version}, outfile)
+
+        # init.d
+        template = File.join(Kudu.template_dir, "god.init.d.erb")
+        outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}.god.init.d ")
+        ErubisInflater.inflate_file_write(template, {
+                                            ruby:options[:ruby], 
+                                            project_name:project.name, 
+                                            project_version:project.version
+                                        }, outfile)
       end
 
       # nginx upstream
