@@ -2,7 +2,7 @@ app = "<%=project_name%>-<%=project_version%>"
 app_root="/home/#{ENV['USER']}/.rvm/gems/#{ENV['RUBY_VERSION']}@#{app}/gems/#{app}"
 
 God.watch do |w|
-  w.name = "sidekiq"
+  w.name = {app}
   w.start = "sidekiq -C #{app_root}/config/sidekiq.yaml -L /var/log/unicorn/#{app}/sidekiq.log -r #{app_root}/lib/wm_api.rb"
   w.keepalive(:memory_max => 100.megabytes)
 end

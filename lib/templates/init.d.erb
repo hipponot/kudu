@@ -55,8 +55,11 @@ if [ ! -d ${SIDEKIQ_PID_DIR} ]; then
 fi
 SIDEKIQ_PID="$SIDEKIQ_PID_DIR/sidekiq.pid"
 SIDEKIQ_LOG="/var/log/unicorn/<%=project_name%>-<%=project_version%>/sidekiq.log"
-SIDEKIQ_CMD="sidekiq -C $APP_ROOT/config/sidekiq.yaml -d -L $SIDEKIQ_LOG -P $SIDEKIQ_PID -r $APP_ROOT/lib/<%=project_name%>.rb"
-CMD="$SET_PATH; echo $SIDEKIQ_CMD; $SIDEKIQ_CMD; $RVM_HOME@global/bin/unicorn $UNICORN_OPTS deploy.ru"
+#SIDEKIQ_CMD="sidekiq -C $APP_ROOT/config/sidekiq.yaml -d -L $SIDEKIQ_LOG -P $SIDEKIQ_PID -r $APP_ROOT/lib/<%=project_name%>.rb"
+SIDEKIQ_START_CMD="god -c $APP_ROOT/config/sidekiq.god"
+SIDEKIQ_STOP_CMD="god stop <%=project_name%>-<%=project_version%>"
+SIDEKIQ_RESTART_CMD="god restart <%=project_name%>-<%=project_version%>"
+CMD="$SET_PATH; echo $SIDEKIQ_START_CMD; $SIDEKIQ_CMD; $RVM_HOME@global/bin/unicorn $UNICORN_OPTS deploy.ru"
 <%else%>
 CMD="$SET_PATH; $RVM_HOME@global/bin/unicorn $UNICORN_OPTS deploy.ru"
 <%end%>
@@ -84,6 +87,9 @@ start)
 stop)
   sig QUIT && exit 0
   echo >&2 "Not running"
+  <%if with_sidekiq%> 
+  sudo su - $RUN_AS -c "$SET_PATH;$SIDEKIQ_STOP_CMD" && echo $SIDEKIQ_STOP_CMD && exit 0
+  <%end%>
   ;;
 force-stop)
   sig TERM && exit 0
@@ -91,7 +97,9 @@ force-stop)
   ;;
 restart|reload)
   sig HUP && echo reloaded OK 
-  sudo su - $RUN_AS -c "$SET_PATH;$SIDEKIQ_CMD" && echo 'Sidekiq restart' && exit 0
+  <%if with_sidekiq%> 
+  sudo su - $RUN_AS -c "$SET_PATH;$SIDEKIQ_RESTART_CMD" && echo $SIDEKIQ_RESTART_CMD && exit 0
+  <%end%>
   echo >&2 "Couldn't reload, starting '$CMD' instead"
   sudo su - $RUN_AS -c "$CMD"
   ;;
