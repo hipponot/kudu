@@ -44,7 +44,8 @@ module Kudu
         ErubisInflater.inflate_file_write(template, {
                                             ruby:options[:ruby], 
                                             project_name:project.name, 
-                                            project_version:project.version
+                                            project_version:project.version,
+                                            with_sidekiq:with_sidekiq
                                         }, outfile)
       end
 

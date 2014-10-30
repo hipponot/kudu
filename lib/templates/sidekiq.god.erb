@@ -6,3 +6,4 @@ God.watch do |w|
   w.start = "sidekiq -C #{app_root}/config/sidekiq.yaml -L /var/log/unicorn/#{app}/sidekiq.log -r #{app_root}/lib/wm_api.rb"
   w.keepalive(:memory_max => 100.megabytes)
 end
+
