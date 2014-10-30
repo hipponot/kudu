@@ -32,7 +32,7 @@ module Kudu
                                         }, outfile)
 
       # New sidekiq under god flow
-      if with_sidekiq and !options[:production]
+      if with_sidekiq 
 
         template = File.join(Kudu.template_dir, "sidekiq.god.erb")
         outfile = File.join(project.directory, "config", "sidekiq.god")
