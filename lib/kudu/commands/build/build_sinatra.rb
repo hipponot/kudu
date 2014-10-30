@@ -40,7 +40,7 @@ module Kudu
 
         # init.d
         template = File.join(Kudu.template_dir, "god.init.d.erb")
-        outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}.god.init.d ")
+        outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}.god.init.d")
         ErubisInflater.inflate_file_write(template, {
                                             ruby:options[:ruby], 
                                             project_name:project.name, 
