@@ -4,10 +4,61 @@ gem_home="/home/#{ENV['USER']}/.rvm/gems/#{ENV['RUBY_VERSION']}@#{app}"
 gem_path="#{gem_home}:/home/#{ENV['USER']}/.rvm/gems/#{ENV['RUBY_VERSION']}@global"
 app_root="/home/#{ENV['USER']}/.rvm/gems/#{ENV['RUBY_VERSION']}@#{app}/gems/#{app}"
 set_path="export GEM_HOME=#{gem_home};export GEM_PATH=#{gem_path}"
-God.watch do |w|
-  w.name = app
-  w.start = "#{set_path}; sidekiq -C #{app_root}/config/sidekiq.yaml -L /var/log/unicorn/#{app}/sidekiq.log -P /tmp/unicorn/pids/#{app}/sidekiq.pid -r #{app_root}/lib/#{project}.rb"
-  w.stop = "#{set_path}; sidekiqctl stop /tmp/unicorn/pids/#{app}/sidekiq.pid"
-  w.keepalive(:memory_max => 100.megabytes)
-end
+pid_file = "#{ENV['HOME']}/.god/pids/#{app}.pid"
 
+God.watch do |w|
+
+  w.name = app
+  w.start = "#{set_path}; sidekiq -C #{app_root}/config/sidekiq.yaml -L /var/log/unicorn/#{app}/sidekiq.log -r #{app_root}/lib/#{project}.rb -P #{pid_file} -d"
+  w.log = "/var/log/unicorn/#{app}/god.log"
+  w.stop = "#{set_path}; sidekiqctl stop #{pid_file}"
+  w.pid_file = pid_file
+  w.behavior(:clean_pid_file)
+  w.interval = 30.seconds
+
+  w.transition(:init, { true => :up, false => :start }) do |on|
+    # Transition from the init state to the up state if the process is already running,
+    # or to the start state if it's not.
+    on.condition(:process_running) do |c|
+      c.running = true
+    end
+  end
+
+  # determine when process has finished starting
+  w.transition([:start, :restart], :up) do |on|
+    on.condition(:process_running) do |c|
+      c.running = true
+      c.interval = 5.seconds
+    end
+    # failsafe
+    on.condition(:tries) do |c|
+      c.times = 5
+      c.transition = :start
+      c.interval = 5.seconds
+    end
+  end
+
+  # start if process is not running
+  w.transition(:up, :start) do |on|
+    on.condition(:process_running) do |c|
+      c.running = false
+    end
+  end
+  
+  # restart if memory bloats
+  w.transition(:up, :restart) do |on|
+    on.condition(:memory_usage) do |c|
+      c.interval = 1
+      c.above = 35.megabytes
+      c.times = 1
+      c.pid_file = pid_file
+    end
+    on.condition(:cpu_usage) do |c|
+      c.interval = 10
+      c.above = 10.percent
+      c.times = [3, 5]
+      c.pid_file = pid_file
+    end
+  end
+
+end
