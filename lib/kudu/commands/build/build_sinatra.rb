@@ -20,6 +20,10 @@ module Kudu
       builder.update_version if options[:production] 
 
       # New sidekiq under god flow
+
+      # presence of config/sidekiq.yaml triggers init.d script with sidekiq support
+      with_sidekiq = File.exists?(File.join(project.directory, 'config/sidekiq.yaml')) ? true : false
+
       if with_sidekiq 
         template = File.join(Kudu.template_dir, "sidekiq.god.erb")
         outfile = File.join(project.directory, "config", "sidekiq.god")
@@ -38,8 +42,6 @@ module Kudu
         # init.d
         template = File.join(Kudu.template_dir, "init.d.erb")
         outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}.init.d")
-        # presence of config/sidekiq.yaml triggers init.d script with sidekiq support
-        with_sidekiq = File.exists?(File.join(project.directory, 'config/sidekiq.yaml')) ? true : false
         ErubisInflater.inflate_file_write(template, {
                                             ruby:options[:ruby], 
                                             project_name:project.name, 
