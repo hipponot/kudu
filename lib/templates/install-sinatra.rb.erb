@@ -1,0 +1,88 @@
+#!/usr/bin/env ruby
+require 'yaml'
+require "thor"
+require "etc"
+require "rvm"
+
+class Install < Thor
+
+  desc "install", "Install wootmath package"
+  method_option :nginx, :aliases => "-n", :type => :string, :default=>"/etc/nginx-backend", :required => true, :desc => "nginx conf directory"
+  method_option :user, :aliases => "-u", :type => :string, :required=>true, :default=>Etc.getlogin, :desc => "user"
+  def install
+    gemset = File.basename(File.expand_path(File.dirname(__FILE__)))
+    # install in-house gems
+    RVM.gemset.create gemset
+    RVM.gemset.use! gemset
+    puts "Package - install.rb :Installing in-house gem"
+    Dir.glob('*.gem').each do |gem|
+      run_and_echo("gem install -f --no-ri --no-rdoc #{gem}")
+    end
+
+    # init.d        
+    Dir.glob("*.init.d").each do |f|
+      target_name = File.basename(f).gsub('.init.d','')
+      target = "/etc/init.d/#{target_name}"
+      run_and_echo("sudo cp #{f} #{target}")
+      run_and_echo("sudo chown #{options[:user]}:#{options[:user]} #{target}")
+      run_and_echo("sudo chmod 755  #{target}")
+      # restart on boot
+      run_and_echo("sudo /usr/sbin/update-rc.d #{target_name} defaults 98 02")
+    end
+#    puts "Package - skipping 3d party test"
+
+    #install third party gems
+    # unless ENV['RACK_ENV']=='production'
+    #  puts "Non-production environment -- installing third party gems into global"
+    #  RVM.gemset.use! "global" 
+    # end		   
+    puts "Package - install.rb :Installing third-party gem"
+    RVM.gemset.use! 'global'
+    third_party = YAML::load(IO.read('third_party.yaml'))
+    third_party.each do | gem|
+      if /latest/ =~ gem[:version]
+        if is_installed? gem[:name]
+          puts "already_installed #{gem[:name]}"
+        else
+          run_and_echo("gem install -f --no-ri --no-rdoc #{gem[:name]}")
+        end
+      else
+        if is_installed? gem[:name], gem[:version]
+          puts "already_installed #{gem[:name]} #{gem[:version]}"
+        else
+          run_and_echo("gem install -f --no-ri --no-rdoc -v '#{gem[:version]}' #{gem[:name]}")
+        end
+      end
+    end
+
+  end
+
+  default_task :install
+
+  private
+
+  def run_and_echo(cmd)
+    puts cmd
+    status = system(cmd)
+    unless status
+      puts "Pkg - install.rb command failed #{cmd} - punting" 
+      exit(1)
+    end
+  end
+
+  def is_installed? name, version=nil
+    begin
+      if (version.nil?)
+        ::Gem::Specification.find_by_name(name)
+      else
+        ::Gem::Specification.find_by_name(name, version)
+      end
+      true
+    rescue ::Gem::LoadError 
+      false
+    end
+  end
+
+end
+
+Install.start

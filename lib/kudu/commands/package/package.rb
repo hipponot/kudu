@@ -16,7 +16,7 @@ module Kudu
     desc "package", "Package project"
 
     method_option :name, :aliases => "-n", :type => :string, :required=>true, :desc => "project name"
-    method_option :'static-dir', :aliases => "-s", :type => :string, :required=>true, :desc => "package directory"
+    method_option :'static-dir', :aliases => "-s", :type => :string, :required=>false, :desc => "package directory"
     method_option :'package-dir', :aliases => "-d", :type => :string, :required=>true, :desc => "package directory"
     method_option :force, :aliases => "-f", :type => :boolean, :required=>false, :default=>false, :desc => "overwrite existing package"
     method_option :ruby, :aliases => "-v", :type => :string, :required => true, :default=>`rvm current`.chomp,  :desc => "ruby-version"
