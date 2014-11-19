@@ -32,7 +32,7 @@
       <ConfigurationWrapper RunnerId="RubyDebugRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="kudu (1)" type="RubyRunConfigurationType" factoryName="Ruby">
+    <configuration default="false" name="kudu (package)" type="RubyRunConfigurationType" factoryName="Ruby">
       <module name="kudu" />
       <RUBY_RUN_CONFIG NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
       <RUBY_RUN_CONFIG NAME="WORK DIR" VALUE="$MODULE_DIR$/../nimbee/edu/ruby/lib/woot" />
@@ -49,7 +49,7 @@
       </EXTENSION>
       <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />
       <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/bin/kudu" />
-      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="clean -n woot -m" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="package -f -d $USER_HOME$/shared/pool/staging/skelly_2013_12_12/pkgs/7133 -s $USER_HOME$/shared/pool/staging/skelly_2013_12_12/www-static --num-workers=3 -n wm_web" />
       <RunnerSettings RunnerId="RubyDebugRunner" />
       <ConfigurationWrapper RunnerId="RubyDebugRunner" />
       <method />

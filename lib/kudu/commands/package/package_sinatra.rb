@@ -9,38 +9,90 @@ require_relative '../../ui'
 require_relative '../../kudu_project'
 
 module Kudu
-
   class PackageSinatra
 
-    def initialize(options, project)
+    def initialize(options, project, cli)
 
-      package_dir = File.join(project.directory,'package')
-      Dir.mkdir(package_dir) unless File.directory?(package_dir)
+      # do a clean production build with dependencies
+      clean_options = { name:project.name, :dependencies=>true, :repo=>'default', :local=>true}
+      cli.invoke :clean, nil, clean_options
+      build_options = { 
+        :name=>project.name, 
+        :install=>false, 
+        :ruby=>options[:ruby], 
+        :force=>true, 
+        :'skip-third-party'=>true, 
+        :repo=>'default', 
+        :production=>options[:production],
+        :dependencies=>true, 
+        :'num-workers'=>options[:'num-workers'],
+        :'bump-version'=>options[:'bump-version'] 
+      }
+      Kudu.ui.info "Building with options #{build_options}"
+      cli.invoke :build, nil, build_options
 
-      # init.d
-      template = File.join(Kudu.template_dir, "init.d.erb")
-      outfile = File.join(project.directory, "build", "#{project.name}.init.d")
-      ErubisInflater.inflate_file_write(template, {env:options[:env], ruby:options[:ruby], user:options[:user], project_name:project.name, project_version:project.version}, outfile)
-      initd = "/etc/init.d/#{project.name}-#{project.version}"
-      `sudo cp #{outfile} #{initd}`
-      `sudo chmod 755 #{initd}`
+      # create package directions
+      package_dir = File.join(options[:'package-dir'])
+      package_name = "#{project.name}-#{project.version}"
+      target = File.join(package_dir, package_name)
+      tarball_name = "#{package_name}.tar.gz"
+      tarball = File.join(package_dir, tarball_name)
+      if ( File.exist?(target) || File.exist?(tarball) ) and not options[:force]
+        Kudu.ui.error("File exists #{target}.  Use --force to overwrite.. punting")
+        exit(1)
+      elsif options[:force]
+        FileUtils.rm_rf(target)
+        FileUtils.rm_rf(tarball)
+      end
+      FileUtils.mkdir_p(target)
+      FileUtils.cp_r(File.join(project.directory, 'build/.'), target)      
 
-      # nginx upstream
-      template = File.join(Kudu.template_dir, "upstream.conf.erb")
-      outfile = File.join(project.directory, "build", "upstream.conf")
-      ErubisInflater.inflate_file_write(template, {project_name:project.name, project_version:project.version}, outfile)
-      upstream = "#{options[:'nginx-conf']}/conf.d/upstream/#{project.name}-#{project.version}.conf"
-      `sudo cp #{outfile} #{upstream}`
+      # add in-house dependencies to the package
+      project.dependencies('in-house').each do |dep|
+        dep = KuduProject.project(dep.name)
+        FileUtils.cp_r(File.join(dep.directory, 'build/.'), target)
+      end
 
-      # nginx location 
-      template = File.join(Kudu.template_dir, "location.conf.erb")
-      outfile = File.join(project.directory, "build", "location.conf")
-      ErubisInflater.inflate_file_write(template, {project_name:project.name, project_version:project.version}, outfile)
-      location = "#{options[:'nginx-conf']}/conf.d/location/#{project.name}-#{project.version}.conf"
-      `sudo cp #{outfile} #{location}`
-      puts "packaged #{project.name}-#{project.version}"
+      #-- Static file delivery for sinatra apps (that have an appropriately named lib/public/static_src/<API>/ dir):
+      sinatra_static_src_dir = File.join  project.directory, %W(lib public static_src #{project.name})
+      if File.directory? sinatra_static_src_dir
+        static_staging_dir = options[:'static-dir']
+        tgt_dir = File.join static_staging_dir, %W( #{project.name} #{project.version} ) 
+        # ToDo - reenable when we are doing production builds
+        if false and File.directory? tgt_dir
+          puts "Static content directory already exists: #{tgt_dir}\n --Leaving existing content as is."
+        else
+          puts "Delivering static content to #{tgt_dir}"
+          FileUtils.mkdir_p tgt_dir, :verbose => true
+          pwd = Dir.getwd
+          puts "cd #{sinatra_static_src_dir}"
+          Dir.chdir sinatra_static_src_dir
+          FileUtils.cp_r Dir.glob("*"), tgt_dir, :verbose => true
+          puts "cd #{pwd}"
+            Dir.chdir pwd 
+        end
+      end
+
+      # installer
+      outfile = File.join(target, "install.rb")
+      template = File.join(Kudu.template_dir, "install.rb.erb")
+      ErubisInflater.inflate_file_write(template, {}, outfile)
+      `chmod +x #{outfile}`
+      # third party
+      File.open(File.join(target,"third_party.yaml"), 'w') {
+        |f| f.write(project.dependencies('third-party').map {|d| {name:d.name, version:d.version} }.to_yaml) 
+      }
+      # tarball
+      `cd #{package_dir}; tar cf #{package_name}.tar #{File.basename(target)}`
+      `cd #{package_dir}; gzip -9 -f #{package_name}.tar`
+      # cleanup
+      FileUtils.rm_rf(target)
+      if File.exist?(tarball)
+        Kudu.ui.info("Wrote package #{tarball}")
+      else
+        Kudu.ui.error("Something went horribly wrong, can't find #{tarball}")
+      end
     end
 
-  end
-
-end
+  end # PackageSinatra
+end # Kudu
