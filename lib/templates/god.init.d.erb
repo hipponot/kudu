@@ -27,7 +27,7 @@ else
 fi
 
 APP_ROOT=/home/$RUN_AS/.rvm/gems/$RUBY_VERSION@$APP_NAME-$APP_VERSION/gems/$APP_NAME-$APP_VERSION
-PID="/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>/unicorn.pid"
+PID=/home/$RUN_AS/unicorn/pids/<%=project_name%>-<%=project_version%>/unicorn.pid
 
 if [ -n "$RACK_ENV" ]
 then
