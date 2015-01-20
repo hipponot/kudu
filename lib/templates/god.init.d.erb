@@ -49,12 +49,12 @@ if [ ! -d $UNICORN_LOG_DIR ]; then
   chown $RUN_AS:$RUN_AS $UNICORN_LOG_DIR
 fi
 UNICORN_SOCKET_DIR='/tmp/unicorn/sockets'
-if [ ! -d $UNICORN_SOCKET_DIR]; then
+if [ ! -d $UNICORN_SOCKET_DIR ]; then
   mkdir -p $UNICORN_SOCKET_DIR
   chown -R $RUN_AS:$RUN_AS $UNICORN_SOCKET_DIR
 fi
 UNICORN_PID_DIR='/tmp/unicorn/pids'
-if [ ! -d $UNICORN_PID_DIR]; then
+if [ ! -d $UNICORN_PID_DIR ]; then
   mkdir -p $UNICORN_PID_DIR
   chown -R $RUN_AS:$RUN_AS $UNICORN_PID_DIR
 fi
