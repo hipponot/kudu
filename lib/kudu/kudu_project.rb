@@ -46,18 +46,23 @@ module Kudu
     def bump_version
       # this call is idempotent for a given kudu run
       return if version_updated
-      kudu_file = File.join(directory, 'kudu.yaml')
-      kudu = YAML::load(IO.read(kudu_file))
-      kudu[:publications][0][:version] = version
-      major, minor, build = version.split('.')
-      build = Kudu.git_commit_count
-      new_version = "#{major}.#{minor}.#{build}"
-      # write the new version back to kudu.yaml
-      kudu[:publications][0][:version] = new_version
-      File.open(kudu_file, 'w') {|f| f.write(kudu.to_yaml) }
-      self.version = new_version
-      # Refactor for one gem per project - this is lame
-      publications.each {|p| p.version = version }
+      files = ['kudu.yaml']
+      lock_file = File.join(directory, 'kudu.lock.yaml')
+      files << 'kudu.lock.yaml' if File.exist?(lock_file) 
+      files.each do |file|
+        kudu_file = File.join(directory, file)
+        kudu = YAML::load(IO.read(kudu_file))
+        kudu[:publications][0][:version] = version
+        major, minor, build = version.split('.')
+        build = Kudu.git_commit_count
+        new_version = "#{major}.#{minor}.#{build}"
+        # write the new version back to kudu.yaml
+        kudu[:publications][0][:version] = new_version
+        File.open(kudu_file, 'w') {|f| f.write(kudu.to_yaml) }
+        self.version = new_version
+        # Refactor for one gem per project - this is lame
+        publications.each {|p| p.version = version }
+      end
     end
 
     def version
@@ -177,7 +182,11 @@ module Kudu
           kudu_file = File.join(spec.directory, 'kudu.yaml')
           lock_file = File.join(spec.directory, 'kudu.lock.yaml')
           kudu = YAML.load(IO.read(kudu_file))
-          kudu[:dependencies] = spec.dependencies.map { |d| d.to_hash }
+          kudu[:dependencies] = spec.dependencies.map do |d|
+            rval = d.to_hash
+            rval.delete(:version) if rval[:group] == 'in-house'
+            rval
+          end
           IO.write(lock_file, kudu.to_yaml)          
           Kudu.ui.info("Wrote #{lock_file}")
         end
