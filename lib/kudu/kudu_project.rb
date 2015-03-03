@@ -143,6 +143,7 @@ module Kudu
         end
         generate_kudu_lock_files(dep_manifest, p) if dep_manifest
         return p
+        exit
       end
 
       def lookup_version(name)
@@ -161,20 +162,22 @@ module Kudu
         
         @manifest ||= YAML.load(IO.read(manifest_file))
         projects.each do |name, spec|
-          kudu = YAML.load(IO.read(File.join(spec.directory, 'kudu.yaml')))
-          kudu[:dependencies].map do |dep|
-            next if dep[:group] == 'in-house'
-            if dep.has_key?(:version) == false or dep[:version] == 'latest'
-              version = lookup_version(dep[:name])
+          spec.dependencies.each do |dep|
+            next if dep.group == 'in-house'
+            if dep.version == 'latest'
+              version = lookup_version(dep.name)
             else 
-              manifest_version = lookup_version(dep[:name])
-              override_version = dep[:version]
-              Kudu.ui.warn("kudu.yaml overriding depenency manifest version for gem #{dep[:name]}, overriding version #{manifest_version} with #{override_version}")
+              manifest_version = lookup_version(dep.name)
+              override_version = dep.version
+              Kudu.ui.warn("kudu.yaml overriding depenency manifest version for gem #{dep.name}, overriding version #{manifest_version} with #{override_version}")
               version = override_version
             end
-            dep[:version] = version
+            dep.version = version
           end
+          kudu_file = File.join(spec.directory, 'kudu.yaml')
           lock_file = File.join(spec.directory, 'kudu.lock.yaml')
+          kudu = YAML.load(IO.read(kudu_file))
+          kudu[:dependencies] = spec.dependencies.map { |d| d.to_hash }
           IO.write(lock_file, kudu.to_yaml)          
           Kudu.ui.info("Wrote #{lock_file}")
         end
