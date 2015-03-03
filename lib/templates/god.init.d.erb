@@ -89,7 +89,7 @@ restart|reload)
   <%if with_sidekiq%> 
   sudo su - $RUN_AS -c "$SIDEKIQ_RESTART_CMD" && echo $SIDEKIQ_RESTART_CMD
   <%end%>
-  sig HUP && echo reloaded OK 
+  sig HUP && echo reloaded OK && exit 0
   echo >&2 "Couldn't reload, starting '$CMD' instead"
   sudo su - $RUN_AS -c "$CMD"
   ;;

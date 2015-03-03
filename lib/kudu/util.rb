@@ -36,8 +36,9 @@ module Kudu
         eval("#{classname}.new(options)")
       else
         # unbox varags before instantiating the delegate
-        args_str = ""
-        args.each_with_index {|a,i| args_str += "args[#{i}]"; args += "," unless args.length-1}
+        args_str = []
+        args.each_with_index{ |a,i| args_str << "args[#{i}]" }
+        args_str = args_str.join(',')
         eval("#{classname}.new(options, #{args_str})")
       end
     end
