@@ -184,7 +184,8 @@ module Kudu
           kudu = YAML.load(IO.read(kudu_file))
           kudu[:dependencies] = spec.dependencies.map do |d|
             rval = d.to_hash
-            rval.delete(:version) if rval[:group] == 'in-house'
+            # quiet the ruby 2 whining w explicit version for in-house dependencies
+            rval[:version] = '~> 0' if rval[:group] == 'in-house'
             rval
           end
           IO.write(lock_file, kudu.to_yaml)          
