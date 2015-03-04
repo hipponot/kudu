@@ -19,7 +19,7 @@ set -e
 APP_NAME=<%=project_name%>
 APP_VERSION=<%=project_version%>
 
-if [getent passwd ubuntu -eq 0 ]
+if [ getent passwd ubuntu -eq 0 ]
 then
  RUN_AS=ubuntu
 else
