@@ -12,15 +12,14 @@
 # Use this as a basis for your own Unicorn init script.
 # Change APPLICATION to match your app.
 # Make sure that all paths are correct.
- 
-set -e
+#set -e
  
 # Change these to match your app:
 APP_NAME=<%=project_name%>
 APP_VERSION=<%=project_version%>
-
-if [ getent passwd ubuntu -eq 0 ]
-then
+getent passwd ubuntu
+UBUNTU=$?
+if [ $UBUNTU -eq 0 ]; then
  RUN_AS=ubuntu
 else
  RUN_AS=vagrant
