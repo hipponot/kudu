@@ -21,7 +21,6 @@ APP_VERSION=<%=project_version%>
 getent passwd ubuntu
 UBUNTU=$?
 if [ $UBUNTU -eq 0 ]; then
-then
  RUN_AS=ubuntu
 else
  RUN_AS=vagrant
