@@ -18,7 +18,7 @@
 APP_NAME=<%=project_name%>
 APP_VERSION=<%=project_version%>
 getent passwd ubuntu
-UBUNTU=$?
+UBUNTU=$?    
 if [ $UBUNTU -eq 0 ]; then
  RUN_AS=ubuntu
 else
@@ -28,7 +28,7 @@ RUBY_VERSION=$(sudo su -l $RUN_AS -c 'echo $RUBY_VERSION')
 RACK_ENV=$(sudo su -l $RUN_AS -c 'echo $RACK_ENV')
 
 APP_ROOT=/home/$RUN_AS/.rvm/gems/$RUBY_VERSION@$APP_NAME-$APP_VERSION/gems/$APP_NAME-$APP_VERSION
-PID=/home/$RUN_AS/pids/<%=project_name%>-<%=project_version%>/unicorn.pid
+PID="/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>/unicorn.pid"
 
 if [ -n "$RACK_ENV" ]
 then
@@ -60,7 +60,7 @@ if [ ! -d $UNICORN_PID_DIR ]; then
 fi
 
 <%if with_sidekiq%> 
-SIDEKIQ_PID_DIR=/home/$RUN_AS/unicorn/pids/<%=project_name%>-<%=project_version%>
+SIDEKIQ_PID_DIR="/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>"
 if [ ! -d ${SIDEKIQ_PID_DIR} ]; then
      mkdir -p ${SIDEKIQ_PID_DIR}
      chown $RUN_AS:$RUN_AS $SIDEKIQ_PID_DIR
