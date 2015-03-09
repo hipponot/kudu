@@ -13,8 +13,8 @@ timeout 60
 preload_app true
 
 # Application directories
-FileUtils.mkdir_p "#{ENV['HOME']}/unicorn/sockets/<%=project_name%>-<%=project_version%>"
-FileUtils.mkdir_p "#{ENV['HOME']}/unicorn/pids/<%=project_name%>-<%=project_version%>"
+FileUtils.mkdir_p "/tmp/unicorn/sockets/<%=project_name%>-<%=project_version%>"
+FileUtils.mkdir_p "/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>"
 FileUtils.mkdir_p "/var/log/unicorn/<%=project_name%>-<%=project_version%>"
 
 # Specify path to socket unicorn listens to, 
