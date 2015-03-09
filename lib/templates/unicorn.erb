@@ -19,7 +19,7 @@ FileUtils.mkdir_p "/var/log/unicorn/<%=project_name%>-<%=project_version%>"
 
 # Specify path to socket unicorn listens to, 
 # we will use this in our nginx.conf later
-listen "#{ENV['HOME']}/unicorn/sockets/<%=project_name%>-<%=project_version%>/unicorn.sock", :backlog => 1024
+listen "/tmp/unicorn/sockets/<%=project_name%>-<%=project_version%>/unicorn.sock", :backlog => 1024
 
 # Set process id path
 pid "/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>/unicorn.pid"
