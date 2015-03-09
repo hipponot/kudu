@@ -22,7 +22,7 @@ FileUtils.mkdir_p "/var/log/unicorn/<%=project_name%>-<%=project_version%>"
 listen "#{ENV['HOME']}/unicorn/sockets/<%=project_name%>-<%=project_version%>/unicorn.sock", :backlog => 1024
 
 # Set process id path
-pid "#{ENV['HOME']}/unicorn/pids/<%=project_name%>-<%=project_version%>/unicorn.pid"
+pid "/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>/unicorn.pid"
 
 # Set log file paths
 stderr_path "/var/log/unicorn/<%=project_name%>-<%=project_version%>/stderr.log"
