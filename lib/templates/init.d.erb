@@ -12,19 +12,20 @@
 # Use this as a basis for your own Unicorn init script.
 # Change APPLICATION to match your app.
 # Make sure that all paths are correct.
- 
-set -e
+#set -e
  
 # Change these to match your app:
 APP_NAME=<%=project_name%>
 APP_VERSION=<%=project_version%>
-
-if [ -n "$SUDO_USER" ]
-then
- RUN_AS=$SUDO_USER
-else 
- RUN_AS=$USER
+getent passwd ubuntu
+UBUNTU=$?    
+if [ $UBUNTU -eq 0 ]; then
+ RUN_AS=ubuntu
+else
+ RUN_AS=vagrant
 fi
+RUBY_VERSION=$(sudo su -l $RUN_AS -c 'echo $RUBY_VERSION')
+RACK_ENV=$(sudo su -l $RUN_AS -c 'echo $RACK_ENV')
 
 APP_ROOT=/home/$RUN_AS/.rvm/gems/$RUBY_VERSION@$APP_NAME-$APP_VERSION/gems/$APP_NAME-$APP_VERSION
 PID="/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>/unicorn.pid"
@@ -36,6 +37,7 @@ else
   ENV=development
 fi
 
+
 RVM_HOME="/home/$RUN_AS/.rvm/gems/$RUBY_VERSION"
 GEM_HOME="/home/$RUN_AS/.rvm/gems/$RUBY_VERSION@<%=project_name%>-<%=project_version%>"
 GEM_PATH="/home/$RUN_AS/.rvm/gems/$RUBY_VERSION@<%=project_name%>-<%=project_version%>:/home/$RUN_AS/.rvm/gems/$RUBY_VERSION@global"
@@ -45,6 +47,16 @@ UNICORN_LOG_DIR="/var/log/unicorn/<%=project_name%>-<%=project_version%>"
 if [ ! -d $UNICORN_LOG_DIR ]; then
   mkdir -p $UNICORN_LOG_DIR
   chown $RUN_AS:$RUN_AS $UNICORN_LOG_DIR
+fi
+UNICORN_SOCKET_DIR='/tmp/unicorn/sockets'
+if [ ! -d $UNICORN_SOCKET_DIR ]; then
+  mkdir -p $UNICORN_SOCKET_DIR
+  chown -R $RUN_AS:$RUN_AS $UNICORN_SOCKET_DIR
+fi
+UNICORN_PID_DIR='/tmp/unicorn/pids'
+if [ ! -d $UNICORN_PID_DIR ]; then
+  mkdir -p $UNICORN_PID_DIR
+  chown -R $RUN_AS:$RUN_AS $UNICORN_PID_DIR
 fi
 
 <%if with_sidekiq%> 

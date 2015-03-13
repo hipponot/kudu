@@ -16,7 +16,20 @@ class Install < Thor
     puts "Package - install.rb :Installing in-house gem"
     Dir.glob('*.gem').each do |gem|
       run_and_echo("gem install -f --no-ri --no-rdoc #{gem}")
+
+      # Link binaries to $HOME/bin for primary gem in this gemset                                                                                                                                   
+      bindir = File.join(ENV['HOME'], 'bin')
+      FileUtils.mkdir_p(bindir) unless File.directory?(bindir)
+      if File.basename(gem,'.gem') == gemset
+        name, version = File.basename(gem,'.gem').split('-')
+        binaries = `gem contents #{name} -v #{version} | grep bin`.split("\n")
+        binaries.each do |binary|
+          cmd = "ln -sf #{binary} #{File.join(bindir, File.basename(binary))}"
+          run_and_echo(cmd)
+        end
+      end
     end
+
     # install third-party gems into gemset
     puts "Package - install.rb :Installing third-party gem"
     third_party = YAML::load(IO.read('third_party.yaml'))
@@ -35,6 +48,8 @@ class Install < Thor
         end
       end
     end
+
+
   end
 
   default_task :install
