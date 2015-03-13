@@ -174,7 +174,7 @@ module Kudu
             else 
               manifest_version = lookup_version(dep.name)
               override_version = dep.version
-              Kudu.ui.warn("kudu.yaml overriding depenency manifest version for gem #{dep.name}, overriding version #{manifest_version} with #{override_version}")
+              Kudu.ui.warn("Project #{name} kudu.yaml is overriding depenency manifest version for gem #{dep.name}, overriding version #{manifest_version} with #{override_version}")
               version = override_version
             end
             dep.version = version
