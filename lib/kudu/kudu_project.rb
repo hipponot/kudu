@@ -193,7 +193,7 @@ module Kudu
         end
         if @manifest_dirty 
           @manifest_dirty = false
-          @manifest = IO.write(manifest_file, manifest.to_yaml)
+          @manifest = IO.write(manifest_file, @manifest.to_yaml)
           Kudu.ui.info("Wrote updated manifest #{manifest_file}")
         end
       end
