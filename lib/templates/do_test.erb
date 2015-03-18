@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+require "minitest/autorun"
+require "minitest/reporters"
+Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new(:color => false)]
+Dir.glob("#{File.dirname(__FILE__)}/test/unit/test_*.rb") do |f|
+  require f
+end

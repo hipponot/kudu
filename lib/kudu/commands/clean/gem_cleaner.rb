@@ -20,15 +20,20 @@ module Kudu
           return if options[:local]
           Kudu.ui.info "uninstalling #{project.name} #{project.version}"
           if Kudu.is_installed? project.name, project.version
+            cmd = "gem uninstall -I -x -q -v #{project.version} #{project.name}"
+            Kudu.ui.info cmd
+            Kudu.ui.info `#{cmd}`.chomp
             Kudu.ui.info `gem uninstall -I -x -q -v #{project.version} #{project.name}`.chomp
             # cleans up all version
             Kudu.ui.info `gem cleanup #{project.name}`
           end
           if options[:'more-clean'] || options[:nuke]
             project.dependencies.each do |dep|
-              if dep.group == 'third-party'
-                if dep.version == 'latest'
-                  Kudu.ui.info `rvm @global do gem uninstall  -I -q -x #{dep.name}`.chomp
+              if /third-party|developer/ =~ dep.group
+                if dep.version == 'latest' or /~>/ =~ dep.version
+                  Kudu.ui.info cmd
+                  cmd = "rvm @global do gem uninstall  -I -q -x #{dep.name}".chomp
+                  Kudu.ui.info `#{cmd}`.chomp
                 else
                   Kudu.ui.info `rvm @global do gem uninstall  -I -q -x #{dep.name} -v #{dep.version}`.chomp
                 end

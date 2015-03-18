@@ -1,0 +1,83 @@
+#!/usr/bin/env ruby
+require 'yaml'
+require "thor"
+require "etc"
+require "rvm"
+
+class Install < Thor
+
+  desc "install", "Install wootmath package"
+  method_option :user, :aliases => "-u", :type => :string, :required=>true, :default=>Etc.getlogin, :desc => "user"
+  def install
+    gemset = File.basename(File.expand_path(File.dirname(__FILE__)))
+    # install in-house gems into gemset
+    RVM.gemset.create gemset
+    RVM.gemset.use! gemset
+    puts "Package - install.rb :Installing in-house gem"
+    Dir.glob('*.gem').each do |gem|
+      run_and_echo("gem install -f --no-ri --no-rdoc #{gem}")
+
+      # Link binaries to $HOME/bin for primary gem in this gemset                                                                                                                                   
+      bindir = File.join(ENV['HOME'], 'bin')
+      FileUtils.mkdir_p(bindir) unless File.directory?(bindir)
+      if File.basename(gem,'.gem') == gemset
+        name, version = File.basename(gem,'.gem').split('-')
+        binaries = `gem contents #{name} -v #{version} | grep bin`.split("\n")
+        binaries.each do |binary|
+          cmd = "ln -sf #{binary} #{File.join(bindir, File.basename(binary))}"
+          run_and_echo(cmd)
+        end
+      end
+    end
+
+    # install third-party gems into gemset
+    puts "Package - install.rb :Installing third-party gem"
+    third_party = YAML::load(IO.read('third_party.yaml'))
+    third_party.each do | gem|
+      if /latest/ =~ gem[:version]
+        if is_installed? gem[:name]
+          puts "already_installed #{gem[:name]}"
+        else
+          run_and_echo("gem install -f --no-ri --no-rdoc #{gem[:name]}")
+        end
+      else
+        if is_installed? gem[:name], gem[:version]
+          puts "already_installed #{gem[:name]} #{gem[:version]}"
+        else
+          run_and_echo("gem install -f --no-ri --no-rdoc -v '#{gem[:version]}' #{gem[:name]}")
+        end
+      end
+    end
+
+
+  end
+
+  default_task :install
+
+  private
+
+  def run_and_echo(cmd)
+    puts cmd
+    status = system(cmd)
+    unless status
+      puts "Pkg - install.rb command failed #{cmd} - punting" 
+      exit(1)
+    end
+  end
+
+  def is_installed? name, version=nil
+    begin
+      if (version.nil?)
+        ::Gem::Specification.find_by_name(name)
+      else
+        ::Gem::Specification.find_by_name(name, version)
+      end
+      true
+    rescue ::Gem::LoadError 
+      false
+    end
+  end
+
+end
+
+Install.start

@@ -1,6 +1,5 @@
 require 'rvm'
 require 'etc'
-require 'ruby-prof' unless RUBY_PLATFORM=='java'
 
 require_relative '../../error'
 require_relative '../../util'
@@ -24,6 +23,9 @@ module Kudu
         @install = options[:install]
         raise GemsBuilderFailed, "GemBuilder needs single @publication in publications array" unless project.publications.length == 1
         @publication = project.publications.first
+        if options[:version]
+          @publication.version = options[:version]
+        end
       end
     end
     attr_reader :project
@@ -123,6 +125,9 @@ module Kudu
         # Convert to full vertex descriptor if necessary
         project.dependencies.select {|d| d.group == 'third-party' || d.group =='developer'}.each do |dep|
           # install the versioned third party gem if necessary
+          if dep.name == 'aws-sdk'
+            'yoda'
+          end
           if not is_installed? dep
             if dep.version == 'latest'
               Kudu.ui.info "Installing latest #{dep.name}"

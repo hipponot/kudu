@@ -2,9 +2,11 @@ module Kudu
   class KuduError < StandardError; end
   class NotUserVagrant < KuduError; end
   class DuplicateProjectFound < KuduError; end
+  class DuplicateDependencyManifestFound < KuduError; end
   class KuduSpecNotFound < KuduError;  end  
   class KuduSpecInHouseVersion < KuduError;  end  
   class ProjectNotFound < KuduError; end
+  class UnknownGem < KuduError; end
   class InvalidGemspec < KuduError; end
   class InvalidKuduSpec < KuduError; end
   class InvalidOption < KuduError; end

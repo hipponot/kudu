@@ -1,7 +1,6 @@
 require 'rvm'
 require 'etc'
 require 'yaml'
-require 'ruby-prof' unless RUBY_PLATFORM=='java'
 
 require_relative '../../error'
 require_relative '../../util'
@@ -15,22 +14,21 @@ module Kudu
 
     desc "build", "Build project"
 
-    method_option :name, :aliases => "-n", :required=>false, :default=>nil, :desc => "Project name", :lazy_default => ""
+    method_option :name, :aliases => "-n", :required=>true, :default=>nil, :desc => "Project name"
     method_option :all, :aliases => "-a", :type => :boolean, :required=>false, :desc => "Build everything"
     method_option :dependencies, :aliases => "-d", :required => false, :desc => "Rebuild dependencies before building"
     method_option :force, :aliases => "-f", :type => :boolean, :required => false, :default => false,  :desc => "Force rebuild"
     method_option :'skip-third-party', :aliases => "-s", :type => :boolean, :required => false, :default => false,  :desc => "Skip third party gem install"
+    method_option :'only-third-party', :aliases => "-s", :type => :boolean, :required => false, :default => false,  :desc => "Only build and install third party deps"
     method_option :repo, :aliases => "-r", :type => :string, :required => false, :default=>"default",  :desc => "Repository name (published artifacts)"
     method_option :odi, :aliases => "-o", :type => :boolean, :required => false, :default=>false,  :desc => "Optimized for developer iterations"
     method_option :version, :aliases => "-v", :type => :string, :required => false, :desc => "Specify version"
     method_option :production, :aliases => "-p", :type => :boolean, :required => false, :default=>false, :lazy_default=>true, :desc => "Production build increments version"
+    method_option :'bump-version', :type => :boolean, :required => false, :default=>true, :desc => "Production build increments version"
     method_option :dryrun, :aliases => "-y", :type => :boolean, :required => false, :default=>false,  :desc => "Dry run"
     method_option :ruby, :aliases => "-v", :type => :string, :required => true, :default=>`rvm current`.chomp,  :desc => "ruby-version"
     method_option :install, :aliases => "-i", :type => :boolean, :required => false, :default=>true,  :desc => "install built gem"    
 
-    # No ruby-prof in jruby 
-    @profile = RUBY_PLATFORM == 'java' ? false : options[:profile]
-    
     def build
       Kudu.with_logging(self, __method__) do
         if options[:all]
@@ -57,7 +55,7 @@ module Kudu
         raise Error.new("Bad return status from pre build script #{pre}") unless status
       end
       # production build set build number according to git_commit_count
-      project.bump_version if options[:production]
+      project.bump_version if options[:production] and options[:'bump-version']
       # create build directory
       build_dir = File.join(project.directory,'build')
       Dir.mkdir(build_dir) unless File.directory?(build_dir)

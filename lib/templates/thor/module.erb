@@ -1,0 +1,20 @@
+require_relative "<%=project_name%>/ui"
+require_relative "<%=project_name%>/cli"
+require_relative "<%=project_name%>/version"
+
+# require all commands
+root = File.dirname(File.absolute_path(__FILE__))
+Dir.glob(root + '/<%=project_name%>/commands/*.rb', &method(:require))
+
+module <%=name_cc%>
+
+  class Error < StandardError; end
+
+  class << self
+    attr_writer :ui
+    def ui
+      @ui ||= <%=name_cc%>::UI.new
+    end
+  end
+
+end

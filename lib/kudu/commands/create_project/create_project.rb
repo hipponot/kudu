@@ -6,6 +6,7 @@ module Kudu
 
     desc "create-project", "Create a skelton kudu project"
     method_option :name, :type=>:string, :aliases => "-n", :required=>true, :desc => "Project name"
+    method_option :module_name, :type=>:string, :aliases => "-m", :required=>false, :desc => "Module name"
     method_option :type, :type=>:string, :aliases => "-t", :required=>true, :default=>'sinatra', :desc => "Project type"
     method_option :native_extension, :type=>:boolean, :aliases => "-e", :required=>false, :default=>false, :desc => "C-Native extension (ruby types only)"
     method_option :use_namespace, :type=>:boolean, :aliases => "-s", :required=>false, :default=>false, :desc => "First token in snake cased name used as enclosing namespace"

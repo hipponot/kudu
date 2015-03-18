@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/<%=project_name%>'
+require_relative '../lib/<%=project_name%>/cli'
+require_relative '../lib/<%=project_name%>/friendly_errors'
+<%=name_cc%>.with_friendly_errors {
+  <%=name_cc%>::CLI.start
+}
+
+
+

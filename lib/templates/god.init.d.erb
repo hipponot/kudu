@@ -12,13 +12,14 @@
 # Use this as a basis for your own Unicorn init script.
 # Change APPLICATION to match your app.
 # Make sure that all paths are correct.
+ 
 #set -e
  
 # Change these to match your app:
 APP_NAME=<%=project_name%>
 APP_VERSION=<%=project_version%>
 getent passwd ubuntu
-UBUNTU=$?    
+UBUNTU=$?
 if [ $UBUNTU -eq 0 ]; then
  RUN_AS=ubuntu
 else
@@ -29,14 +30,12 @@ RACK_ENV=$(sudo su -l $RUN_AS -c 'echo $RACK_ENV')
 
 APP_ROOT=/home/$RUN_AS/.rvm/gems/$RUBY_VERSION@$APP_NAME-$APP_VERSION/gems/$APP_NAME-$APP_VERSION
 PID="/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>/unicorn.pid"
-
 if [ -n "$RACK_ENV" ]
 then
   ENV=$RACK_ENV
 else
   ENV=development
 fi
-
 
 RVM_HOME="/home/$RUN_AS/.rvm/gems/$RUBY_VERSION"
 GEM_HOME="/home/$RUN_AS/.rvm/gems/$RUBY_VERSION@<%=project_name%>-<%=project_version%>"
@@ -60,27 +59,17 @@ if [ ! -d $UNICORN_PID_DIR ]; then
 fi
 
 <%if with_sidekiq%> 
-SIDEKIQ_PID_DIR="/tmp/unicorn/pids/<%=project_name%>-<%=project_version%>"
-if [ ! -d ${SIDEKIQ_PID_DIR} ]; then
-     mkdir -p ${SIDEKIQ_PID_DIR}
-     chown $RUN_AS:$RUN_AS $SIDEKIQ_PID_DIR
-fi
-SIDEKIQ_PID="$SIDEKIQ_PID_DIR/sidekiq.pid"
-SIDEKIQ_LOG="/var/log/unicorn/<%=project_name%>-<%=project_version%>/sidekiq.log"
-SIDEKIQ_CMD="sidekiq -C $APP_ROOT/config/sidekiq.yaml -d -L $SIDEKIQ_LOG -P $SIDEKIQ_PID -r $APP_ROOT/lib/<%=project_name%>.rb"
-CMD="$SET_PATH; echo $SIDEKIQ_CMD; $SIDEKIQ_CMD; $RVM_HOME@global/bin/unicorn $UNICORN_OPTS deploy.ru"
-<%else%>
-CMD="$SET_PATH; $RVM_HOME@global/bin/unicorn $UNICORN_OPTS deploy.ru"
+SIDEKIQ_START_CMD="$SET_PATH;god load $APP_ROOT/config/sidekiq.god; god start <%=project_name%>-<%=project_version%>"
+SIDEKIQ_STOP_CMD="$SET_PATH;god stop <%=project_name%>-<%=project_version%>"
+SIDEKIQ_RESTART_CMD="$SET_PATH;god restart <%=project_name%>-<%=project_version%>"
 <%end%>
 
+CMD="$SET_PATH;$RVM_HOME@global/bin/unicorn $UNICORN_OPTS deploy.ru"
 old_pid="$PID.oldbin"
  
 cd $APP_ROOT || exit 1
  
 sig () {
-  <%if with_sidekiq%>   
-  test -s "$SIDEKIQ_PID" && kill -$1 `cat $SIDEKIQ_PID`
-  <%end%>
   test -s "$PID" && kill -$1 `cat $PID`
 }
  
@@ -90,10 +79,16 @@ oldsig () {
  
 case ${1-help} in
 start)
+  <%if with_sidekiq%> 
+  sudo su - $RUN_AS -c "$SIDEKIQ_START_CMD" && echo $SIDEKIQ_START_CMD
+  <%end%>
   sig 0 && echo >&2 "Already running" && exit 0
   sudo su - $RUN_AS -c "$CMD"
   ;;
 stop)
+  <%if with_sidekiq%> 
+  sudo su - $RUN_AS -c "$SIDEKIQ_STOP_CMD" && echo $SIDEKIQ_STOP_CMD
+  <%end%>
   sig QUIT && exit 0
   echo >&2 "Not running"
   ;;
@@ -102,8 +97,10 @@ force-stop)
   echo >&2 "Not running"
   ;;
 restart|reload)
-  sig HUP && echo reloaded OK 
-  sudo su - $RUN_AS -c "$SET_PATH;$SIDEKIQ_CMD" && echo 'Sidekiq restart' && exit 0
+  <%if with_sidekiq%> 
+  sudo su - $RUN_AS -c "$SIDEKIQ_RESTART_CMD" && echo $SIDEKIQ_RESTART_CMD
+  <%end%>
+  sig HUP && echo reloaded OK && exit 0
   echo >&2 "Couldn't reload, starting '$CMD' instead"
   sudo su - $RUN_AS -c "$CMD"
   ;;

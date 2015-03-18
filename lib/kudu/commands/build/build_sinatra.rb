@@ -1,6 +1,5 @@
 require 'rvm'
 require 'etc'
-require 'ruby-prof' unless RUBY_PLATFORM=='java'
 
 require_relative '../../error'
 require_relative '../../util'
@@ -18,12 +17,38 @@ module Kudu
 
       builder = GemBuilder.new(options, project)
       # production builds update version first
-      builder.update_version if options[:production]
+      builder.update_version if options[:production] 
 
-      # init.d
-      template = File.join(Kudu.template_dir, "init.d.erb")
-      outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}.init.d")
-      ErubisInflater.inflate_file_write(template, {ruby:options[:ruby], project_name:project.name, project_version:project.version}, outfile)
+      # New sidekiq under god flow
+
+      # presence of config/sidekiq.yaml triggers init.d script with sidekiq support
+      with_sidekiq = File.exists?(File.join(project.directory, 'config/sidekiq.yaml')) ? true : false
+
+      if with_sidekiq 
+        template = File.join(Kudu.template_dir, "sidekiq.god.erb")
+        outfile = File.join(project.directory, "config", "sidekiq.god")
+        ErubisInflater.inflate_file_write(template, {project_name:project.name, project_version:project.version}, outfile)
+
+        # init.d
+        template = File.join(Kudu.template_dir, "god.init.d.erb")
+        outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}.init.d")
+        ErubisInflater.inflate_file_write(template, {
+                                            ruby:options[:ruby], 
+                                            project_name:project.name, 
+                                            project_version:project.version,
+                                            with_sidekiq:with_sidekiq
+                                        }, outfile)
+      else
+        # init.d
+        template = File.join(Kudu.template_dir, "init.d.erb")
+        outfile = File.join(project.directory, "build", "#{project.name}-#{project.version}.init.d")
+        ErubisInflater.inflate_file_write(template, {
+                                            ruby:options[:ruby], 
+                                            project_name:project.name, 
+                                            project_version:project.version, 
+                                            with_sidekiq:with_sidekiq
+                                          }, outfile)
+      end
 
       # nginx upstream
       template = File.join(Kudu.template_dir, "upstream.conf.erb")
@@ -43,11 +68,14 @@ module Kudu
 
       # add version to config.ru 
       ru_file = File.join(project.directory, "config", "config.ru")
+      unless File.exist?(ru_file) 
+        ru_file = File.join(project.directory, "config.ru")
+      end
       deploy_ru = File.join(project.directory, "config", "deploy.ru")
       IO.write(deploy_ru,IO.read(ru_file).gsub("require","gem \"#{project.name}\", \"#{project.version}\"; require"))
 
       # build the gem after generation of config files
-      builder.build_gem
+      builder.build_gem unless options[:'only-third-party']
       builder.install_third_party unless options[:'skip-third-party']
 
     end
