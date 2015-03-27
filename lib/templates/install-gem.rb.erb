@@ -15,7 +15,7 @@ class Install < Thor
     RVM.gemset.use! gemset
     puts "Package - install.rb :Installing in-house gem"
     Dir.glob('*.gem').each do |gem|
-      run_and_echo("gem install -f --no-ri --no-rdoc #{gem}")
+      run_and_echo("gem install -f --no-ri --no-rdoc --ignore-dependencies #{gem}")
 
       # Link binaries to $HOME/bin for primary gem in this gemset                                                                                                                                   
       bindir = File.join(ENV['HOME'], 'bin')
@@ -32,6 +32,7 @@ class Install < Thor
 
     # install third-party gems into gemset
     puts "Package - install.rb :Installing third-party gem"
+    RVM.gemset.use! 'global'
     third_party = YAML::load(IO.read('third_party.yaml'))
     third_party.each do | gem|
       if /latest/ =~ gem[:version]
