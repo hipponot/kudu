@@ -18,13 +18,21 @@ class Install < Thor
       run_and_echo("gem install -f --no-ri --no-rdoc #{gem}")
 
       # Link binaries to $HOME/bin for primary gem in this gemset                                                                                                                                   
+      # Link god files to $HOME/god for primary gem in this gemset                                                                                                                                   
       bindir = File.join(ENV['HOME'], 'bin')
+      goddir = File.join(ENV['HOME'], 'god')
       FileUtils.mkdir_p(bindir) unless File.directory?(bindir)
+      FileUtils.mkdir_p(goddir) unless File.directory?(bindir)
       if File.basename(gem,'.gem') == gemset
         name, version = File.basename(gem,'.gem').split('-')
         binaries = `gem contents #{name} -v #{version} | grep bin`.split("\n")
         binaries.each do |binary|
           cmd = "ln -sf #{binary} #{File.join(bindir, File.basename(binary))}"
+          run_and_echo(cmd)
+        end
+        gods = `gem contents #{name} -v #{version} | grep god`.split("\n")
+        gods.each do |god|
+          cmd = "ln -sf #{god} #{File.join(goddir, File.basename(god))}"
           run_and_echo(cmd)
         end
       end
