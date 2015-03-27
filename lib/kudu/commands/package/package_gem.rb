@@ -51,6 +51,7 @@ module Kudu
         dep = KuduProject.project(dep.name)
         FileUtils.cp_r(File.join(dep.directory, 'build/.'), target)
       end
+      tp = project.transitive_dependencies('in-house')
 
       # installer
       outfile = File.join(target, "install.rb")
@@ -61,6 +62,9 @@ module Kudu
       File.open(File.join(target,"third_party.yaml"), 'w') {
         |f| f.write(project.dependencies('third-party').map {|d| {name:d.name, version:d.version} }.to_yaml) 
       }
+      tp = project.dependencies('third-party')
+      ttp = project.transitive_dependencies('third-party')
+
       # tarball
       `cd #{package_dir}; tar cf #{package_name}.tar #{File.basename(target)}`
       `cd #{package_dir}; gzip -9 -f #{package_name}.tar`

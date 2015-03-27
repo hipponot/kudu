@@ -42,6 +42,18 @@ module Kudu
       end
     end
 
+    def transitive_dependencies group=nil
+      deps = []
+      @dependencies.each do |dep|      
+        deps << dep.to_hash
+        if dep.group == 'in-house'
+          proj = KuduProject.project(dep.name)
+          deps += proj.transitive_dependencies
+        end
+      end
+      group.nil? ? deps.uniq : deps.uniq.select { |d| d[:group] == group }
+    end
+
     # Auto incrementing of build number for production builds
     def bump_version
       # this call is idempotent for a given kudu run
