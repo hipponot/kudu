@@ -27,7 +27,7 @@
       </EXTENSION>
       <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />
       <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/bin/kudu" />
-      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="package --no-color -f -d $USER_HOME$/shared/pool/staging/wmadmin/utils -n wmcw --bump-version false --production false" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="package --no-color -f -d $USER_HOME$/shared/pool/staging/skelly_2013_12_12/utils -n wmcw --bump-version false --production false" />
       <RunnerSettings RunnerId="RubyDebugRunner" />
       <ConfigurationWrapper RunnerId="RubyDebugRunner" />
       <method />
