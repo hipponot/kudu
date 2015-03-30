@@ -37,8 +37,8 @@ class Install < Thor
       end
     end
 
-    # install third-party gems into gemset
-    puts "Package - install.rb :Installing third-party gem"
+    # install third-party gems into global gemset
+    puts "Package - install.rb :Installing third-party gems into @global"
     RVM.gemset.use! 'global'
     third_party = YAML::load(IO.read('third_party.yaml'))
     third_party.each do | gem|
