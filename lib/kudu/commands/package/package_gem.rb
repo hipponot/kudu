@@ -16,7 +16,7 @@ module Kudu
       # do a clean production build with dependencies
       clean_options = { name:project.name, :dependencies=>true, :repo=>'default', :local=>true}
       cli.invoke :clean, nil, clean_options
-      build_options = { 
+      build_options = {
         :name=>project.name, 
         :install=>false, 
         :ruby=>options[:ruby], 

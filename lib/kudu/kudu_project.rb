@@ -202,7 +202,6 @@ module Kudu
             rval
           end
           IO.write(lock_file, kudu.to_yaml)          
-          Kudu.ui.info("Wrote #{lock_file}")
         end
         if @manifest_dirty 
           @manifest_dirty = false
