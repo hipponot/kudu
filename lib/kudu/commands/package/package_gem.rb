@@ -16,7 +16,7 @@ module Kudu
       # do a clean production build with dependencies
       clean_options = { name:project.name, :dependencies=>true, :repo=>'default', :local=>true}
       cli.invoke :clean, nil, clean_options
-      build_options = { 
+      build_options = {
         :name=>project.name, 
         :install=>false, 
         :ruby=>options[:ruby], 
@@ -47,20 +47,24 @@ module Kudu
       FileUtils.cp_r(File.join(project.directory, 'build/.'), target)      
 
       # add in-house dependencies to the package
-      project.dependencies('in-house').each do |dep|
+      ih_dep = project.dependencies('in-house')
+      ih_tdep = project.transitive_dependencies('in-house')
+      ih_tdep.each do |dep|
         dep = KuduProject.project(dep.name)
         FileUtils.cp_r(File.join(dep.directory, 'build/.'), target)
       end
-
+      
       # installer
       outfile = File.join(target, "install.rb")
       template = File.join(Kudu.template_dir, "install-gem.rb.erb")
       ErubisInflater.inflate_file_write(template, {}, outfile)
       `chmod +x #{outfile}`
+
       # third party
-      File.open(File.join(target,"third_party.yaml"), 'w') {
-        |f| f.write(project.dependencies('third-party').map {|d| {name:d.name, version:d.version} }.to_yaml) 
-      }
+      tp_dep = project.dependencies('third-party')
+      tp_tdep = project.transitive_dependencies('third-party')
+      IO.write(File.join(target,"third_party.yaml"), tp_tdep.map {|d| {name:d.name, version:d.version} }.to_yaml)
+
       # tarball
       `cd #{package_dir}; tar cf #{package_name}.tar #{File.basename(target)}`
       `cd #{package_dir}; gzip -9 -f #{package_name}.tar`

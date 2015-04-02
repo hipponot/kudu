@@ -16,10 +16,9 @@ class Install < Thor
     puts "Package - install.rb :Installing in-house gem"
     Dir.glob('*.gem').each do |gem|
       run_and_echo("gem install -f --no-ri --no-rdoc --ignore-dependencies #{gem}")
-
-      # Link binaries to $HOME/bin for primary gem in this gemset                                                                                                                                   
-      # Link god files to $HOME/god for primary gem in this gemset                                                                                                                                   
+      # Link binaries to $HOME/bin for primary gem in this gemset                                                                                                                         
       bindir = File.join(ENV['HOME'], 'bin')
+      # Link god files to $HOME/god for primary gem in this gemset                                                                                                                        
       goddir = File.join(ENV['HOME'], 'god')
       FileUtils.mkdir_p(bindir) unless File.directory?(bindir)
       FileUtils.mkdir_p(goddir) unless File.directory?(bindir)
@@ -38,8 +37,8 @@ class Install < Thor
       end
     end
 
-    # install third-party gems into gemset
-    puts "Package - install.rb :Installing third-party gem"
+    # install third-party gems into global gemset
+    puts "Package - install.rb :Installing third-party gems into @global"
     RVM.gemset.use! 'global'
     third_party = YAML::load(IO.read('third_party.yaml'))
     third_party.each do | gem|

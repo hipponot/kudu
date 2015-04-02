@@ -16,7 +16,7 @@ class Install < Thor
     RVM.gemset.use! gemset
     puts "Package - install.rb :Installing in-house gem"
     Dir.glob('*.gem').each do |gem|
-      run_and_echo("gem install -f --no-ri --no-rdoc #{gem}")
+      run_and_echo("gem install -f --no-ri --no-rdoc --ignore-dependencies #{gem}")
     end
 
     # init.d        
@@ -29,14 +29,9 @@ class Install < Thor
       # restart on boot
       run_and_echo("sudo /usr/sbin/update-rc.d #{target_name} defaults 98 02")
     end
-#    puts "Package - skipping 3d party test"
-
-    #install third party gems
-    # unless ENV['RACK_ENV']=='production'
-    #  puts "Non-production environment -- installing third party gems into global"
-    #  RVM.gemset.use! "global" 
-    # end		   
-    puts "Package - install.rb :Installing third-party gem"
+    
+    # install third-party gems into global gemset
+    puts "Package - install.rb :Installing third-party gems into @global"
     RVM.gemset.use! 'global'
     third_party = YAML::load(IO.read('third_party.yaml'))
     third_party.each do | gem|

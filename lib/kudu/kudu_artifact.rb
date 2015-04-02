@@ -10,6 +10,7 @@ require_relative 'error'
       attr_reader :type
       attr_reader :group
 
+      include Comparable
 
       def initialize(name, version, type, group)
         @name = name
