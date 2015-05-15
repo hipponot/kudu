@@ -44,7 +44,12 @@ module Kudu
         FileUtils.rm_rf(target)
         FileUtils.rm_rf(tarball)
       end
-      FileUtils.mkdir_p(target)
+      begin
+        FileUtils.mkdir_p(target)
+      rescue Exception=>e
+        Kudu.error("Failed to create the directory #{target}")
+        exit(1)
+      end
       FileUtils.cp_r(File.join(project.directory, 'build/.'), target)      
 
       # add in-house dependencies to the package
