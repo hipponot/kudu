@@ -47,7 +47,7 @@ module Kudu
       begin
         FileUtils.mkdir_p(target)
       rescue Exception=>e
-        Kudu.error("Failed to create the directory #{target}")
+        Kudu.ui.error("Failed to create the directory #{target}")
         exit(1)
       end
       FileUtils.cp_r(File.join(project.directory, 'build/.'), target)      
