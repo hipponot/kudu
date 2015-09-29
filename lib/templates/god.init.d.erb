@@ -18,12 +18,12 @@
 # Change these to match your app:
 APP_NAME=<%=project_name%>
 APP_VERSION=<%=project_version%>
-getent passwd ubuntu
-UBUNTU=$?
-if [ $UBUNTU -eq 0 ]; then
- RUN_AS=ubuntu
-else
+getent passwd vagrant
+VAGRANT=$?    
+if [ $VAGRANT -eq 0 ]; then
  RUN_AS=vagrant
+else
+ RUN_AS=ubuntu
 fi
 RUBY_VERSION=$(sudo su -l $RUN_AS -c 'echo $RUBY_VERSION')
 RACK_ENV=$(sudo su -l $RUN_AS -c 'echo $RACK_ENV')
