@@ -107,11 +107,14 @@ module Kudu
     def odi(project)
       Kudu.with_logging(self, __method__) do
         tgt = `gem path #{@publication.name} -v #{@publication.version}`.chomp
+        if tgt==""
+          puts @publication
+          abort("tgt is empty in ODI")
+        end
         src = project.directory
         cmd = "rm -rf #{tgt}; ln -snf #{src} #{tgt}"
         puts "Setting up link back to local development"
-        puts cmd
-        system(cmd)
+        puts cmd; system(cmd) 
       end
     end
     
@@ -137,9 +140,6 @@ module Kudu
         # Convert to full vertex descriptor if necessary
         project.dependencies.select {|d| d.group == 'third-party' || d.group =='developer'}.each do |dep|
           # install the versioned third party gem if necessary
-          if dep.name == 'aws-sdk'
-            'yoda'
-          end
           if not is_installed? dep
             if dep.version == 'latest'
               Kudu.ui.info "Installing latest #{dep.name}"
