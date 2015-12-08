@@ -42,6 +42,19 @@ module Kudu
       end
     end
 
+    def transitive_dependencies group=nil
+      deps = []
+      @dependencies.each do |dep|      
+        deps << dep
+        if dep.group == 'in-house'
+          proj = KuduProject.project(dep.name)
+          deps += proj.transitive_dependencies
+        end
+      end
+      deps = group.nil? ? deps : deps.select { |d| d.group == group }
+      deps = deps.uniq { |d| d.to_hash }
+    end
+
     # Auto incrementing of build number for production builds
     def bump_version
       # this call is idempotent for a given kudu run
@@ -189,7 +202,6 @@ module Kudu
             rval
           end
           IO.write(lock_file, kudu.to_yaml)          
-          Kudu.ui.info("Wrote #{lock_file}")
         end
         if @manifest_dirty 
           @manifest_dirty = false

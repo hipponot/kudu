@@ -6,7 +6,7 @@ module Kudu
     def initialize(options, project)
       builder = GemBuilder.new(options, project)
       builder.update_version if options[:production]
-      builder.build_gem
+      builder.build_gem unless options[:'only-third-party']
       builder.install_third_party unless options[:'skip-third-party']
     end
 

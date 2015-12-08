@@ -15,11 +15,13 @@ class Install < Thor
     RVM.gemset.use! gemset
     puts "Package - install.rb :Installing in-house gem"
     Dir.glob('*.gem').each do |gem|
-      run_and_echo("gem install -f --no-ri --no-rdoc #{gem}")
-
-      # Link binaries to $HOME/bin for primary gem in this gemset                                                                                                                                   
+      run_and_echo("gem install -f --no-ri --no-rdoc --ignore-dependencies #{gem}")
+      # Link binaries to $HOME/bin for primary gem in this gemset                                                                                                                         
       bindir = File.join(ENV['HOME'], 'bin')
+      # Link god files to $HOME/god for primary gem in this gemset                                                                                                                        
+      goddir = File.join(ENV['HOME'], 'god')
       FileUtils.mkdir_p(bindir) unless File.directory?(bindir)
+      FileUtils.mkdir_p(goddir) unless File.directory?(bindir)
       if File.basename(gem,'.gem') == gemset
         name, version = File.basename(gem,'.gem').split('-')
         binaries = `gem contents #{name} -v #{version} | grep bin`.split("\n")
@@ -27,11 +29,17 @@ class Install < Thor
           cmd = "ln -sf #{binary} #{File.join(bindir, File.basename(binary))}"
           run_and_echo(cmd)
         end
+        gods = `gem contents #{name} -v #{version} | grep god`.split("\n")
+        gods.each do |god|
+          cmd = "ln -sf #{god} #{File.join(goddir, File.basename(god))}"
+          run_and_echo(cmd)
+        end
       end
     end
 
-    # install third-party gems into gemset
-    puts "Package - install.rb :Installing third-party gem"
+    # install third-party gems into global gemset
+    puts "Package - install.rb :Installing third-party gems into @global"
+    RVM.gemset.use! 'global'
     third_party = YAML::load(IO.read('third_party.yaml'))
     third_party.each do | gem|
       if /latest/ =~ gem[:version]

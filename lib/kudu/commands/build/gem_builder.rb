@@ -25,6 +25,7 @@ module Kudu
         @publication = project.publications.first
         if options[:version]
           @publication.version = options[:version]
+          ENV['FORCE_GEM_VERSION'] = options[:version]
         end
       end
     end
@@ -49,7 +50,7 @@ module Kudu
             FileUtils.mv File.join(project.directory, gem_name), File.join(build_dir, gem_name)
             if @install
               Dir.chdir(build_dir)
-              Kudu.ui.info `gem install -l -f --no-ri --no-rdoc #{gem_name}`
+              Kudu.ui.info `gem install -l -f --no-ri --no-rdoc #{gem_name} --without development`
               Kudu.ui.info "Installed #{gem_name} in group #{@publication.group}"
               odi(project) if @odi
             end
@@ -102,8 +103,22 @@ module Kudu
         return nil
       end                               
     end
-    
+
     def odi(project)
+      Kudu.with_logging(self, __method__) do
+        tgt = `gem path #{@publication.name} -v #{@publication.version}`.chomp
+        if tgt==""
+          puts @publication
+          abort("tgt is empty in ODI")
+        end
+        src = project.directory
+        cmd = "rm -rf #{tgt}; ln -snf #{src} #{tgt}"
+        puts "Setting up link back to local development"
+        puts cmd; system(cmd) 
+      end
+    end
+    
+    def odi_old(project)
       Kudu.with_logging(self, __method__) do
         targets = `gem contents #{@publication.name} --version #{@publication.version}`.split($/) 
         sources = targets.map { |f| project.directory + f.split(/#{project.name}-\d+\.\d+\.\d+/)[1] }
@@ -125,16 +140,13 @@ module Kudu
         # Convert to full vertex descriptor if necessary
         project.dependencies.select {|d| d.group == 'third-party' || d.group =='developer'}.each do |dep|
           # install the versioned third party gem if necessary
-          if dep.name == 'aws-sdk'
-            'yoda'
-          end
           if not is_installed? dep
             if dep.version == 'latest'
               Kudu.ui.info "Installing latest #{dep.name}"
-              Kudu.ui.info `gem install -f --no-ri --no-rdoc #{dep.name}`.chomp
+              Kudu.ui.info `gem install -f --no-ri --no-rdoc #{dep.name} --without development`.chomp
             else
               Kudu.ui.info "Installing #{dep.name}-#{dep.version}"
-              Kudu.ui.info `gem install -f --no-ri --no-rdoc #{dep.name} --version \'#{dep.version}\'`.chomp
+              Kudu.ui.info `gem install -f --no-ri --no-rdoc #{dep.name} --without development --version \'#{dep.version}\'`.chomp
             end
           else
             msg = "Already installed, skipping #{dep.name}, #{dep.version}"

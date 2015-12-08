@@ -44,11 +44,16 @@ module Kudu
         FileUtils.rm_rf(target)
         FileUtils.rm_rf(tarball)
       end
-      FileUtils.mkdir_p(target)
+      begin
+        FileUtils.mkdir_p(target)
+      rescue Exception=>e
+        Kudu.ui.error("Failed to create the directory #{target}")
+        exit(1)
+      end
       FileUtils.cp_r(File.join(project.directory, 'build/.'), target)      
 
       # add in-house dependencies to the package
-      project.dependencies('in-house').each do |dep|
+      project.transitive_dependencies('in-house').each do |dep|
         dep = KuduProject.project(dep.name)
         FileUtils.cp_r(File.join(dep.directory, 'build/.'), target)
       end
@@ -80,7 +85,7 @@ module Kudu
       `chmod +x #{outfile}`
       # third party
       File.open(File.join(target,"third_party.yaml"), 'w') {
-        |f| f.write(project.dependencies('third-party').map {|d| {name:d.name, version:d.version} }.to_yaml) 
+        |f| f.write(project.transitive_dependencies('third-party').map {|d| {name:d.name, version:d.version} }.to_yaml) 
       }
       # tarball
       `cd #{package_dir}; tar cf #{package_name}.tar #{File.basename(target)}`
