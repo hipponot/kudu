@@ -23,11 +23,7 @@ module Kudu
         @install = options[:install]
         raise GemsBuilderFailed, "GemBuilder needs single @publication in publications array" unless project.publications.length == 1
         @publication = project.publications.first
-        if options[:version]
-          @publication.version = options[:version]
-          ENV['FORCE_GEM_VERSION'] = options[:version]
-        end
-      end
+     end
     end
     attr_reader :project
 
@@ -46,7 +42,7 @@ module Kudu
             Dir.chdir(project.directory)
             Kudu.ui.info `gem build #{gemspec}`
             build_dir = File.join(project.directory,'build')
-            gem_name = "#{@publication.name}-#{@publication.version}.gem"
+            gem_name = "#{@publication.name}-#{@project.version}.gem"
             FileUtils.mv File.join(project.directory, gem_name), File.join(build_dir, gem_name)
             if @install
               Dir.chdir(build_dir)
@@ -59,18 +55,6 @@ module Kudu
           end
         rescue Exception => e
           raise GemBuilderFailed, "Gem build failed: #{e.message}"
-        end
-      end
-    end
-
-    def update_version
-      Kudu.with_logging(self, __method__) do      
-        Kudu.rvm_use @repo
-        return unless is_installed? project
-        local_hash = Kudu.source_hash(project.directory)
-        install_hash = installed_gem_source_hash(project)
-        if local_hash != install_hash
-          project.bump_version
         end
       end
     end
@@ -93,7 +77,7 @@ module Kudu
 
     def installed_gem_source_hash(project)
       Kudu.with_logging(self, __method__) do
-        files = `gem contents #{@publication.name} --version #{@publication.version}`.split($/)
+        files = `gem contents #{@publication.name} --version #{@project.version}`.split($/)
         files.each do |file|
           if file =~/sha1/
             sha1 = IO.read(file)
@@ -106,7 +90,7 @@ module Kudu
 
     def odi(project)
       Kudu.with_logging(self, __method__) do
-        tgt = `gem path #{@publication.name} -v #{@publication.version}`.chomp
+        tgt = `gem path #{@publication.name} -v #{@project.version}`.chomp
         if tgt==""
           puts @publication
           abort("tgt is empty in ODI")
@@ -120,7 +104,7 @@ module Kudu
     
     def odi_old(project)
       Kudu.with_logging(self, __method__) do
-        targets = `gem contents #{@publication.name} --version #{@publication.version}`.split($/) 
+        targets = `gem contents #{@publication.name} --version #{@project.version}`.split($/) 
         sources = targets.map { |f| project.directory + f.split(/#{project.name}-\d+\.\d+\.\d+/)[1] }
         for i in 0..sources.length-1
           next if sources[i] =~ /sha1/

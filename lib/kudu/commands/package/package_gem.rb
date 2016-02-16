@@ -21,17 +21,16 @@ module Kudu
         :install=>false, 
         :ruby=>options[:ruby], 
         :force=>true, 
-        :'skip-third-party'=>true, 
+        :skip_third_party=>true, 
         :repo=>'default', 
-        :production=>options[:production],
         :dependencies=>true, 
-        :'bump-version'=>options[:'bump-version'] 
+        :version=>options[:version] 
       }
       Kudu.ui.info "Building with options #{build_options}"
       cli.invoke :build, nil, build_options
 
       # create package directions
-      package_dir = File.join(options[:'package-dir'])
+      package_dir = File.join(options[:package_dir])
       package_name = "#{project.name}-#{project.version}"
       target = File.join(package_dir, package_name)
       tarball_name = "#{package_name}.tar.gz"
