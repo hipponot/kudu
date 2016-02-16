@@ -21,18 +21,17 @@ module Kudu
         :install=>false, 
         :ruby=>options[:ruby], 
         :force=>true, 
-        :'skip-third-party'=>true, 
+        :skip_third_party=>true, 
         :repo=>'default', 
-        :production=>options[:production],
         :dependencies=>true, 
-        :'num-workers'=>options[:'num-workers'],
-        :'bump-version'=>options[:'bump-version'] 
+        :num_workers=>options[:num_workers],
+        :version=>options[:version] 
       }
       Kudu.ui.info "Building with options #{build_options}"
       cli.invoke :build, nil, build_options
 
       # create package directions
-      package_dir = File.join(options[:'package-dir'])
+      package_dir = File.join(options[:package_dir])
       package_name = "#{project.name}-#{project.version}"
       target = File.join(package_dir, package_name)
       tarball_name = "#{package_name}.tar.gz"
@@ -61,7 +60,7 @@ module Kudu
       #-- Static file delivery for sinatra apps (that have an appropriately named lib/public/static_src/<API>/ dir):
       sinatra_static_src_dir = File.join  project.directory, %W(lib public static_src #{project.name})
       if File.directory? sinatra_static_src_dir
-        static_staging_dir = options[:'static-dir']
+        static_staging_dir = options[:static_dir]
         tgt_dir = File.join static_staging_dir, %W( #{project.name} #{project.version} ) 
         # ToDo - reenable when we are doing production builds
         if false and File.directory? tgt_dir

@@ -16,8 +16,6 @@ module Kudu
     def initialize(options, project)
 
       builder = GemBuilder.new(options, project)
-      # production builds update version first
-      builder.update_version if options[:production] 
 
       # New sidekiq under god flow
 
@@ -63,7 +61,7 @@ module Kudu
       # generate unicorn config before building sinatra project types
       template = File.join(Kudu.template_dir, "unicorn.erb")
       outfile = File.join(project.directory, "config", "unicorn.rb")
-      num_workers = options[:'num-workers']
+      num_workers = options[:num_workers]
       ErubisInflater.inflate_file_write(template, {project_name:project.name, project_version:project.version, num_workers:num_workers}, outfile)
 
       # add version to config.ru 
@@ -75,8 +73,8 @@ module Kudu
       IO.write(deploy_ru,IO.read(ru_file).gsub("require","gem \"#{project.name}\", \"#{project.version}\"; require"))
 
       # build the gem after generation of config files
-      builder.build_gem unless options[:'only-third-party']
-      builder.install_third_party unless options[:'skip-third-party']
+      builder.build_gem unless options[:only_third_party]
+      builder.install_third_party unless options[:skip_third_party]
 
     end
 

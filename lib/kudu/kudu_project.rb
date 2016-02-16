@@ -56,26 +56,18 @@ module Kudu
     end
 
     # Auto incrementing of build number for production builds
-    def bump_version
+    def set_version revision
       # this call is idempotent for a given kudu run
       return if version_updated
-      files = ['kudu.yaml']
-      lock_file = File.join(directory, 'kudu.lock.yaml')
-      files << 'kudu.lock.yaml' if File.exist?(lock_file) 
-      files.each do |file|
-        kudu_file = File.join(directory, file)
-        kudu = YAML::load(IO.read(kudu_file))
-        kudu[:publications][0][:version] = version
-        major, minor, build = version.split('.')
-        build = Kudu.git_commit_count
-        new_version = "#{major}.#{minor}.#{build}"
-        # write the new version back to kudu.yaml
-        kudu[:publications][0][:version] = new_version
-        File.open(kudu_file, 'w') {|f| f.write(kudu.to_yaml) }
-        self.version = new_version
-        # Refactor for one gem per project - this is lame
-        publications.each {|p| p.version = version }
+      if /\d+\.\d+\.\d+/ =~ revision
+        self.version = revision
+      else
+        major_minor_file = File.join(directory, 'MAJOR_MINOR_VER')
+        major_minor = File.exist?(major_minor_file) ? IO.read(major_minor_file) : '1.0'
+        self.version = major_minor + "." + revision 
       end
+      ver_file = File.join(directory, 'VERSION')
+      IO.write(ver_file, self.version)
     end
 
     def version
