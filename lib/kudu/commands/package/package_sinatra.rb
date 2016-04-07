@@ -57,25 +57,27 @@ module Kudu
         FileUtils.cp_r(File.join(dep.directory, 'build/.'), target)
       end
 
+      # Dead Code
+      #
       #-- Static file delivery for sinatra apps (that have an appropriately named lib/public/static_src/<API>/ dir):
-      sinatra_static_src_dir = File.join  project.directory, %W(lib public static_src #{project.name})
-      if File.directory? sinatra_static_src_dir
-        static_staging_dir = options[:static_dir]
-        tgt_dir = File.join static_staging_dir, %W( #{project.name} #{project.version} ) 
-        # ToDo - reenable when we are doing production builds
-        if false and File.directory? tgt_dir
-          puts "Static content directory already exists: #{tgt_dir}\n --Leaving existing content as is."
-        else
-          puts "Delivering static content to #{tgt_dir}"
-          FileUtils.mkdir_p tgt_dir, :verbose => true
-          pwd = Dir.getwd
-          puts "cd #{sinatra_static_src_dir}"
-          Dir.chdir sinatra_static_src_dir
-          FileUtils.cp_r Dir.glob("*"), tgt_dir, :verbose => true
-          puts "cd #{pwd}"
-            Dir.chdir pwd 
-        end
-      end
+      # sinatra_static_src_dir = File.join  project.directory, %W(lib public static_src #{project.name})
+      # if File.directory? sinatra_static_src_dir
+      #   static_staging_dir = options[:static_dir]
+      #   tgt_dir = File.join static_staging_dir, %W( #{project.name} #{project.version} ) 
+      #   # ToDo - reenable when we are doing production builds
+      #   if false and File.directory? tgt_dir
+      #     puts "Static content directory already exists: #{tgt_dir}\n --Leaving existing content as is."
+      #   else
+      #     puts "Delivering static content to #{tgt_dir}"
+      #     FileUtils.mkdir_p tgt_dir, :verbose => true
+      #     pwd = Dir.getwd
+      #     puts "cd #{sinatra_static_src_dir}"
+      #     Dir.chdir sinatra_static_src_dir
+      #     FileUtils.cp_r Dir.glob("*"), tgt_dir, :verbose => true
+      #     puts "cd #{pwd}"
+      #       Dir.chdir pwd 
+      #   end
+      # end
 
       # installer
       outfile = File.join(target, "install.rb")

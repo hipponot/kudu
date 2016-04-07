@@ -43,6 +43,8 @@ module Kudu
             Kudu.ui.info `gem build #{gemspec}`
             build_dir = File.join(project.directory,'build')
             gem_name = "#{@publication.name}-#{@project.version}.gem"
+            ver_file = File.join(project.directory, 'VERSION')
+            IO.write(ver_file, project.version) unless File.exist?(ver_file) 
             FileUtils.mv File.join(project.directory, gem_name), File.join(build_dir, gem_name)
             if @install
               Dir.chdir(build_dir)
