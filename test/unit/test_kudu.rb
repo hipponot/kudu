@@ -23,7 +23,7 @@ class TestKudu < Test::Unit::TestCase
 
   def test_version
     out = capture_stdout  { Kudu::CLI.start ['version'] }
-    assert(out.string.strip == '0.0.1')
+    assert(out.string.strip == '1.0.1')
   end
 
 

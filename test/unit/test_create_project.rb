@@ -24,11 +24,11 @@ class TestKudu < Test::Unit::TestCase
   def test_version
     Dir.glob("#{File.dirname(__FILE__)}/sample_in_namespace/**/version.rb") do |file|
       load(file)
-      assert(Kudu::A::VERSION == '0.0.1')
+      assert(Kudu::A::VERSION == '1.0.1')
     end
     Dir.glob("#{File.dirname(__FILE__)}/sample_no_namespace/**/version.rb") do |file|
       load(file)
-      assert(A::VERSION == '0.0.1')
+      assert(A::VERSION == '1.0.1')
     end
   
   end

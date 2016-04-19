@@ -10,7 +10,7 @@ module Kudu
       # Settings specific to Sinatra project type, the rest are set in the base class
       settings[:project_type] = "sinatra"
       settings[:native_extension] = options[:native_extension]
-      settings[:publications] << {:name=>options[:name], :version=>"0.0.1", :type=>"gem", :group=>"in-house"}
+      settings[:publications] << {:name=>options[:name], :version=>"1.0.1", :type=>"gem", :group=>"in-house"}
       settings[:dependencies] << {:name=>"sinatra", :group=>"third-party", :type=>"gem"} << {:name=>"json", :group=>"third-party", :type=>"gem"} << {:name=>"shotgun", :group=>"developer", :type=>"gem"} 
 
       with_logging("Creating project skeleton named #{project_name}") { create_project_skeleton }
