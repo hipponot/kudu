@@ -49,16 +49,16 @@ God.watch do |w|
   w.transition(:up, :restart) do |on|
     on.condition(:memory_usage) do |c|
       c.interval = 1
-      c.above = 150.megabytes
+      c.above = 250.megabytes
       c.times = 1
       c.pid_file = pid_file
     end
-    on.condition(:cpu_usage) do |c|
-      c.interval = 10
-      c.above = 10.percent
-      c.times = [3, 5]
-      c.pid_file = pid_file
-    end
+#    on.condition(:cpu_usage) do |c|
+#      c.interval = 10
+#      c.above = 10.percent
+#      c.times = [3, 5]
+#      c.pid_file = pid_file
+#    end
   end
 
 end
