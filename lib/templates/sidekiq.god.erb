@@ -49,7 +49,7 @@ God.watch do |w|
   w.transition(:up, :restart) do |on|
     on.condition(:memory_usage) do |c|
       c.interval = 1
-      c.above = 250.megabytes
+      c.above = 200.megabytes
       c.times = 1
       c.pid_file = pid_file
     end
