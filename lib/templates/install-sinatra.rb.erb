@@ -17,6 +17,11 @@ class Install < Thor
     puts "Package - install.rb :Installing in-house gem"
     Dir.glob('*.gem').each do |gem|
       run_and_echo("gem install -f --no-ri --no-rdoc --ignore-dependencies #{gem}")
+      gem_fullname = File.basename(gem,'.gem')
+      gem_name = gem.split('-').first
+      sidekiq_godfile = `gem contents #{gem_name} | grep sidekiq.god`.chop
+      run_and_echo("mkdir -p /var/log/unicorn/#{gem_fullname}")
+      run_and_echo("god load #{sidekiq_godfile}") unless sidekiq_godfile.length == 0
     end
 
     # init.d        
