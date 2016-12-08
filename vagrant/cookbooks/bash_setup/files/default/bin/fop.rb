@@ -29,8 +29,11 @@ class FileOperations < Thor
   def replace
     Dir.glob(options[:fileset]).select {|f| File.file? f }.each do |f| 
       next if File.binary?(f)
-      text = File.read(f).gsub(/#{options[:match]}/, options[:replace])
-      File.open(f, "w") { |f| f.puts text }
+      old_text = File.read(f)
+      text = old_text.gsub(/#{options[:match]}/, options[:replace])
+      unless (text == old_text)
+        File.open(f, "w") { |f| f.puts text }
+      end
     end
   end
 

@@ -59,7 +59,9 @@ if [ ! -d $UNICORN_PID_DIR ]; then
 fi
 
 <%if with_sidekiq%> 
-SIDEKIQ_START_CMD="$SET_PATH;god load $APP_ROOT/config/sidekiq.god; god start <%=project_name%>-<%=project_version%>"
+#SIDEKIQ_START_CMD="$SET_PATH;god load $APP_ROOT/config/sidekiq.god; god start <%=project_name%>-<%=project_version%>"
+# load is now done by install script
+SIDEKIQ_START_CMD="$SET_PATH;god start <%=project_name%>-<%=project_version%>"
 SIDEKIQ_STOP_CMD="$SET_PATH;god stop <%=project_name%>-<%=project_version%>"
 SIDEKIQ_RESTART_CMD="$SET_PATH;god restart <%=project_name%>-<%=project_version%>"
 <%end%>
