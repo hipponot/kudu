@@ -3,7 +3,7 @@ require 'yaml'
 require "thor"
 require "etc"
 require "rvm"
-
+require 'fileutils'
 class Install < Thor
 
   desc "install", "Install wootmath package"
@@ -16,9 +16,9 @@ class Install < Thor
     puts "Package - install.rb :Installing in-house gem"
     Dir.glob('*.gem').each do |gem|
       run_and_echo("gem install -f --no-ri --no-rdoc --ignore-dependencies #{gem}")
-      # Link binaries to $HOME/bin for primary gem in this gemset                                                                                                                         
+      # Link binaries to $HOME/bin for primary gem in this gemset
       bindir = File.join(ENV['HOME'], 'bin')
-      # Link god files to $HOME/god for primary gem in this gemset                                                                                                                        
+      # Link god files to $HOME/god for primary gem in this gemset
       goddir = File.join(ENV['HOME'], 'god')
       FileUtils.mkdir_p(bindir) unless File.directory?(bindir)
       FileUtils.mkdir_p(goddir) unless File.directory?(bindir)
@@ -68,7 +68,7 @@ class Install < Thor
     puts cmd
     status = system(cmd)
     unless status
-      puts "Pkg - install.rb command failed #{cmd} - punting" 
+      puts "Pkg - install.rb command failed #{cmd} - punting"
       exit(1)
     end
   end
@@ -81,7 +81,7 @@ class Install < Thor
         ::Gem::Specification.find_by_name(name, version)
       end
       true
-    rescue ::Gem::LoadError 
+    rescue ::Gem::LoadError
       false
     end
   end
