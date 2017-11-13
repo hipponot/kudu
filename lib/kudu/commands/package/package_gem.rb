@@ -17,20 +17,22 @@ module Kudu
       clean_options = { name:project.name, :dependencies=>true, :repo=>'default', :local=>true}
       cli.invoke :clean, nil, clean_options
       build_options = {
-        :name=>project.name, 
-        :install=>false, 
-        :ruby=>options[:ruby], 
-        :force=>true, 
-        :skip_third_party=>true, 
-        :repo=>'default', 
-        :dependencies=>true, 
-        :version=>options[:version] 
+        :name=>project.name,
+        :install=>false,
+        :ruby=>options[:ruby],
+        :force=>true,
+        :skip_third_party=>true,
+        :repo=>'default',
+        :dependencies=>true,
+        :version=>options[:version]
       }
       Kudu.ui.info "Building with options #{build_options}"
       cli.invoke :build, nil, build_options
 
       # create package directions
       package_dir = File.join(options[:package_dir])
+      Kudu.ui.error("Can't stat #{package_dir}, is the share mounted?") unless File.directory?(package_dir)
+
       package_name = "#{project.name}-#{project.version}"
       target = File.join(package_dir, package_name)
       tarball_name = "#{package_name}.tar.gz"
@@ -45,11 +47,11 @@ module Kudu
       begin
       FileUtils.mkdir_p(target)
       rescue Exception=>e
-        Kudu.error("Failed to create the directory #{target}")
+        Kudu.ui.error("Failed to create the directory #{target}")
         exit(1)
       end
 
-      FileUtils.cp_r(File.join(project.directory, 'build/.'), target)      
+      FileUtils.cp_r(File.join(project.directory, 'build/.'), target)
 
       # add in-house dependencies to the package
       ih_dep = project.dependencies('in-house')
@@ -58,7 +60,7 @@ module Kudu
         dep = KuduProject.project(dep.name)
         FileUtils.cp_r(File.join(dep.directory, 'build/.'), target)
       end
-      
+
       # installer
       outfile = File.join(target, "install.rb")
       template = File.join(Kudu.template_dir, "install-gem.rb.erb")

@@ -20,7 +20,7 @@ module Kudu
           ::Gem::Specification.find_by_name(name, version)
         end
         true
-      rescue ::Gem::LoadError 
+      rescue ::Gem::LoadError
         false
       end
     end
@@ -31,18 +31,24 @@ module Kudu
     end
 
     def delegate_command(command, type, options, *args)
-      classname = (command + '_' + type).camel_case
-      if args.empty?
-        eval("#{classname}.new(options)")
-      else
-        # unbox varags before instantiating the delegate
-        args_str = []
-        args.each_with_index{ |a,i| args_str << "args[#{i}]" }
-        args_str = args_str.join(',')
-        eval("#{classname}.new(options, #{args_str})")
-      end
+      begin
+        classname = (command + '_' + type).camel_case
+        if args.empty?
+          str = "#{classname}.new(options)"
+          eval(str)
+        else
+          # unbox varags before instantiating the delegate
+          args_str = []
+          args.each_with_index{ |a,i| args_str << "args[#{i}]" }
+          args_str = args_str.join(',')
+          str = "#{classname}.new(options, #{args_str})"
+          eval(str)
+        end
+        rescue Exception=>e
+          Kudu.ui.error("Unexpected exception, in eval #{str} #{e}")
+        end
     end
-    
+
     def each
       begin
         Dir.glob(File.join(Kudu.gitroot,'**/*.gemspec')).each do |gemspec|
@@ -53,7 +59,7 @@ module Kudu
         Kudu.ui.error "Error: Kudu.all failed on #{e}"
       end
     end
-    
+
     def with_logging(obj, method, message=nil)
       Kudu.with_friendly_errors {
         begin
@@ -67,8 +73,8 @@ module Kudu
     end
 
     def validate_standard_options options
-      all = options[:all] 
-      name = options[:name] 
+      all = options[:all]
+      name = options[:name]
       gemspec = options[:gemspec]
       if name && name.empty?
         raise InvalidOption, "Option -n cannot be empty - please specify valid gem name"
@@ -87,7 +93,7 @@ module Kudu
     def verbose
       @verbose ||= false
     end
-    
+
     def verbose= value
       @verbose = value
     end
@@ -99,7 +105,7 @@ module Kudu
     def kudu_root
       File.expand_path(File.join(__FILE__, '../../../'))
     end
-    
+
     def template_dir
       File.join(kudu_root, 'lib', 'templates')
     end
@@ -112,7 +118,7 @@ module Kudu
       begin
         Gem::Specification::load(gemspec).name
       rescue
-        raise Kudu::InvalidGemfile, "Failed to parse #{gemspec}" 
+        raise Kudu::InvalidGemfile, "Failed to parse #{gemspec}"
       end
     end
 
@@ -128,7 +134,7 @@ module Kudu
           return kudu
         end
       rescue
-        raise Kudu::InvalidKudufile, "Failed to parse #{kudu_file} as YAML" 
+        raise Kudu::InvalidKudufile, "Failed to parse #{kudu_file} as YAML"
       end
     end
 
@@ -141,7 +147,7 @@ module Kudu
     def source_hash rootdir
       files = git_ls_files rootdir
       files.delete_if do |f|
-        is_link = File.symlink?(f) 
+        is_link = File.symlink?(f)
         Kudu.ui.warn "source hash ignoring symlink #{f}" if is_link
         is_link
       end
