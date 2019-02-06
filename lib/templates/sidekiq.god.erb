@@ -5,7 +5,7 @@ gem_path="#{gem_home}:/home/#{ENV['USER']}/.rvm/gems/#{ENV['RUBY_VERSION']}@glob
 app_root="/home/#{ENV['USER']}/.rvm/gems/#{ENV['RUBY_VERSION']}@#{app}/gems/#{app}"
 set_path="export GEM_HOME=#{gem_home};export GEM_PATH=#{gem_path}"
 pid_file = "#{ENV['HOME']}/.god/pids/#{app}.pid"
-
+log_stacktrace = ENV['LOG_STACKTRACE']
 God.watch do |w|
 
   w.name = app
@@ -15,7 +15,7 @@ God.watch do |w|
   stop_cmd = "sidekiqctl stop #{pid_file} 5"
   w.stop = "#{set_path};#{stop_cmd}"
   w.pid_file = pid_file
-  w.env = {'PIDFILE' => pid_file}
+  w.env = {'PIDFILE' => pid_file, 'LOG_STACKTRACE' => log_stacktrace }
   w.behavior(:clean_pid_file)
   w.interval = 30.seconds
 
@@ -51,7 +51,7 @@ God.watch do |w|
       c.running = false
     end
   end
-  
+
   # restart if memory bloats
   w.transition(:up, :restart) do |on|
     puts "#{app} transition up to restart due to memory bloat"
