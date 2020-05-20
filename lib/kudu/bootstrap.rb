@@ -17,7 +17,7 @@ module Kudu
         File.open(File.join(ENV['HOME'], '.kudu_bootstrap'), "w") { |f| f.puts true }          
         ['rvm','builder','rack','shotgun','sinatra','sinatra-synchrony','erubis','thor','rgl', 'sqlite3', 'RocketAMF'].each do |gem|
           unless is_installed gem
-	          cmd = "gem install -f --no-ri --no-rdoc #{gem}"
+	          cmd = "gem install -f -N #{gem}"
             puts cmd
 	          puts `#{cmd}`
           else

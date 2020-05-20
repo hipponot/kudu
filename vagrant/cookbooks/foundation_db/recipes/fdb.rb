@@ -1,6 +1,6 @@
 # Install bundler gem
 #execute "install-client" do
-#  command "gem install fdb-0.1.5.1-x86_64-linux.gem --no-rdoc --no-ri -q"
+#  command "gem install fdb-0.1.5.1-x86_64-linux.gem -N -q"
 #end
 
 cookbook_file "/tmp/foundationdb-server_0.1.5-1_amd64.deb" do

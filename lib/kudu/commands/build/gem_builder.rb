@@ -48,7 +48,7 @@ module Kudu
             FileUtils.mv File.join(project.directory, gem_name), File.join(build_dir, gem_name)
             if @install
               Dir.chdir(build_dir)
-              Kudu.ui.info `gem install -l -f --no-ri --no-rdoc #{gem_name} --without development`
+              Kudu.ui.info `gem install -l -f -N #{gem_name} --without development`
               Kudu.ui.info "Installed #{gem_name} in group #{@publication.group}"
               odi(project) if @odi
             end
@@ -129,10 +129,10 @@ module Kudu
           if not is_installed? dep
             if dep.version == 'latest'
               Kudu.ui.info "Installing latest #{dep.name}"
-              Kudu.ui.info `gem install -f --no-ri --no-rdoc #{dep.name} --without development`.chomp
+              Kudu.ui.info `gem install -f -N #{dep.name} --without development`.chomp
             else
               Kudu.ui.info "Installing #{dep.name}-#{dep.version}"
-              Kudu.ui.info `gem install -f --no-ri --no-rdoc #{dep.name} --without development --version \'#{dep.version}\'`.chomp
+              Kudu.ui.info `gem install -f -N #{dep.name} --without development --version \'#{dep.version}\'`.chomp
             end
           else
             msg = "Already installed, skipping #{dep.name}, #{dep.version}"
