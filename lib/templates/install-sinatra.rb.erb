@@ -16,7 +16,7 @@ class Install < Thor
     RVM.gemset.use! gemset
     puts "Package - install.rb :Installing in-house gem"
     Dir.glob('*.gem').each do |gem|
-      run_and_echo("gem install -f --no-ri --no-rdoc --ignore-dependencies #{gem}")
+      run_and_echo("gem install -f -N --ignore-dependencies #{gem}")
       gem_fullname = File.basename(gem,'.gem')
       gem_name = gem.split('-').first
       sidekiq_godfile = `gem contents #{gem_name} | grep sidekiq.god`.chop
@@ -44,7 +44,7 @@ class Install < Thor
         if is_installed? gem[:name]
           puts "already_installed #{gem[:name]}"
         else
-          run_and_echo("gem install -f --no-ri --no-rdoc #{gem[:name]}")
+          run_and_echo("gem install -f -N #{gem[:name]}")
         end
       else
         if is_installed? gem[:name], gem[:version]

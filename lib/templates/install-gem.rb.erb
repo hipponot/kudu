@@ -15,7 +15,7 @@ class Install < Thor
     RVM.gemset.use! gemset
     puts "Package - install.rb :Installing in-house gem"
     Dir.glob('*.gem').each do |gem|
-      run_and_echo("gem install -f --no-ri --no-rdoc --ignore-dependencies #{gem}")
+      run_and_echo("gem install -f -N --ignore-dependencies #{gem}")
       # Link binaries to $HOME/bin for primary gem in this gemset
       bindir = File.join(ENV['HOME'], 'bin')
       # Link god files to $HOME/god for primary gem in this gemset
@@ -46,13 +46,13 @@ class Install < Thor
         if is_installed? gem[:name]
           puts "already_installed #{gem[:name]}"
         else
-          run_and_echo("gem install -f --no-ri --no-rdoc #{gem[:name]}")
+          run_and_echo("gem install -f -N #{gem[:name]}")
         end
       else
         if is_installed? gem[:name], gem[:version]
           puts "already_installed #{gem[:name]} #{gem[:version]}"
         else
-          run_and_echo("gem install -f --no-ri --no-rdoc -v '#{gem[:version]}' #{gem[:name]}")
+          run_and_echo("gem install -f -N -v '#{gem[:version]}' #{gem[:name]}")
         end
       end
     end
