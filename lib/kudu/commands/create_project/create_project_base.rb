@@ -8,7 +8,7 @@ module Kudu
     def project_name
       @settings[:project_name]
     end
-    
+
     def project_type
       @settings[:project_type]
     end
@@ -16,7 +16,7 @@ module Kudu
     def settings
       @settings
     end
-    
+
     def initialize(options)
 
       tokens = options[:name].split("_")
@@ -50,17 +50,17 @@ module Kudu
         while overwrite != 'y' && overwrite != 'n'
           overwrite = STDIN.getc.downcase
         end
-        if overwrite == 'n' 
+        if overwrite == 'n'
           Kudu.ui.info 'exiting'
           return
         end
       end
-
+      FileUtils.mkdir_p(File.join(target, '.vscode'))
       FileUtils.mkdir_p(File.join(target, 'config'))
-      FileUtils.mkdir_p(File.join(target, 'lib', project_name)) 
+      FileUtils.mkdir_p(File.join(target, 'lib', project_name))
       FileUtils.mkdir_p(File.join(target, 'ext', "#{project_name}")) if settings[:native_extension]
       if settings[:create_type] == 'thor'
-        FileUtils.mkdir_p(File.join(target, 'lib', project_name, 'commands')) 
+        FileUtils.mkdir_p(File.join(target, 'lib', project_name, 'commands'))
         FileUtils.mkdir_p(File.join(target, 'bin'))
       end
 
@@ -72,7 +72,7 @@ module Kudu
         Kudu.ui.info("File exists: #{outfile} - skipping")
         return
       end
-      template = File.join(Kudu.template_dir, template_file) 
+      template = File.join(Kudu.template_dir, template_file)
       FileUtils.copy(outfile, outfile + ".bu") if @backup && File.exist?(outfile)
       begin
         ErubisInflater.inflate_file_write(template, settings, outfile)
@@ -94,7 +94,7 @@ module Kudu
           summary: 'generic kudu module summary',
           homepage: 'http://wootlearning.com'
         }
-      end      
+      end
     end
 
     def with_logging(description)

@@ -44,7 +44,7 @@ module Kudu
 
     def transitive_dependencies group=nil
       deps = []
-      @dependencies.each do |dep|      
+      @dependencies.each do |dep|
         deps << dep
         if dep.group == 'in-house'
           proj = KuduProject.project(dep.name)
@@ -64,7 +64,7 @@ module Kudu
       else
         major_minor_file = File.join(directory, 'MAJOR_MINOR_VER')
         major_minor = File.exist?(major_minor_file) ? IO.read(major_minor_file) : '1.0'
-        self.version = major_minor + "." + revision 
+        self.version = major_minor + "." + revision
       end
       ver_file = File.join(directory, 'VERSION')
       IO.write(ver_file, self.version)
@@ -86,32 +86,32 @@ module Kudu
         spec = {}
         #exists
         unless File.exist?(kudu_spec)
-          raise Kudu::InvalidKuduSpec, "Can't open #{kudu_spec}"   
+          raise Kudu::InvalidKuduSpec, "Can't open #{kudu_spec}"
         end
         # valid YAML
         begin
           spec = YAML::load(IO.read(kudu_spec))
         rescue SyntaxError
-          raise Kudu::InvalidKuduSpec, "Failed to parse #{kudu_spec} as YAML" 
+          raise Kudu::InvalidKuduSpec, "Failed to parse #{kudu_spec} as YAML"
         end
         # Project hash exists and is non empty
-        raise Kudu::InvalidKuduSpec, "#{kudu_spec} project must be a non-empty hash" unless spec[:project].is_a?(Hash)  
+        raise Kudu::InvalidKuduSpec, "#{kudu_spec} project must be a non-empty hash" unless spec[:project].is_a?(Hash)
         raise Kudu::InvalidKuduSpec, "#{kudu_spec} project must be a non-empty hash" if spec[:project].empty?
         # Project name is a non-empty string
-        raise Kudu::InvalidKuduSpec, "#{kudu_spec} project name must be a non emtpy string" unless spec[:project][:name].is_a?(String) 
+        raise Kudu::InvalidKuduSpec, "#{kudu_spec} project name must be a non emtpy string" unless spec[:project][:name].is_a?(String)
         raise Kudu::InvalidKuduSpec, "#{kudu_spec} project name must be a non emtpy string" if spec[:project][:name].empty?
         # Project type is a non-empty string and is known
         if not spec[:project][:type].is_a?(String) || KNOWN_PROJECT_TYPES.include?(spec[:project][:type])
           raise Kudu::InvalidKuduSpec, "#{kudu_spec} project type must be one of #{KNOWN_PROJECT_TYPES.inspect}"
-        end          
+        end
         # publications is non-emtpy array
-        raise Kudu::InvalidKuduSpec, "#{kudu_spec} publications must be a non-emtpy array" unless spec[:publications].is_a?(Array) 
+        raise Kudu::InvalidKuduSpec, "#{kudu_spec} publications must be a non-emtpy array" unless spec[:publications].is_a?(Array)
         raise Kudu::InvalidKuduSpec, "#{kudu_spec} publications must be a non-emtpy array" if spec[:publications].empty?
         # dependencies is array (empty okay)
-        raise Kudu::InvalidKuduSpec, "#{kudu_spec} dependencies must be an array" unless spec[:dependencies].is_a?(Array) 
+        raise Kudu::InvalidKuduSpec, "#{kudu_spec} dependencies must be an array" unless spec[:dependencies].is_a?(Array)
         spec
       end
-      
+
       def project(project_name)
         # allows for skipping the project name parameter when commands are issued from project root directory
         project_name ||= File.exist?('kudu.yaml') ? KuduProject.new('kudu.yaml').name : nil
@@ -139,7 +139,7 @@ module Kudu
           spec.dependencies.each do |d|
             if d.group == 'in-house' && d.version != 'latest'
               raise KuduSpecInHouseVersion, "Invalid spec: #{spec.name}, versioning of in-house dependencies is not supported, #{d.inspect}"
-            end  
+            end
           end
         end
         # Generate kudu.lock.yaml files if dependency manifest file exists
@@ -165,18 +165,18 @@ module Kudu
           Kudu.ui.info("Adding unknown gem #{name} with version #{unknown_version} to dependency manfiest")
           @manifest_dirty = true
         end
-        return @manifest[name] 
+        return @manifest[name]
       end
 
       def generate_kudu_lock_files manifest_file, projects
-        
+
         @manifest ||= YAML.load(IO.read(manifest_file))
         projects.each do |name, spec|
           spec.dependencies.each do |dep|
             next if dep.group == 'in-house'
             if dep.version == 'latest'
               version = lookup_version(dep.name)
-            else 
+            else
               manifest_version = lookup_version(dep.name)
               override_version = dep.version
               Kudu.ui.warn("Project #{name} kudu.yaml is overriding depenency manifest version for gem #{dep.name}, overriding version #{manifest_version} with #{override_version}")
@@ -186,16 +186,17 @@ module Kudu
           end
           kudu_file = File.join(spec.directory, 'kudu.yaml')
           lock_file = File.join(spec.directory, 'kudu.lock.yaml')
+          puts "READING #{kudu_file}"
           kudu = YAML.load(IO.read(kudu_file))
           kudu[:dependencies] = spec.dependencies.map do |d|
-            rval = d.to_hash
+          rval = d.to_hash
             # quiet the ruby 2 whining w explicit version for in-house dependencies
             rval[:version] = '>0' if rval[:group] == 'in-house'
             rval
           end
-          IO.write(lock_file, kudu.to_yaml)          
+          IO.write(lock_file, kudu.to_yaml)
         end
-        if @manifest_dirty 
+        if @manifest_dirty
           @manifest_dirty = false
           @manifest = IO.write(manifest_file, @manifest.to_yaml)
           Kudu.ui.info("Wrote updated manifest #{manifest_file}")
@@ -204,8 +205,8 @@ module Kudu
 
     end # class << self
 
-  end 
-end 
+  end
+end
 
 
 
