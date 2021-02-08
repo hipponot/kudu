@@ -8,18 +8,18 @@
 # Short-Description: Start the APPLICATION unicorns at boot
 # Description:       Enable APPLICATION at boot time.
 ### END INIT INFO
-# 
+#
 # Use this as a basis for your own Unicorn init script.
 # Change APPLICATION to match your app.
 # Make sure that all paths are correct.
- 
+
 #set -e
- 
+
 # Change these to match your app:
 APP_NAME=<%=project_name%>
 APP_VERSION=<%=project_version%>
 getent passwd vagrant
-VAGRANT=$?    
+VAGRANT=$?
 if [ $VAGRANT -eq 0 ]; then
  RUN_AS=vagrant
 else
@@ -58,37 +58,37 @@ if [ ! -d $UNICORN_PID_DIR ]; then
   chown -R $RUN_AS:$RUN_AS $UNICORN_PID_DIR
 fi
 
-<%if with_sidekiq%> 
+<%if with_sidekiq%>
 #SIDEKIQ_START_CMD="$SET_PATH;god load $APP_ROOT/config/sidekiq.god; god start <%=project_name%>-<%=project_version%>"
 # load is now done by install script
 SIDEKIQ_START_CMD="$SET_PATH;god start <%=project_name%>-<%=project_version%>"
 SIDEKIQ_STOP_CMD="$SET_PATH;god stop <%=project_name%>-<%=project_version%>"
 SIDEKIQ_RESTART_CMD="$SET_PATH;god restart <%=project_name%>-<%=project_version%>"
 <%end%>
-
-CMD="$SET_PATH;$RVM_HOME@global/bin/unicorn $UNICORN_OPTS deploy.ru"
+UNICORN_BIN=`sudo su - $RUN_AS -c "which unicorn"`
+CMD="$SET_PATH;$UNICORN_BIN $UNICORN_OPTS deploy.ru"
 old_pid="$PID.oldbin"
- 
+
 cd $APP_ROOT || exit 1
- 
+
 sig () {
   test -s "$PID" && kill -$1 `cat $PID`
 }
- 
+
 oldsig () {
   test -s $old_pid && kill -$1 `cat $old_pid`
 }
- 
+
 case ${1-help} in
 start)
-  <%if with_sidekiq%> 
+  <%if with_sidekiq%>
   sudo su - $RUN_AS -c "$SIDEKIQ_START_CMD" && echo $SIDEKIQ_START_CMD
   <%end%>
   sig 0 && echo >&2 "Already running" && exit 0
   sudo su - $RUN_AS -c "$CMD"
   ;;
 stop)
-  <%if with_sidekiq%> 
+  <%if with_sidekiq%>
   sudo su - $RUN_AS -c "$SIDEKIQ_STOP_CMD" && echo $SIDEKIQ_STOP_CMD
   <%end%>
   sig QUIT && exit 0
@@ -99,7 +99,7 @@ force-stop)
   echo >&2 "Not running"
   ;;
 restart|reload)
-  <%if with_sidekiq%> 
+  <%if with_sidekiq%>
   sudo su - $RUN_AS -c "$SIDEKIQ_RESTART_CMD" && echo $SIDEKIQ_RESTART_CMD
   <%end%>
   sig HUP && echo reloaded OK && exit 0
