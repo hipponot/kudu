@@ -1,4 +1,5 @@
 Kudu
+
 =====
 
 ## Introduction
@@ -10,7 +11,7 @@ language types is WIP.
 
 ## Prerequisites
 
-Your system must have ruby >1.93 installed.  
+Your system must have ruby >1.93 installed.
 
 ## Install VirtualBox
 
@@ -28,7 +29,7 @@ Double click the dmg file and follow the instructions
 
 **Ubuntu**<br>
 
-``` 
+```
 sudo dpkg -i vagrant_i686.deb
 ```
 Add **/opt/vagrant/bin** to your path
@@ -40,11 +41,11 @@ vagrant gem install vagrant-vbguest
 ```
 ## Initialize the Guest OS
 
-``` 
+```
 cd kudu/vagrant
 vagrant up
-``` 
-The first time this command is run the the Vagrant vbox image will be pulled down from the source URI contained in the VagrantFile (this can take some time).  Upon boot up the unadorned image is is provisioned via chef-solo. The default setup is RVM, ruby and the gemset necessary to run the Kudu build system as well as some common shell & editor setup. 
+```
+The first time this command is run the the Vagrant vbox image will be pulled down from the source URI contained in the VagrantFile (this can take some time).  Upon boot up the unadorned image is is provisioned via chef-solo. The default setup is RVM, ruby and the gemset necessary to run the Kudu build system as well as some common shell & editor setup.
 Upon completion of the up command the newly provision VM can be accessed via the below.
 
 ```

@@ -5,15 +5,13 @@
     "version": "0.2.0",
     "configurations": [
       {
-            "name": "kudu build -n wootdb",
+            "name": "kudu build -n zapt",
             "type": "Ruby",
             "request": "launch",
             "program": "${workspaceRoot}/bin/kudu",
-            "cwd" : "/home/skelly/dev/nimbee/edu/ruby/lib/wootdb",
+            "cwd" : "/home/skelly/dev/zapt",
             "args" : [
               "build",
-              "-n",
-              "wootdb"
             ]
         }
     ]
