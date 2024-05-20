@@ -5,7 +5,7 @@ module Kudu
     class << self
       def init(argv)
         unless argv[0] == "bootstrap"
-          if File.exists?(File.join(ENV['HOME'],'.kudu_bootstrap'))
+          if File.exist?(File.join(ENV['HOME'],'.kudu_bootstrap'))
             return
           else
             puts 'Please run kudu bootstrap'

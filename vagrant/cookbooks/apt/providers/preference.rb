@@ -42,7 +42,7 @@ action :add do
 end
 
 action :remove do
-  if ::File.exists?("/etc/apt/preferences.d/#{new_resource.package_name}")
+  if ::File.exist?("/etc/apt/preferences.d/#{new_resource.package_name}")
     Chef::Log.info "Un-pinning #{new_resource.package_name} from /etc/apt/preferences.d/"
     file "/etc/apt/preferences.d/#{new_resource.package_name}" do
       action :delete

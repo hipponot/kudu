@@ -7,7 +7,7 @@ class ErubisInflater
     text = self.read_template_file template
     result = inflate_text(text, settings)
     # Write result to file
-    File.unlink(outfile) if (File.exists?(outfile)) 
+    File.unlink(outfile) if (File.exist?(outfile)) 
     IO.write(outfile, result)
   end
 

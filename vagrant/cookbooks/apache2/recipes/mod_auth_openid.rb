@@ -34,7 +34,7 @@ bash "install mod_auth_openid" do
   perl -pi -e "s/-i -a -n 'authopenid'/-i -n 'authopenid'/g" Makefile
   make && make install
   EOH
-  not_if { File.exists?("/usr/lib/apache2/modules/mod_auth_openid.so") }
+  not_if { File.exist?("/usr/lib/apache2/modules/mod_auth_openid.so") }
 end
 
 file "/var/cache/apache2/mod_auth_openid.db" do

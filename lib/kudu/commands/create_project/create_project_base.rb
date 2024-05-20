@@ -68,7 +68,7 @@ module Kudu
 
     def elaborate(template_file, relative_output_file)
       outfile = File.join(Dir.pwd, project_name, relative_output_file)
-      if @patch && File.exists?(outfile)
+      if @patch && File.exist?(outfile)
         Kudu.ui.info("File exists: #{outfile} - skipping")
         return
       end
