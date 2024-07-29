@@ -4,11 +4,13 @@ RVM based ruby build tool with transitive dependency management
 
 ## Installation
 
+gem install bundler
+bundler cache
 
 
 ## Usage
 
-TODO: Write usage instructions here
+bundler exec kudu
 
 ## Development
 
