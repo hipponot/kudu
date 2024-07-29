@@ -1,2 +1,0 @@
-#!/usr/bin/env sh
-FLEX_HOME=/opt/flex/flex_sdk_4.6; $FLEX_HOME/bin/mxmlc $*

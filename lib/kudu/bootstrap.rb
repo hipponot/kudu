@@ -5,7 +5,7 @@ module Kudu
     class << self
       def init(argv)
         unless argv[0] == "bootstrap"
-          if File.exists?(File.join(ENV['HOME'],'.kudu_bootstrap'))
+          if File.exist?(File.join(ENV['HOME'],'.kudu_bootstrap'))
             return
           else
             puts 'Please run kudu bootstrap'
@@ -13,8 +13,8 @@ module Kudu
             exit(0)
           end
         end
-        
-        File.open(File.join(ENV['HOME'], '.kudu_bootstrap'), "w") { |f| f.puts true }          
+
+        File.open(File.join(ENV['HOME'], '.kudu_bootstrap'), "w") { |f| f.puts true }
         ['rvm','builder','rack','shotgun','sinatra','sinatra-synchrony','erubis','thor','rgl', 'sqlite3', 'RocketAMF'].each do |gem|
           unless is_installed gem
 	          cmd = "gem install -f -N #{gem}"
@@ -31,7 +31,7 @@ module Kudu
         begin
           Gem::Specification.find_by_name(gem)
           true
-        rescue Gem::LoadError 
+        rescue Gem::LoadError
           false
         end
       end
