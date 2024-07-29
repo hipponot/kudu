@@ -20,7 +20,7 @@ module Kudu
       # New sidekiq under god flow
 
       # presence of config/sidekiq.yaml triggers init.d script with sidekiq support
-      with_sidekiq = File.exists?(File.join(project.directory, 'config/sidekiq.yaml')) ? true : false
+      with_sidekiq = File.exist?(File.join(project.directory, 'config/sidekiq.yaml')) ? true : false
 
       if with_sidekiq 
         template = File.join(Kudu.template_dir, "sidekiq.god.erb")
